@@ -1,1853 +1,1029 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<!--[if IE 8 ]><html class="no-js oldie ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js oldie ie9" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Mona - Model Agency HTML5 Template">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Title -->
-  <title>Mona - Model Agency HTML5 Template</title>
+   <!--- basic page needs
+   ================================================== -->
+   <meta charset="utf-8">
+	<title>Kards</title>
+	<meta name="description" content="">  
+	<meta name="author" content="">
 
-  <!-- Favicon -->
-  <link rel="icon" href="./img/core-img/favicon.ico">
+   <!-- mobile specific metas
+   ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+ 	<!-- CSS
+   ================================================== -->
+   <link rel="stylesheet" href="css/base.css">  
+   <link rel="stylesheet" href="css/main.css">
+   <link rel="stylesheet" href="css/vendor.css">     
+
+   <!-- script
+   ================================================== -->   
+	<script src="js/modernizr.js"></script>
+	<script src="js/pace.min.js"></script>
+
+   <!-- favicons
+	================================================== -->
+	<link rel="icon" type="image/png" href="favicon.png">
 
 </head>
 
-<body>
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="wrapper">
-      <div class="cssload-loader"></div>
-    </div>
-  </div>
+<body id="top">
 
-  <!-- ***** Header Area Start ***** -->
-  <header class="header-area">
-    <!-- Main Header Start -->
-    <div class="main-header-area">
-      <div class="classy-nav-container breakpoint-off">
-        <!-- Classy Menu -->
-        <nav class="classy-navbar justify-content-between" id="monaNav">
+	<!-- header 
+   ================================================== -->
+   <header>   	
+   	<div class="row">
 
-          <!-- Background Curve -->
-          <div class="bg-curve" style="background-image: url(./img/core-img/curve.png);"></div>
+   		<div class="top-bar">
+   			<a class="menu-toggle" href="#"><span>Menu</span></a>
 
-          <!-- Logo -->
-          <a class="nav-brand" href="index.html"><img src="./img/core-img/logo.png" alt=""></a>
+	   		<div class="logo">
+		         <a href="index.html">KARDS</a>
+		      </div>		      
 
-          <!-- Navbar Toggler -->
-          <div class="classy-navbar-toggler">
-            <span class="navbarToggler"><span></span><span></span><span></span></span>
-          </div>
+		   	<nav id="main-nav-wrap">
+					<ul class="main-navigation">
+						<li class="current"><a class="smoothscroll"  href="#intro" title="">Home</a></li>
+						<li><a class="smoothscroll"  href="#about" title="">About</a></li>
+						<li><a class="smoothscroll"  href="#resume" title="">Resume</a></li>
+						<li><a class="smoothscroll"  href="#portfolio" title="">Portfolio</a></li>
+						<li><a class="smoothscroll"  href="#services" title="">Services</a></li>					
+						<li><a class="smoothscroll"  href="#contact" title="">Contact</a></li>	
+						<li><a href="styles.html" title="">Style Demo</a></li>				
+					</ul>
+				</nav>    		
+   		</div> <!-- /top-bar --> 
+   		
+   	</div> <!-- /row --> 		
+   </header> <!-- /header -->
 
-          <!-- Menu -->
-          <div class="classy-menu">
-            <!-- Menu Close Button -->
-            <div class="classycloseIcon">
-              <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-            </div>
+	<!-- intro section
+   ================================================== -->
+   <section id="intro">   
 
-            <!-- Nav Start -->
-            <div class="classynav">
-              <ul id="nav">
-                <li class="current-item"><a href="./index.html">Home</a></li>
-                <li><a href="#">Pages</a>
-                  <ul class="dropdown">
-                    <li><a href="./index.html">- Home</a></li>
-                    <li><a href="./about.html">- About Us</a></li>
-                    <li><a href="./projects.html">- Projects</a></li>
-                    <li><a href="./models.html">- Models</a></li>
-                    <li><a href="./casting.html">- Casting</a></li>
-                    <li><a href="./blog.html">- Blog</a></li>
-                    <li><a href="./single-blog.html">- Blog Details</a></li>
-                    <li><a href="./contact.html">- Contact</a></li>
-                    <li><a href="#">- Dropdown</a>
-                      <ul class="dropdown">
-                        <li><a href="#">- Dropdown Item</a></li>
-                        <li><a href="#">- Dropdown Item</a>
-                          <ul class="dropdown">
-                            <li><a href="#">- Even Dropdown</a></li>
-                            <li><a href="#">- Even Dropdown</a></li>
-                            <li><a href="#">- Even Dropdown</a></li>
-                            <li><a href="#">- Even Dropdown</a></li>
-                          </ul>
-                        </li>
-                        <li><a href="#">- Dropdown Item</a></li>
-                        <li><a href="#">- Dropdown Item</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><a href="./projects.html">Project</a></li>
-                <li><a href="./models.html">Models</a></li>
-                <li><a href="./casting.html">Casting</a></li>
-                <li><a href="#">Blog</a>
-                  <ul class="dropdown">
-                    <li><a href="./blog.html">- Blog</a></li>
-                    <li><a href="./single-blog.html">- Blog Details</a></li>
-                  </ul>
-                </li>
-                <li><a href="./contact.html">Contact</a></li>
-              </ul>
+   	<div class="intro-overlay"></div>	
 
-              <!-- Search Icon -->
-              <div class="search-icon" data-toggle="modal" data-target="#searchModal">
-                <i class="icon_search"></i>
-              </div>
-            </div>
-            <!-- Nav End -->
+   	<div class="intro-content">
+   		<div class="row">
 
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-  <!-- ***** Header Area End ***** -->
+   			<div class="col-twelve">
 
-  <!-- ***** Top Search Area Start ***** -->
-  <div class="top-search-area">
-    <!-- Search Modal -->
-    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <!-- Close Button -->
-            <button type="button" class="btn close-btn" data-dismiss="modal"><i class="fa fa-times"></i></button>
-            <!-- Form -->
-            <form action="index.html" method="post">
-              <input type="search" name="top-search-bar" class="form-control" placeholder="Search and hit enter...">
-              <button type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ***** Top Search Area End ***** -->
+	   			<h5>Hello, World.</h5>
+	   			<h1>I'm Juan Dela Cruz.</h1>
 
-  <!-- ***** Welcome Area Start ***** -->
-  <section class="welcome-area">
-    <!-- Welcome Slides -->
-    <div class="welcome-slides owl-carousel">
+	   			<p class="intro-position">
+	   				<span>Front-end Developer</span>
+	   				<span>UI/UX Designer</span> 
+	   			</p>
 
-      <!-- Single Welcome Slide -->
-      <div class="single-welcome-slide">
-        <!-- Background Curve -->
-        <div class="bg-curve" style="background-image: url(./img/core-img/curve.png);"></div>
-        <!-- Main Background Image -->
-        <div class="main-bg-img bg-img" data-animation="fadeInUpBig" data-delay="200ms" style="background-image: url(./img/bg-img/18.jpg);"></div>
-        <!-- Welcome Text -->
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInUp" data-delay="400ms">Jesse <br>
-                  Edwards</h2>
-                <h5 data-animation="bounceInUp" data-delay="600ms">Star Model 2019</h5>
-                <a href="#" class="btn" data-animation="bounceInUp" data-delay="800ms">Model details <i class="arrow_right"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Social Info -->
-        <div class="social-info">
-          <a href="#" data-animation="bounceInDown" data-delay="1000ms"><i class="fa fa-facebook"></i> <span>Facebook</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1100ms"><i class="fa fa-twitter"></i> <span>Twitter</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1200ms"><i class="fa fa-instagram"></i> <span>Instagram</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1300ms"><i class="fa fa-youtube-play"></i> <span>Youtube</span></a>
-        </div>
-        <!-- Pager -->
-        <div class="slide-pager">
-          <a href="#">Next: Naznin Niloy</a>
-        </div>
-      </div>
+	   			<a class="button stroke smoothscroll" href="#about" title="">More About Me</a>
 
-      <!-- Single Welcome Slide -->
-      <div class="single-welcome-slide">
-        <!-- Background Curve -->
-        <div class="bg-curve" style="background-image: url(./img/core-img/curve.png);"></div>
-        <!-- Main Background Image -->
-        <div class="main-bg-img bg-img" data-animation="fadeInUpBig" data-delay="200ms" style="background-image: url(./img/bg-img/19.jpg);"></div>
-        <!-- Welcome Text -->
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInUp" data-delay="400ms">Naznin <br>
-                  Niloy</h2>
-                <h5 data-animation="bounceInUp" data-delay="600ms">Star Model 2019</h5>
-                <a href="#" class="btn" data-animation="bounceInUp" data-delay="800ms">Model details <i class="arrow_right"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Social Info -->
-        <div class="social-info">
-          <a href="#" data-animation="bounceInDown" data-delay="1000ms"><i class="fa fa-facebook"></i> <span>Facebook</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1100ms"><i class="fa fa-twitter"></i> <span>Twitter</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1200ms"><i class="fa fa-instagram"></i> <span>Instagram</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1300ms"><i class="fa fa-youtube-play"></i> <span>Youtube</span></a>
-        </div>
-        <!-- Pager -->
-        <div class="slide-pager">
-          <a href="#">Next: Shaila Ritu</a>
-        </div>
-      </div>
+	   		</div>  
+   			
+   		</div>   		 		
+   	</div> <!-- /intro-content --> 
 
-      <!-- Single Welcome Slide -->
-      <div class="single-welcome-slide">
-        <!-- Background Curve -->
-        <div class="bg-curve" style="background-image: url(./img/core-img/curve.png);"></div>
-        <!-- Main Background Image -->
-        <div class="main-bg-img bg-img" data-animation="fadeInUpBig" data-delay="200ms" style="background-image: url(./img/bg-img/20.jpg);"></div>
-        <!-- Welcome Text -->
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInUp" data-delay="400ms">Shaila <br>
-                  Ritu</h2>
-                <h5 data-animation="bounceInUp" data-delay="600ms">Star Model 2019</h5>
-                <a href="#" class="btn" data-animation="bounceInUp" data-delay="800ms">Model details <i class="arrow_right"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Social Info -->
-        <div class="social-info">
-          <a href="#" data-animation="bounceInDown" data-delay="1000ms"><i class="fa fa-facebook"></i> <span>Facebook</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1100ms"><i class="fa fa-twitter"></i> <span>Twitter</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1200ms"><i class="fa fa-instagram"></i> <span>Instagram</span></a>
-          <a href="#" data-animation="bounceInDown" data-delay="1300ms"><i class="fa fa-youtube-play"></i> <span>Youtube</span></a>
-        </div>
-        <!-- Pager -->
-        <div class="slide-pager">
-          <a href="#">Next: Jesse Edwards</a>
-        </div>
-      </div>
+   	<ul class="intro-social">        
+         <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+         <li><a href="#"><i class="fa fa-behance"></i></a></li>
+         <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+         <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+         <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+      </ul> <!-- /intro-social -->      	
 
-    </div>
-  </section>
-  <!-- ***** Welcome Area End ***** -->
+   </section> <!-- /intro -->
 
-  <!-- ***** About Us Area Start ***** -->
-  <section class="mona-about-us-area mb-30 section-padding-80-0">
-    <div class="container">
-      <div class="row">
 
-        <!-- About Us Thumbnail -->
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="about-us-thumbnail mb-50 wow fadeInUp" data-wow-delay="100ms">
-            <span class="line"></span>
-            <img src="./img/bg-img/16.jpg" alt="">
-            <span class="line2"></span>
-          </div>
-        </div>
+   <!-- about section
+   ================================================== -->
+   <section id="about">  
 
-        <!-- About Us Thumbnail -->
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="about-us-thumbnail mb-50 wow fadeInUp" data-wow-delay="400ms">
-            <span class="line"></span>
-            <img src="./img/bg-img/17.jpg" alt="">
-            <span class="line2"></span>
-          </div>
-        </div>
+   	<div class="row section-intro">
+   		<div class="col-twelve">
 
-        <!-- About Us Content -->
-        <div class="col-12 col-lg-4">
-          <div class="about-us-content mb-50 wow fadeInUp" data-wow-delay="700ms">
-            <h2>We Have 20+ Years Practical Experience in Agency</h2>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing esed diam nonumy eirmod tempor invidunt ut labore et dolore magna.</p>
-            <p>At vero eos et accusam et justo duo dolores et ea rebum. Stet gubergren no sea takimata sanctus est Lorem ipsum dolor sit amet ipsumlor eut consetetur sadipscing elitr.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+   			<h5>About</h5>
+   			<h1>Let me introduce myself.</h1>
 
-    <!-- Single Service Area -->
-    <div class="container">
-      <div class="service-area mt-80">
-        <div class="row">
+   			<div class="intro-info">
 
-          <!-- Single Service Area -->
-          <div class="col-12 col-sm-6 col-lg-3">
-            <div class="single-service-area mb-50 wow fadeInUp" data-wow-delay="100ms">
-              <i class="icon_film"></i>
-              <h5>Fashion Shows</h5>
-              <p>At vero eos et accusam et justo duo dolores et ea rebum.</p>
-            </div>
-          </div>
+   				<img src="images/profile-pic.jpg" alt="Profile Picture">
 
-          <!-- Single Service Area -->
-          <div class="col-12 col-sm-6 col-lg-3">
-            <div class="single-service-area mb-50 wow fadeInUp" data-wow-delay="300ms">
-              <i class="icon_calendar"></i>
-              <h5>Special Events</h5>
-              <p>At vero eos et accusam et justo duo dolores et ea rebum.</p>
-            </div>
-          </div>
+   				<p class="lead">Lorem ipsum Exercitation culpa qui dolor consequat exercitation fugiat laborum ex ea eiusmod ad do aliqua occaecat nisi ad irure sunt id pariatur Duis laboris amet exercitation veniam labore consectetur ea id quis eiusmod.</p>
+   			</div>   			
 
-          <!-- Single Service Area -->
-          <div class="col-12 col-sm-6 col-lg-3">
-            <div class="single-service-area mb-50 wow fadeInUp" data-wow-delay="500ms">
-              <i class="icon_camera_alt"></i>
-              <h5>Commercial Photo</h5>
-              <p>At vero eos et accusam et justo duo dolores et ea rebum.</p>
-            </div>
-          </div>
+   		</div>   		
+   	</div> <!-- /section-intro -->
 
-          <!-- Single Service Area -->
-          <div class="col-12 col-sm-6 col-lg-3">
-            <div class="single-service-area mb-50 wow fadeInUp" data-wow-delay="700ms">
-              <i class="icon_house_alt"></i>
-              <h5>Model School</h5>
-              <p>At vero eos et accusam et justo duo dolores et ea rebum.</p>
-            </div>
-          </div>
+   	<div class="row about-content">
 
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- ***** About Us Area End ***** -->
+   		<div class="col-six tab-full">
 
-  <!-- ***** Model Area Start ***** -->
-  <section class="mona-model-area">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="model-tab-area">
+   			<h3>Profile</h3>
+   			<p>Lorem ipsum Qui veniam ut consequat ex ullamco nulla in non ut esse in magna sint minim officia consectetur nisi commodo ea magna pariatur nisi cillum.</p>
 
-            <ul class="nav nav-tabs mb-50" id="mona_modelTab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="tab1" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">All</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="tab2" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Model</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="tab3" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Actor</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="tab4" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">Singer</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+   			<ul class="info-list">
+   				<li>
+   					<strong>Fullname:</strong>
+   					<span>Juan Dela Cruz</span>
+   				</li>
+   				<li>
+   					<strong>Birth Date:</strong>
+   					<span>September 28, 1987</span>
+   				</li>
+   				<li>
+   					<strong>Job:</strong>
+   					<span>Freelancer, Frontend Developer</span>
+   				</li>
+   				<li>
+   					<strong>Website:</strong>
+   					<span>www.kardswebsite.com</span>
+   				</li>
+   				<li>
+   					<strong>Email:</strong>
+   					<span>me@kardswebsite.com</span>
+   				</li>
 
-    <!-- Mona Tab Content -->
-    <div class="mona-tab-content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <div class="tab-content" id="mona_modelTabContent">
-              <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab1">
-                <!-- All Model Slide -->
-                <div class="mona-all-model-slide owl-carousel">
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/10.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Willie Figueroa</h3>
-                      <h6>Model</h6>
-                    </div>
+   			</ul> <!-- /info-list -->
+
+   		</div>
+
+   		<div class="col-six tab-full">
+
+   			<h3>Skills</h3>
+   			<p>Lorem ipsum Qui veniam ut consequat ex ullamco nulla in non ut esse in magna sint minim officia consectetur nisi commodo ea magna pariatur nisi cillum.</p>
+
+				<ul class="skill-bars">
+				   <li>
+				   	<div class="progress percent90"><span>90%</span></div>
+				   	<strong>HTML5</strong>
+				   </li>
+				   <li>
+				   	<div class="progress percent85"><span>85%</span></div>
+				   	<strong>CSS3</strong>
+				   </li>
+				   <li>
+				   	<div class="progress percent70"><span>70%</span></div>
+				   	<strong>JQuery</strong>
+				   </li>
+				   <li>
+				   	<div class="progress percent95"><span>95%</span></div>
+				   	<strong>PHP</strong>
+				   </li>
+				   <li>
+
+				   	<div class="progress percent75"><span>75%</span></div>
+				   	<strong>Wordpress</strong>
+				   </li>
+      
+				</ul> <!-- /skill-bars -->		
+
+   		</div>
+
+   	</div>
+
+   	<div class="row button-section">
+   		<div class="col-twelve">
+   			<a href="#contact" title="Hire Me" class="button stroke smoothscroll">Hire Me</a>
+   			<a href="#" title="Download CV" class="button button-primary">Download CV</a>
+   		</div>   		
+   	</div>
+
+   </section> <!-- /process-->    
+
+
+   <!-- resume Section
+   ================================================== -->
+	<section id="resume" class="grey-section">
+
+		<div class="row section-intro">
+   		<div class="col-twelve">
+
+   			<h5>Resume</h5>
+   			<h1>More of my credentials.</h1>
+
+   			<p class="lead">Lorem ipsum Do commodo in proident enim in dolor cupidatat adipisicing dolore officia nisi aliqua incididunt Ut veniam lorem ipsum Consectetur ut in in eu do.</p>
+
+   		</div>   		
+   	</div> <!-- /section-intro--> 
+
+   	<div class="row resume-timeline">
+
+   		<div class="col-twelve resume-header">
+
+   			<h2>Work Experience</h2>
+
+   		</div> <!-- /resume-header -->
+
+   		<div class="col-twelve">
+
+   			<div class="timeline-wrap">
+
+   				<div class="timeline-block">
+
+	   				<div class="timeline-ico">
+	   					<i class="fa fa-graduation-cap"></i>
+	   				</div>
+
+	   				<div class="timeline-header">
+	   					<h3>UI Designer</h3>
+	   					<p>July 2015 - Present</p>
+	   				</div>
+
+	   				<div class="timeline-content">
+	   					<h4>Awesome Studio</h4>
+	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi.</p>
+	   				</div>
+
+	   			</div> <!-- /timeline-block -->
+
+	   			<div class="timeline-block">
+
+	   				<div class="timeline-ico">
+	   					<i class="fa fa-graduation-cap"></i>
+	   				</div>
+
+	   				<div class="timeline-header">
+	   					<h3>Front-end Developer</h3>
+	   					<p>July 2014 - June 2015</p>
+	   				</div>
+
+	   				<div class="timeline-content">
+	   					<h4>Super Cool Agency</h4>
+	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi incididunt.</p>
+	   				</div>
+
+	   			</div> <!-- /timeline-block -->
+
+	   			<div class="timeline-block">
+
+	   				<div class="timeline-ico">
+	   					<i class="fa fa-graduation-cap"></i>
+	   				</div>
+
+	   				<div class="timeline-header">
+	   					<h3>Web Designer</h3>
+	   					<p>May 2013 - June 2014</p>
+	   				</div>
+
+	   				<div class="timeline-content">
+	   					<h4>Great Designs Studio</h4>
+	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi incididunt.</p>
+	   				</div>
+
+	   			</div> <!-- /timeline-block -->
+
+   			</div> <!-- /timeline-wrap -->   			
+
+   		</div> <!-- /col-twelve -->
+   		
+   	</div> <!-- /resume-timeline -->
+   	
+   	<div class="row resume-timeline">
+
+   		<div class="col-twelve resume-header">
+
+   			<h2>Education</h2>
+
+   		</div> <!-- /resume-header -->
+
+   		<div class="col-twelve">
+
+   			<div class="timeline-wrap">
+
+   				<div class="timeline-block">
+
+	   				<div class="timeline-ico">
+	   					<i class="fa fa-briefcase"></i>
+	   				</div>
+
+	   				<div class="timeline-header">
+	   					<h3>Master Degree</h3>
+	   					<p>July 2015 - Present</p>
+	   				</div>
+
+	   				<div class="timeline-content">
+	   					<h4>University of Life</h4>
+	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi.</p>
+	   				</div>
+
+	   			</div> <!-- /timeline-block -->
+
+	   			<div class="timeline-block">
+
+	   				<div class="timeline-ico">
+	   					<i class="fa fa-briefcase"></i>
+	   				</div>
+
+	   				<div class="timeline-header">
+	   					<h3>Bachelor Degree</h3>
+	   					<p>July 2014 - June 2015</p>
+	   				</div>
+
+	   				<div class="timeline-content">
+	   					<h4>State Design University</h4>
+	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi incididunt.</p>
+	   				</div>
+
+	   			</div> <!-- /timeline-block -->
+
+	   			<div class="timeline-block">
+
+	   				<div class="timeline-ico">
+	   					<i class="fa fa-briefcase"></i>
+	   				</div>
+
+	   				<div class="timeline-header">
+	   					<h3>Bachelor Degree</h3>
+	   					<p>May 2013 - June 2014</p>
+	   				</div>
+
+	   				<div class="timeline-content">
+	   					<h4>Design College</h4>
+	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi incididunt.</p>
+	   				</div>
+
+	   			</div> <!-- /timeline-block -->
+
+   			</div> <!-- /timeline-wrap -->   			
+
+   		</div> <!-- /col-twelve -->
+   		
+   	</div> <!-- /resume-timeline -->
+		
+	</section> <!-- /features -->
+
+
+	<!-- Portfolio Section
+   ================================================== -->
+	<section id="portfolio">
+
+		<div class="row section-intro">
+   		<div class="col-twelve">
+
+   			<h5>Portfolio</h5>
+   			<h1>Check Out Some of My Works.</h1>
+
+   			<p class="lead">Lorem ipsum Do commodo in proident enim in dolor cupidatat adipisicing dolore officia nisi aliqua incididunt Ut veniam lorem ipsum Consectetur ut in in eu do.</p>
+
+   		</div>   		
+   	</div> <!-- /section-intro--> 
+
+   	<div class="row portfolio-content">
+
+   		<div class="col-twelve">
+
+   			<!-- portfolio-wrapper -->
+	         <div id="folio-wrapper" class="block-1-2 block-mob-full stack">
+
+	         	<div class="bgrid folio-item">
+	               <div class="item-wrap">
+	               	<img src="images/portfolio/liberty.jpg" alt="Liberty">
+	                  <a href="#modal-01" class="overlay">	                  	           
+	                     <div class="folio-item-table">
+	                     	<div class="folio-item-cell">
+		     					       <h3 class="folio-title">Liberty</h3>	     					    
+		     					    	 <span class="folio-types">
+		     					       	  Graphic Design
+		     					       </span>
+		     					   </div>	                      	
+	                     </div>                    
+	                  </a>
+	               </div>	               
+	        		</div> <!-- /folio-item -->
+
+	        		<div class="bgrid folio-item">
+	               <div class="item-wrap">
+	               	<img src="images/portfolio/shutterbug.jpg" alt="Shutterbug">
+	               	<a href="#modal-02" class="overlay">              		                  
+	                     <div class="folio-item-table">
+	                     	<div class="folio-item-cell">
+	                     		<h3 class="folio-title">Shutterbug</h3>	     					    
+		     					    	<span class="folio-types">
+		     					       	  Web Design
+		     					      </span>		     		
+		     					   </div> 	                      	
+	                     </div>                    
+	                  </a>
+	               </div>
+	        		</div> <!-- /folio-item -->
+
+	            <div class="bgrid folio-item">
+	               <div class="item-wrap">
+	               	<img src="images/portfolio/clouds.jpg"alt="Clouds">
+	                  <a href="#modal-03" class="overlay">             		                  
+	                     <div class="folio-item-table">
+	                     	<div class="folio-item-cell">
+	                     		<h3 class="folio-title">Clouds</h3>	     					    
+		     					    	<span class="folio-types">
+		     					       	  Web Design
+		     					      </span>		     		
+		     					   </div> 	                      	
+	                     </div>                    
+	                  </a>
+	               </div>
+	        		</div> <!-- /folio-item -->
+
+	            <div class="bgrid folio-item">
+	               <div class="item-wrap">
+	               	<img src="images/portfolio/beetle.jpg" alt="Beetle">
+	                  <a href="#modal-04" class="overlay">                  	                 
+	                     <div class="folio-item-table">
+	                     	<div class="folio-item-cell">
+	                     		<h3 class="folio-title">Beetle</h3>	     					    
+		     					    	<span class="folio-types">
+		     					       	  Branding
+		     					      </span>		     		
+		     					   </div>  	                      	
+	                     </div>                    
+	                  </a>
+	               </div>
+	        		</div> <!-- /folio-item -->     
+
+	        		<div class="bgrid folio-item">
+	               <div class="item-wrap">
+	               	<img src="images/portfolio/lighthouse.jpg" alt="Lighthouse">
+	                  <a href="#modal-05" class="overlay">             		                  
+	                     <div class="folio-item-table">
+	                     	<div class="folio-item-cell">
+	                     		<h3 class="folio-title">Lighthouse</h3>	     					    
+		     					    	<span class="folio-types">
+		     					       	  Web Development
+		     					      </span>		     		
+		     					   </div> 	                      	
+	                     </div>                    
+	                  </a>
+	               </div>
+	        		</div> <!-- /folio-item -->
+
+	            <div class="bgrid folio-item">
+	               <div class="item-wrap">
+	               	<img src="images/portfolio/salad.jpg" alt="Salad">
+	                  <a href="#modal-06" class="overlay">
+	                     <div class="folio-item-table">
+	                     	<div class="folio-item-cell">
+	                     		<h3 class="folio-title">Salad</h3>	     					    
+		     					    	<span class="folio-types">
+		     					       	  Branding
+		     					      </span>		     		
+		     					   </div>	                      	
+	                     </div>                    
+	                  </a>
+	               </div>
+	        		</div> <!-- /folio-item -->   
+
+	            <!-- modal popups - begin
+	            ============================================================= -->
+	            <div id="modal-01" class="popup-modal slider mfp-hide">	
+
+				     	<div class="media">
+				     		<img src="images/portfolio/modals/m-liberty.jpg" alt="" />
+				     	</div>      	
+
+					   <div class="description-box">
+					      <h4>Liberty</h4>		      
+					      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+
+					      <div class="categories">Web Development</div>			               
+					   </div>
+
+			         <div class="link-box">
+			            <a href="http://www.behance.net">Details</a>
+					      <a href="#" class="popup-modal-dismiss">Close</a>
+			         </div>		      
+
+				   </div> <!-- /modal-01 -->
+
+				   <div id="modal-02" class="popup-modal slider mfp-hide">	
+
+				     	<div class="media">
+				     		<img src="images/portfolio/modals/m-shutterbug.jpg" alt="" />
+				     	</div>      	
+
+					   <div class="description-box">
+					      <h4>Shutterbug</h4>		      
+					      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+
+					      <div class="categories">Web Design</div>			               
+					   </div>
+
+			         <div class="link-box">
+			            <a href="http://www.behance.net">Details</a>
+					      <a href="#" class="popup-modal-dismiss">Close</a>
+			         </div>		      
+
+				   </div> <!-- /modal-02 -->
+
+				   <div id="modal-03" class="popup-modal slider mfp-hide">	
+
+				     	<div class="media">
+				     		<img src="images/portfolio/modals/m-clouds.jpg" alt="" />
+				     	</div>      	
+
+					   <div class="description-box">
+					      <h4>Clouds</h4>		      
+					      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+
+					      <div class="categories">Web Design</div>			               
+					   </div>
+
+			         <div class="link-box">
+			            <a href="http://www.behance.net">Details</a>
+					      <a href="#" class="popup-modal-dismiss">Close</a>
+			         </div>		      
+
+				   </div> <!-- /modal-03 -->
+
+				   <div id="modal-04" class="popup-modal slider mfp-hide">	
+
+				     	<div class="media">
+				     		<img src="images/portfolio/modals/m-beetle.jpg" alt="" />
+				     	</div>      	
+
+					   <div class="description-box">
+					      <h4>Beetle</h4>		      
+					      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+
+					      <div class="categories">Branding</div>			               
+					   </div>
+
+			         <div class="link-box">
+			            <a href="http://www.behance.net">Details</a>
+					      <a href="#" class="popup-modal-dismiss">Close</a>
+			         </div>		      
+
+				   </div> <!-- /modal-04 -->
+
+				   <div id="modal-05" class="popup-modal slider mfp-hide">	
+
+				     	<div class="media">
+				     		<img src="images/portfolio/modals/m-lighthouse.jpg" alt="" />
+				     	</div>      	
+
+					   <div class="description-box">
+					      <h4>Lighthouse</h4>		      
+					      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+
+					      <div class="categories">Web Development</div>			               
+					   </div>
+
+			         <div class="link-box">
+			            <a href="http://www.behance.net">Details</a>
+					      <a href="#" class="popup-modal-dismiss">Close</a>
+			         </div>		      
+
+				   </div> <!-- /modal-05 -->
+
+				   <div id="modal-06" class="popup-modal slider mfp-hide">	
+
+				     	<div class="media">
+				     		<img src="images/portfolio/modals/m-salad.jpg" alt="" />
+				     	</div>      	
+
+					   <div class="description-box">
+					      <h4>Salad</h4>		      
+					      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+
+					      <div class="categories">Branding</div>			               
+					   </div>
+
+			         <div class="link-box">
+			            <a href="http://www.behance.net">Details</a>
+					      <a href="#" class="popup-modal-dismiss">Close</a>
+			         </div>		      
+
+				   </div> <!-- /modal-06 -->
+
+
+				   <!-- modal popups - end
+	            ============================================================= -->
+
+	         </div> <!-- /portfolio-wrapper --> 
+
+   		</div>  <!-- /twelve -->   
+
+   	</div> <!-- /portfolio-content --> 
+		
+	</section> <!-- /portfolio --> 
+
+
+	<!-- CTA Section
+   ================================================== -->
+	<section id="cta" class="grey-section">
+
+   	<div class="row cta-content">
+
+   		<div class="col-twelve section-ads">  
+
+	     		<h2 class="h01"><a href="http://www.dreamhost.com/r.cgi?287326|STYLESHOUT">Styleshout Recommends Dreamhost.</a></h2>
+
+		      <p class="lead">
+		      Looking for an awesome and reliable webhosting? Try <a href="http://www.dreamhost.com/r.cgi?287326|STYLESHOUT"><span>DreamHost</span></a>.
+				Get <span>$50 off</span> when you sign up with the promocode <span>styleshout</span>. 
+				<!-- Simply type	the promocode in the box labeled “Promo Code” when placing your order. -->	
+				</p>
+
+				<div class="action">
+			      <a class="button button-primary large" href="http://www.dreamhost.com/r.cgi?287326|STYLESHOUT">Sign Up Now</a>
+		      </div>		     	
+
+   		</div>
+
+   	</div> <!-- /cta-content -->
+
+   </section> <!-- /cta --> 
+
+	
+	<!-- services Section
+   ================================================== -->
+	<section id="services">
+
+		<div class="overlay"></div>
+
+		<div class="row section-intro">
+   		<div class="col-twelve">
+
+   			<h5>Services</h5>
+   			<h1>What Can I Do For You?</h1>
+
+   			<p class="lead">Lorem ipsum Do commodo in proident enim in dolor cupidatat adipisicing dolore officia nisi aliqua incididunt Ut veniam lorem ipsum Consectetur ut in in eu do.</p>
+
+   		</div>   		
+   	</div> <!-- /section-intro -->
+
+   	<div class="row services-content">
+
+   		<div id="owl-slider" class="owl-carousel services-list">
+
+	      	<div class="service">	
+
+	      		<span class="icon"><i class="icon-earth"></i></span>            
+
+	            <div class="service-content">	
+
+	            	 <h3>Webdesign</h3>
+
+		            <p class="desc">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+	         		</p>
+	         		
+	         	</div> 	         	 
+
+				</div> <!-- /service -->
+
+				<div class="service">	
+
+					<span class="icon"><i class="icon-window"></i></span>                          
+
+	            <div class="service-content">	
+
+	            	<h3>Web Development</h3>  
+
+		            <p class="desc">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+	         		</p>
+
+	            </div>	                          
+
+			   </div> <!-- /service -->
+
+			   <div class="service">
+
+			   	<span class="icon"><i class="icon-paint-brush"></i></span>		            
+
+	            <div class="service-content">
+
+	            	<h3>Branding</h3>
+
+		            <p class="desc">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+	        			</p> 
+
+	            </div> 	            	               
+
+			   </div> <!-- /service -->
+
+				<div class="service">
+
+					<span class="icon"><i class="icon-toggles"></i></span>	              
+
+	            <div class="service-content">
+
+	            	<h3>UI/UX Design</h3>
+
+		            <p class="desc">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+	         		</p> 
+	         		
+	            </div>                
+
+				</div> <!-- /service -->
+
+			   <div class="service">
+
+			   	<span class="icon"><i class="icon-image"></i></span>	            
+
+	            <div class="service-content">
+
+	            	<h3>Graphics Design</h3>
+
+		            <p class="desc">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+	        			</p> 
+
+	            </div>	               
+
+			   </div> <!-- /service -->
+
+			   <div class="service">
+
+			   	<span class="icon"><i class="icon-chat"></i></span>	   	           
+
+	            <div class="service-content">
+
+	            	 <h3>Consultancy</h3>
+
+		            <p class="desc">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+	        			</p> 
+	        			
+	            </div>	               
+
+			   </div> <!-- /service -->
+
+	      </div> <!-- /services-list -->
+   		
+   	</div> <!-- /services-content -->
+		
+	</section> <!-- /services -->	
+
+
+	<!-- stats Section
+   ================================================== -->
+	<section id="stats" class="count-up">
+
+		<div class="row">
+			<div class="col-twelve">
+
+				<div class="block-1-6 block-s-1-3 block-tab-1-2 block-mob-full stats-list">
+
+					<div class="bgrid stat">
+
+						<div class="icon-part">
+							<i class="icon-pencil-ruler"></i>
+						</div>
+
+						<h3 class="stat-count">
+							1500
+						</h3>
+
+						<h5 class="stat-title">
+							Projects Completed
+						</h5>
+
+					</div> <!-- /stat -->					
+
+					<div class="bgrid stat">
+
+						<div class="icon-part">
+							<i class="icon-users"></i>
+						</div>
+
+						<h3 class="stat-count">
+							900
+						</h3>
+
+						<h5 class="stat-title">
+							Happy Clients
+						</h5>
+
+					</div> <!-- /stat -->
+
+					<div class="bgrid stat">
+
+						<div class="icon-part">
+							<i class="icon-badge"></i>
+						</div>
+
+						<h3 class="stat-count">
+							200
+						</h3>
+
+						<h5 class="stat-title">
+							Awards Received
+						</h5>
+
+					</div> <!-- /stat -->									
+
+					<div class="bgrid stat">
+
+						<div class="icon-part">
+							<i class="icon-light-bulb"></i>
+						</div>
+
+						<h3 class="stat-count">
+							120
+						</h3>
+
+						<h5 class="stat-title">
+							Crazy Ideas
+						</h5>
+
+					</div> <!-- /stat -->
+
+					<div class="bgrid stat">
+
+						<div class="icon-part">
+							<i class="icon-cup"></i>
+						</div>
+
+						<h3 class="stat-count">
+							1500
+						</h3>
+
+						<h5 class="stat-title">
+							Coffee Cups
+						</h5>
+
+					</div> <!-- /stat -->
+
+					<div class="bgrid stat">
+
+						<div class="icon-part">
+							<i class="icon-clock"></i>
+						</div>
+
+						<h3 class="stat-count">
+							7200
+						</h3>
+
+						<h5 class="stat-title">
+							Hours
+						</h5>
+
+					</div> <!-- /stat -->
+
+				</div> <!-- /stats-list -->
+
+			</div> <!-- /twelve -->
+		</div> <!-- /row -->
+
+	</section> <!-- /stats -->
+
+	
+   <!-- contact
+   ================================================== -->
+	<section id="contact">
+
+		<div class="row section-intro">
+   		<div class="col-twelve">
+
+   			<h5>Contact</h5>
+   			<h1>I'd Love To Hear From You.</h1>
+
+   			<p class="lead">Lorem ipsum Do commodo in proident enim in dolor cupidatat adipisicing dolore officia nisi aliqua incididunt Ut veniam lorem ipsum Consectetur ut in in eu do.</p>
+
+   		</div> 
+   	</div> <!-- /section-intro -->
+
+   	<div class="row contact-form">
+
+   		<div class="col-twelve">
+
+            <!-- form -->
+            <form name="contactForm" id="contactForm" method="post" action="">
+      			<fieldset>
+
+                  <div class="form-field">
+ 						   <input name="contactName" type="text" id="contactName" placeholder="Name" value="" minlength="2" required="">
+                  </div>
+                  <div class="form-field">
+	      			   <input name="contactEmail" type="email" id="contactEmail" placeholder="Email" value="" required="">
+	               </div>
+                  <div class="form-field">
+	     				   <input name="contactSubject" type="text" id="contactSubject" placeholder="Subject" value="">
+	               </div>                       
+                  <div class="form-field">
+	                 	<textarea name="contactMessage" id="contactMessage" placeholder="message" rows="10" cols="50" required=""></textarea>
+	               </div>                      
+                 <div class="form-field">
+                     <button class="submitform">Submit</button>
+                     <div id="submit-loader">
+                        <div class="text-loader">Sending...</div>                             
+       				      <div class="s-loader">
+								  	<div class="bounce1"></div>
+								  	<div class="bounce2"></div>
+								  	<div class="bounce3"></div>
+								</div>
+							</div>
                   </div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/11.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Della Martinez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+      			</fieldset>
+      		</form> <!-- Form End -->
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Peter Alvarez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+            <!-- contact-warning -->
+            <div id="message-warning">            	
+            </div>            
+            <!-- contact-success -->
+      		<div id="message-success">
+               <i class="fa fa-check"></i>Your message was sent, thank you!<br>
+      		</div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Olive Ross</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+         </div> <!-- /col-twelve -->
+   		
+   	</div> <!-- /contact-form -->
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Louise Ray</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   	<div class="row contact-info">
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/10.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Willie Figueroa</h3>
-                      <h6>Model</h6>
-                    </div>
-                  </div>
+   		<div class="col-four tab-full">
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/11.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Della Martinez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<div class="icon">
+   				<i class="icon-pin"></i>
+   			</div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Peter Alvarez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<h5>Where to find me</h5>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Olive Ross</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<p>
+            1600 Amphitheatre Parkway<br>
+            Mountain View, CA<br>
+            94043 US
+            </p>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Louise Ray</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
+   		</div>
 
-              <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab2">
-                <!-- All Model Slide -->
-                <div class="mona-models-slide owl-carousel">
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/10.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Willie Figueroa</h3>
-                      <h6>Model</h6>
-                    </div>
-                  </div>
+   		<div class="col-four tab-full collapse">
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/11.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Della Martinez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<div class="icon">
+   				<i class="icon-mail"></i>
+   			</div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Peter Alvarez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<h5>Email Me At</h5>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Olive Ross</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<p>someone@kardswebsite.com<br>
+			   	info@kardswebsite.com			     
+			   </p>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Louise Ray</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   		</div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/10.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Willie Figueroa</h3>
-                      <h6>Model</h6>
-                    </div>
-                  </div>
+   		<div class="col-four tab-full">
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/11.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Della Martinez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<div class="icon">
+   				<i class="icon-phone"></i>
+   			</div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Peter Alvarez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<h5>Call Me At</h5>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Olive Ross</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   			<p>Phone: (+63) 555 1212<br>
+			   	Mobile: (+63) 555 0100<br>
+			     	Fax: (+63) 555 0101
+			   </p>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Louise Ray</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
+   		</div>
+   		
+   	</div> <!-- /contact-info -->
+		
+	</section> <!-- /contact -->
 
-              <div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="tab3">
-                <!-- All Model Slide -->
-                <div class="mona-actor-slide owl-carousel">
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/10.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Willie Figueroa</h3>
-                      <h6>Model</h6>
-                    </div>
-                  </div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/11.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Della Martinez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   <!-- footer
+   ================================================== -->
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Peter Alvarez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   <footer>
+     	<div class="row">
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Olive Ross</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+     		<div class="col-six tab-full pull-right social">
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Louise Ray</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+     			<ul class="footer-social">        
+			      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+			      <li><a href="#"><i class="fa fa-behance"></i></a></li>
+			      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+			      <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+			      <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+			   </ul> 
+	      		
+	      </div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/10.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Willie Figueroa</h3>
-                      <h6>Model</h6>
-                    </div>
-                  </div>
+      	<div class="col-six tab-full">
+	      	<div class="copyright">
+		        	<span>© Copyright Kards 2016.</span> 
+		        	<span>Design by <a href="http://www.styleshout.com/">styleshout</a></span>	         	
+		         </div>		                  
+	      	</div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/11.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Della Martinez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+	      	<div id="go-top">
+		         <a class="smoothscroll" title="Back to Top" href="#top"><i class="fa fa-long-arrow-up"></i></a>
+		      </div>
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Peter Alvarez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+      	</div> <!-- /row -->     	
+   </footer>  
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Olive Ross</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
+   <div id="preloader"> 
+    	<div id="loader"></div>
+   </div> 
 
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Louise Ray</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="tab-pane fade" id="tab-4" role="tabpanel" aria-labelledby="tab4">
-                <!-- All Model Slide -->
-                <div class="mona-singer-slide owl-carousel">
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/10.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Willie Figueroa</h3>
-                      <h6>Model</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/11.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Della Martinez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Peter Alvarez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Olive Ross</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Louise Ray</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/10.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Willie Figueroa</h3>
-                      <h6>Model</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/11.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Della Martinez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/12.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Peter Alvarez</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/9.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Olive Ross</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-
-                  <!-- Single Model Item -->
-                  <div class="single-model-item">
-                    <div class="model-thumbnail">
-                      <!-- First Thumbnail -->
-                      <img class="first-thumbnail" src="./img/bg-img/13.jpg" alt="">
-                      <!-- Second Thumbnail -->
-                      <img class="second-thumbnail" src="./img/bg-img/14.jpg" alt="">
-                      <!-- Share Info -->
-                      <div class="share-info">
-                        <!-- Share Icon -->
-                        <div class="share-icon">
-                          <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                        </div>
-                        <!-- Others Icon -->
-                        <div class="others-icon">
-                          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="model-info">
-                      <h3>Louise Ray</h3>
-                      <h6>actor</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- ***** Model Area End ***** -->
-
-  <!-- ***** Client Feedback Area Start ***** -->
-  <section class="clients-feedback-area section-padding-80 clearfix">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-10">
-          <div class="slider slider-for">
-
-            <!-- Client Feedback Text -->
-            <div class="client-feedback-text text-center">
-              <div class="quote-icon">
-                <i class="icon_quotations" aria-hidden="true"></i>
-              </div>
-              <div class="client-description text-center">
-                <h4>“Success Agency is, hands down, one of the best companies that we have worked with! The company has either met or exceeded all of the goals that we initially set for all of the projects that they implemented for us.”</h4>
-              </div>
-              <div class="ratings text-center">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </div>
-              <div class="client-name text-center">
-                <h5>Rodney Williams</h5>
-                <span>Producer</span>
-              </div>
-            </div>
-
-            <!-- Client Feedback Text -->
-            <div class="client-feedback-text text-center">
-              <div class="quote-icon">
-                <i class="icon_quotations" aria-hidden="true"></i>
-              </div>
-              <div class="client-description text-center">
-                <h4>“Success Agency is, hands down, one of the best companies that we have worked with! The company has either met or exceeded all of the goals that we initially set for all of the projects that they implemented for us.”</h4>
-              </div>
-              <div class="ratings text-center">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </div>
-              <div class="client-name text-center">
-                <h5>Nazrul Islam</h5>
-                <span>Producer</span>
-              </div>
-            </div>
-
-            <!-- Client Feedback Text -->
-            <div class="client-feedback-text text-center">
-              <div class="quote-icon">
-                <i class="icon_quotations" aria-hidden="true"></i>
-              </div>
-              <div class="client-description text-center">
-                <h4>“Success Agency is, hands down, one of the best companies that we have worked with! The company has either met or exceeded all of the goals that we initially set for all of the projects that they implemented for us.”</h4>
-              </div>
-              <div class="ratings text-center">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </div>
-              <div class="client-name text-center">
-                <h5>Williams Rodney</h5>
-                <span>Producer</span>
-              </div>
-            </div>
-
-            <!-- Client Feedback Text -->
-            <div class="client-feedback-text text-center">
-              <div class="quote-icon">
-                <i class="icon_quotations" aria-hidden="true"></i>
-              </div>
-              <div class="client-description text-center">
-                <h4>“Success Agency is, hands down, one of the best companies that we have worked with! The company has either met or exceeded all of the goals that we initially set for all of the projects that they implemented for us.”</h4>
-              </div>
-              <div class="ratings text-center">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </div>
-              <div class="client-name text-center">
-                <h5>Rodney Williams</h5>
-                <span>Producer</span>
-              </div>
-            </div>
-
-            <!-- Client Feedback Text -->
-            <div class="client-feedback-text text-center">
-              <div class="quote-icon">
-                <i class="icon_quotations" aria-hidden="true"></i>
-              </div>
-              <div class="client-description text-center">
-                <h4>“Success Agency is, hands down, one of the best companies that we have worked with! The company has either met or exceeded all of the goals that we initially set for all of the projects that they implemented for us.”</h4>
-              </div>
-              <div class="ratings text-center">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </div>
-              <div class="client-name text-center">
-                <h5>Rodney Williams</h5>
-                <span>Producer</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Client Thumbnail Area -->
-        <div class="col-12 col-md-6 col-lg-5">
-          <div class="slider slider-nav">
-            <div class="client-thumbnail">
-              <img src="./img/bg-img/6.jpg" alt="">
-            </div>
-            <div class="client-thumbnail">
-              <img src="./img/bg-img/7.jpg" alt="">
-            </div>
-            <div class="client-thumbnail">
-              <img src="./img/bg-img/8.jpg" alt="">
-            </div>
-            <div class="client-thumbnail">
-              <img src="./img/bg-img/6.jpg" alt="">
-            </div>
-            <div class="client-thumbnail">
-              <img src="./img/bg-img/7.jpg" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- ***** Client Feedback Area End ***** -->
-
-  <!-- ***** CTA Area Start ***** -->
-  <section class="mona-cta-area section-padding-80">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="cta-content">
-            <h2>Do You Want To Be A Model?</h2>
-            <h6>Lorem ipsum dolor sit amet, consetetur sadipscing esed diam nonumy eirmod tempor.</h6>
-            <a href="#" class="btn mona-btn">Contact Us</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- ***** CTA Area End ***** -->
-
-  <!-- ***** Blog Area Start ***** -->
-  <section class="mona-blog-area mb-50 section-padding-80-0">
-    <div class="container">
-      <div class="row">
-        <!-- Section Heading -->
-        <div class="col-12">
-          <div class="section-heading text-center">
-            <h2>Latest News</h2>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <!-- Single Blog Post -->
-        <div class="col-12 col-lg-4">
-          <div class="single-blog-post mb-30 wow fadeInUp" data-wow-delay="100ms">
-            <div class="post-thumbnail slide-post owl-carousel">
-              <a href="#"><img src="./img/bg-img/3.jpg" alt=""></a>
-              <a href="#"><img src="./img/bg-img/4.jpg" alt=""></a>
-            </div>
-            <div class="post-content">
-              <a href="#" class="post-title">How To Use Eye Shadow Like The Stars</a>
-              <span class="post-date">30 Aug 2018</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-8">
-          <div class="row">
-
-            <!-- Single Blog Post -->
-            <div class="col-12">
-              <div class="single-blog-post featured-post mb-30 wow fadeInUp" data-wow-delay="300ms">
-                <div class="post-thumbnail">
-                  <a href="#"><img src="./img/bg-img/5.jpg" alt=""></a>
-                </div>
-                <div class="post-content">
-                  <div>
-                    <a href="#" class="post-title">What Curling Irons Are The Best Ones</a>
-                    <span class="post-date">30 Aug 2018</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="col-12 col-sm-6">
-              <div class="single-blog-post mb-30 wow fadeInUp" data-wow-delay="500ms">
-                <div class="post-thumbnail">
-                  <a href="#"><img src="./img/bg-img/1.jpg" alt=""></a>
-                </div>
-                <div class="post-content">
-                  <a href="#" class="post-title">What Curling Irons Are The Best Ones</a>
-                  <span class="post-date">30 Aug 2018</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="col-12 col-sm-6">
-              <div class="single-blog-post mb-30 wow fadeInUp" data-wow-delay="700ms">
-                <div class="post-thumbnail">
-                  <a href="#"><img src="./img/bg-img/2.jpg" alt=""></a>
-                </div>
-                <div class="post-content">
-                  <a href="#" class="post-title">How To Save Money On Beauty Products</a>
-                  <span class="post-date">30 Aug 2018</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- ***** Blog Area End ***** -->
-
-  <!-- ***** Footer Area Start ***** -->
-  <footer class="footer-area section-padding-80-0">
-    <div class="container">
-      <div class="row justify-content-between">
-
-        <!-- Single Footer Widget -->
-        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-          <div class="single-footer-widget mb-60">
-            <!-- Logo -->
-            <a href="#" class="d-block mb-4"><img src="./img/core-img/logo.png" alt=""></a>
-            <p>Integer vehicula mauris libero, at molestie eros imperdiet sit amet. Suspendisse mattis ante sit amet ante.</p>
-            <div class="copywrite-text">
-              <p>&copy; 
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Single Footer Widget -->
-        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-          <div class="single-footer-widget mb-60">
-            <!-- Widget Title -->
-            <h4 class="widget-title">Our Link</h4>
-
-            <!-- Catagories Nav -->
-            <nav>
-              <ul class="our-link">
-                <li><a href="#">New Faces</a></li>
-                <li><a href="#">Model Of the Week</a></li>
-                <li><a href="#">Classic Women</a></li>
-                <li><a href="#">Privacy Terms</a></li>
-                <li><a href="#">Classic Men</a></li>
-                <li><a href="#">Conditions</a></li>
-                <li><a href="#">Hair & Styles</a></li>
-                <li><a href="#">Contact</a></li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-
-        <!-- Single Footer Widget -->
-        <div class="col-12 col-lg-4 col-xl-3">
-          <div class="single-footer-widget mb-60">
-            <!-- Widget Title -->
-            <h4 class="widget-title">Contact</h4>
-            <!-- Footer Content -->
-            <div class="footer-content mb-30">
-              <h4>+01-3-8888-6868</h4>
-              <h6>40 Baria Sreet 133/2 NewYork City</h6>
-            </div>
-            <!-- Social Info -->
-            <div class="footer-social-info">
-              <a href="#" class="facebook" data-toggle="tooltip" data-placement="top" title="Facebook"><i class="fa fa-facebook"></i></a>
-              <a href="#" class="twitter" data-toggle="tooltip" data-placement="top" title="Twitter"><i class="fa fa-twitter"></i></a>
-              <a href="#" class="pinterest" data-toggle="tooltip" data-placement="top" title="Pinterest"><i class="fa fa-pinterest"></i></a>
-              <a href="#" class="instagram" data-toggle="tooltip" data-placement="top" title="Instagram"><i class="fa fa-instagram"></i></a>
-              <a href="#" class="youtube" data-toggle="tooltip" data-placement="top" title="YouTube"><i class="fa fa-youtube-play"></i></a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </footer>
-  <!-- ***** Footer Area End ***** -->
-
-  <!-- ******* All JS ******* -->
-  <!-- jQuery js -->
-  <script src="js/jquery.min.js"></script>
-  <!-- Popper js -->
-  <script src="js/popper.min.js"></script>
-  <!-- Bootstrap js -->
-  <script src="js/bootstrap.min.js"></script>
-  <!-- All js -->
-  <script src="js/mona.bundle.js"></script>
-  <!-- Active js -->
-  <script src="js/default-assets/active.js"></script>
+   <!-- Java Script
+   ================================================== --> 
+   <script src="js/jquery-2.1.3.min.js"></script>
+   <script src="js/plugins.js"></script>
+   <script src="js/main.js"></script>
 
 </body>
 
