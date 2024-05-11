@@ -2243,13 +2243,46 @@ input, select, textarea {
 
 /* Intro */
 
-	#intro {
+	/* #intro {
 		background: url("images/overlay.png"), url("../../images/fulls/salman\ \(7\).jpeg");
 		background-size: 256px 256px, cover;
 		background-attachment: fixed, fixed;
 		background-position: top left, bottom center;
 		background-repeat: repeat, no-repeat;
-	}
+	} */
+
+	/* For mobile devices (up to 767px) */
+@media only screen and (max-width: 767px) {
+    #intro {
+		background: url("images/overlay.png"), url("../../images/fulls/salman\ \(7\).jpeg");
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+}
+
+/* For iPad (768px to 1024px) */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    #intro {
+		background: url("images/overlay.png"), url("../../images/fulls/salman\ \(7\).jpeg");
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+}
+
+/* For desktop screens (1025px and above) */
+@media only screen and (min-width: 1025px) {
+    #intro {
+		background: url("images/overlay.png"), url("../../images/fulls/salmanpdf\ \(6\).jpg");
+		background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
 
 /* One */
 
