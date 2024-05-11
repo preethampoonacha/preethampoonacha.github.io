@@ -1900,7 +1900,7 @@ input, select, textarea {
 					}
 
 				#header nav {
-					display: none;
+					/* display: none; */
 				}
 
 		}
