@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Material Tracking Dashboard</title>
 <style>
-  :root{
+  <!--:root{
     --bg:#f6f8fb; --card:#fff; --muted:#6b7280; --accent:#2563eb; --danger:#ef4444;
   }
   body{font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;margin:16px;background:var(--bg);color:#111}
@@ -37,7 +37,150 @@
   input[type="number"]{width:100px;padding:6px;border-radius:6px;border:1px solid #e5e7eb}
   .row{display:flex;gap:8px;align-items:center}
   .btn-red{background:var(--danger)}
-  .table-wrap{max-height:50vh;overflow:auto}
+  .table-wrap{max-height:50vh;overflow:auto}-->
+  :root {
+  --bg: #f4f6f9;
+  --card: #fff;
+  --text: #111;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-light: #3b82f6;
+  --danger: #ef4444;
+  --shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+header {
+  padding: 16px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+header h1 { font-size: 20px; margin: 0; }
+header .small { font-size: 13px; opacity: 0.85; }
+
+.wrap {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+@media(max-width: 900px){
+  .wrap { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+button, select, input[type=file], input[type=number], input[type=text] {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+button {
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  border: none;
+}
+button:hover { background: var(--accent-light); }
+button.ghost {
+  background: #f9fafb;
+  color: var(--accent);
+  border: 1px solid #dbeafe;
+}
+button.ghost:hover { background: #eef2ff; }
+button.btn-red { background: var(--danger); }
+button.btn-red:hover { background: #dc2626; }
+
+.project-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 60vh;
+  overflow: auto;
+}
+.project-item {
+  padding: 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.project-item:hover { background: #f3f4f6; }
+.project-item.active {
+  background: linear-gradient(90deg, #eef2ff, #f0f9ff);
+  border: 1px solid #dbeafe;
+}
+
+.metric-row {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+.metric {
+  flex: 1;
+  min-width: 100px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+  text-align: center;
+  transition: 0.2s;
+}
+.metric:hover { background: #f3f4f6; }
+.metric .val { font-weight: 700; font-size: 20px; }
+
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+th { background: #f9fafb; text-align: left; }
+td input, td select { width: 100%; box-sizing: border-box; }
+
+.chart { height: 180px; padding: 12px; }
+.small { font-size: 13px; }
+.muted { color: var(--muted); }
+
+footer {
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 13px;
+  text-align: center;
+  color: var(--muted);
+}
 </style>
 </head>
 <body>
