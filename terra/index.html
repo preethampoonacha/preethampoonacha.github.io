@@ -3,199 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <title>Terra & Co. Organics</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         body {
-            background: #F5EFE6;
+            background: linear-gradient(120deg, #ede4d0 60%, #fffbe8 100%);
             margin: 0;
-            font-family: 'Segoe UI', 'Serif', Arial;
-            color: #5E4527;
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #4b3a23;
+        }
+        .navbar {
+            background: #b08e5a;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(176,142,90,0.07);
+        }
+        .navbar img {
+            vertical-align: middle;
+            height: 70px;
+            border-radius: 50%;
+            margin-right: 30px;
+            box-shadow: 0 4px 14px rgba(71,55,24,0.06);
+        }
+        .navbar-title {
+            font-family: 'Montserrat', serif;
+            font-size: 2.3rem;
+            font-weight: bold;
+            color: #4B3A23;
+            display: inline-block;
+        }
+        .navbar-desc {
+            font-size: 1.08rem;
+            color: #fdf6ee;
+            margin-top: 7px;
+            letter-spacing: 1px;
         }
         .hero {
-            background: #A9824B url('terra_harvest.jpeg') center/contain no-repeat;
-            padding: 60px 20px 100px;
             text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
         }
         .hero h1 {
-            font-size: 3rem;
-            margin: 0 0 20px 0;
-            color: #3E280E;
+            font-family: 'Montserrat', serif;
+            font-size: 2.7rem;
+            margin-bottom: 13px;
+            color: #7a5a31;
             letter-spacing: 2px;
         }
         .hero p {
-            font-size: 1.35rem;
+            font-size: 1.27rem;
             color: #7A6644;
-            margin-bottom: 30px;
+            margin-bottom: 7px;
+            font-weight: 400;
         }
-        .product-section {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 36px;
-            margin: 0 auto 60px;
-            max-width: 1200px;
+            max-width: 1240px;
+            margin: 0 auto 60px auto;
+            padding: 0 24px;
         }
-        .product-card {
+        .card {
+            display: flex;
+            flex-direction: column;
             background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 8px 24px rgba(169,130,75,0.13);
+            border-radius: 22px;
             overflow: hidden;
-            width: 320px;
-            transition: transform 0.3s;
+            box-shadow: 0 14px 38px rgba(176,142,90,0.14);
+            transition: transform .25s, box-shadow .3s;
             cursor: pointer;
             position: relative;
         }
-        .product-card:hover {
-            transform: translateY(-8px) scale(1.04);
-            box-shadow: 0 16px 40px rgba(169,130,75,0.18);
+        .card:hover {
+            transform: scale(1.045) translateY(-6px);
+            box-shadow: 0 18px 42px rgba(140,90,30,0.13);
         }
-        .product-img {
+        .card-img {
             width: 100%;
-            height: 190px;
+            height: 195px;
             object-fit: cover;
+            background: #f6e8d4;
+            box-shadow: 0 4px 16px rgba(221,188,130,0.12);
         }
-        .product-info {
-            padding: 20px 22px;
+        .card-title {
+            font-size: 1.35rem;
+            font-family: 'Montserrat', serif;
+            margin: 14px 0 8px;
+            color: #826029;
+            font-weight: 700;
         }
-        .product-info h2 {
-            font-size: 1.4rem;
-            margin: 0 0 8px;
-            color: #5E4527;
-        }
-        .product-info p {
+        .card-subtitle {
             font-size: 1rem;
-            margin: 0 0 12px;
+            color: #a9824b;
+            font-style: italic;
+            margin-bottom: 8px;
         }
-        .cta {
-            display: inline-block;
-            background: #A9824B;
+        .card-desc {
+            font-size: .97rem;
+            color: #4b3a23;
+            margin-bottom: 18px;
+        }
+        .cta-btn {
+            background: linear-gradient(90deg, #c89d5e 70%, #7a5a31 100%);
             color: #fff;
-            padding: 10px 28px;
-            border-radius: 32px;
-            font-weight: bold;
-            font-size: 1.12rem;
-            text-decoration: none;
-            letter-spacing: 1px;
-            margin-top: 16px;
-            transition: background 0.24s;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-size: 1.05rem;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 36px;
+            margin-bottom: 18px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background .24s;
         }
-        .cta:hover {
-            background: #5E4527;
+        .cta-btn:hover {
+            background: linear-gradient(90deg, #a9824b 60%, #754e25 100%);
         }
         .footer {
             text-align: center;
-            padding: 36px 0 18px 0;
-            background: #A9824B;
+            padding: 38px 0 18px 0;
+            background: #b08e5a;
             color: #fff;
             letter-spacing: 1px;
+            font-size: 1.05rem;
+            margin-top: 48px;
         }
-        @media (max-width: 850px) {
-            .product-section {
-                flex-direction: column;
-                align-items: center;
-            }
-            .hero h1 {
-                font-size: 2.2rem;
-            }
+        /* Responsive adjust */
+        @media (max-width: 900px) {
+            .products { grid-template-columns: 1fr; padding: 0 6vw; }
+            .navbar-title { font-size: 1.5rem; }
+            .hero h1 { font-size: 2.1rem; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Hero Banner -->
+    <!-- Navbar -->
+    <div class="navbar">
+        <img src="terra_harvest.jpeg" alt="Terra Logo">
+        <span class="navbar-title">Terra &amp; Co. Organics</span>
+        <div class="navbar-desc">Tradition Rooted, Taste Perfected. Discover premium organic coffee, spices, nuts, and harvest goodness blended with the spirit of Coorg.</div>
+    </div>
+    <!-- Hero Section -->
     <div class="hero">
-        <h1>Terra & Co. Organics</h1>
-        <p>Tradition Rooted, Taste Perfected. Discover premium organic coffee, spices, nuts, and harvest goodness blended with the spirit of Coorg.</p>
+        <h1>Premium Organics from Coorg</h1>
+        <p>Indulge in genuine flavors, curated for purity and wellness.</p>
     </div>
-
-    <!-- Product Showcases -->
-    <div class="product-section">
-        <!-- Coffee Product -->
-        <div class="product-card" onclick="showDetails('coffee')">
-            <img class="product-img" src="terra-cafe-detail.jpeg" alt="Coffee Delights">
-            <div class="product-info">
-                <h2>Terracafe Coffee Delights</h2>
-                <p>Premium, strong, elegant blends crafted for coffee lovers who adore quality and sustainability from terra soils.</p>
-                <a class="cta" href="#">Shop Coffee</a>
-            </div>
+    <!-- Products Grid -->
+    <div class="products">
+        <!-- Coffee -->
+        <div class="card" onclick="showDetails('coffee')">
+            <img class="card-img" src="terra-cafe-detail.jpeg" alt="Coffee">
+            <div class="card-subtitle">Premium, Strong and Elegant Options</div>
+            <div class="card-title">Terracafe Coffee Delights</div>
+            <div class="card-desc">Elegant blends crafted for coffee lovers who adore quality and sustainability from terra soils.</div>
+            <button class="cta-btn">Shop Coffee</button>
         </div>
-
-        <!-- Spices Product -->
-        <div class="product-card" onclick="showDetails('spices')">
-            <img class="product-img" src="terra-spices-detail.jpeg" alt="Spices Selection">
-            <div class="product-info">
-                <h2>Terra Spices</h2>
-                <p>Nature's flavorful essentials – turmeric, red chili flakes, pepper. Elevate every dish with authentic taste and health benefits.</p>
-                <a class="cta" href="#">Shop Spices</a>
-            </div>
+        <!-- Spices -->
+        <div class="card" onclick="showDetails('spices')">
+            <img class="card-img" src="terra-spices-detail.jpeg" alt="Spices">
+            <div class="card-subtitle">Nature's Flavorful Essentials</div>
+            <div class="card-title">Terra Spices</div>
+            <div class="card-desc">Turmeric, red chili flakes, pepper. Elevate every dish with flavor and health benefits.</div>
+            <button class="cta-btn">Shop Spices</button>
         </div>
-
-        <!-- Nuts Product -->
-        <div class="product-card" onclick="showDetails('nuts')">
-            <img class="product-img" src="terra-nuts-detail.jpeg" alt="Nutritious TerraNuts">
-            <div class="product-info">
-                <h2>TerraNuts Line</h2>
-                <p>Packed with nutrients & flavor. Organic nuts and seeds offer the perfect snack, celebrating nature's goodness in every bite.</p>
-                <a class="cta" href="#">Shop Nuts</a>
-            </div>
+        <!-- Nuts -->
+        <div class="card" onclick="showDetails('nuts')">
+            <img class="card-img" src="terra-nuts-detail.jpeg" alt="Nuts">
+            <div class="card-subtitle">Nature's Best in Every Bite</div>
+            <div class="card-title">TerraNuts Line</div>
+            <div class="card-desc">Packed with nutrients and flavor. The perfect snack, celebrating nature's goodness in every bite.</div>
+            <button class="cta-btn">Shop Nuts</button>
         </div>
-
-        <!-- Rice & Jaggery Product -->
-        <div class="product-card" onclick="showDetails('harvest')">
-            <img class="product-img" src="terra-harvest-detail.jpeg" alt="TerraHarvest Line">
-            <div class="product-info">
-                <h2>TerraHarvest Rice & Jaggery</h2>
-                <p>Organic red, white, brown rice, and wholesome jaggery for delightful, healthy meals direct from fertile fields of Coorg.</p>
-                <a class="cta" href="#">Shop Harvest</a>
-            </div>
+        <!-- Rice & Jaggery -->
+        <div class="card" onclick="showDetails('harvest')">
+            <img class="card-img" src="terra-harvest-detail.jpeg" alt="Rice and Jaggery">
+            <div class="card-subtitle">Organic Rice & Jaggery Options</div>
+            <div class="card-title">TerraHarvest Rice & Jaggery</div>
+            <div class="card-desc">Red, white, brown rice and wholesome jaggery for healthy, delicious meals from Coorg.</div>
+            <button class="cta-btn">Shop Harvest</button>
         </div>
     </div>
-
     <!-- Footer -->
     <div class="footer">
         &copy; 2025 Terra & Co. Organics. Taste the spirit of earth. | Contact: info@terraandcoorganics.com | +91 94481 65016
     </div>
-
-    <!-- Product Details Popup (hidden by default, shown by JS) -->
-    <div id="productDetails" style="
-        display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(94,69,39,0.86);
-        z-index:1000;align-items:center;justify-content:center;color:#fff;">
-        <div id="detailsContent" style="
-            background:#fff; color:#5E4527; border-radius:24px; max-width:400px; padding:34px 28px; box-shadow:0 12px 32px rgba(94,69,39,0.22); text-align:center; position:relative;">
-            <span onclick="closeDetails()" style="position:absolute;top:12px;right:18px;cursor:pointer;font-weight:600;font-size:1.4rem;">&times;</span>
+    <!-- Popup Modal for Details -->
+    <div id="productDetails" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(94,69,39,0.85); z-index:1000; align-items:center; justify-content:center; color:#5E4527;">
+        <div style="background:#fff; border-radius:16px; max-width:400px; padding:32px 22px; box-shadow:0 14px 38px rgba(140,90,30,0.17); text-align:center; position:relative;">
+            <span onclick="closeDetails()" style="position:absolute;top:15px;right:20px;cursor:pointer;font-weight:700;font-size:1.4rem;">&times;</span>
             <div id="detailsText"></div>
         </div>
     </div>
     <script>
-        // Details for each product
+        // Modern product detail popups
         const details = {
             coffee: {
                 title: "Terracafe Coffee Delights",
                 text: `<img src="terra_cafe.jpeg" alt="TerraCafe Coorg" style="width:220px;border-radius:16px;"><br><br>
-                Discover rich coffee blends from Coorg, crafted for strength and elegance.<br><br>
-                <strong>Key Highlights:</strong><ul style="text-align:left;"><li>Premium, strong, and elegant blends</li><li>Sustainable organic farming</li><li>The spirit of Coorg soil</li></ul>`
+                Rich blends from Coorg, crafted for strong aroma and smooth taste.<br><br>
+                <strong>Highlights:</strong>
+                <ul style="text-align:left;">
+                    <li>Premium coffee powders</li>
+                    <li>Sustainable organic farms</li>
+                    <li>Bold, elegant flavors</li>
+                </ul>`
             },
             spices: {
-                title: "TerraSpices",
+                title: "Terra Spices",
                 text: `<img src="terra_spices.jpeg" alt="Terra Spices" style="width:220px;border-radius:16px;"><br><br>
-                Flavorful organic spices to elevate culinary experiences.<br><br>
-                <strong>Key Highlights:</strong><ul style="text-align:left;"><li>Authentic spices: Turmeric, chili flakes, pepper</li><li>Health-packed flavors</li><li>Timeless taste traditions</li></ul>`
+                Authentic flavors: turmeric, chili flakes, pepper,<br>
+                perfect for healthy, vibrant cooking.<br><br>
+                <strong>Highlights:</strong>
+                <ul style="text-align:left;">
+                    <li>Timeless taste tradition</li>
+                    <li>Premium quality spices</li>
+                    <li>Health benefits from pure ingredients</li>
+                </ul>`
             },
             nuts: {
                 title: "TerraNuts Line",
                 text: `<img src="terra-nuts-detail.jpeg" alt="Terra Nuts" style="width:220px;border-radius:16px;"><br><br>
-                Nutritious, organic nuts and seeds for health enthusiasts.<br><br>
-                <strong>Key Highlights:</strong><ul style="text-align:left;"><li>Wholesome selection</li><li>Nutrient-rich snacks</li><li>Best in every bite</li></ul>`
+                Wholesome, organic nuts and seeds for taste and nutrition.<br><br>
+                <strong>Highlights:</strong>
+                <ul style="text-align:left;">
+                    <li>Packed with nutrients</li>
+                    <li>Perfect healthy snacks</li>
+                    <li>Wholesome goodness</li>
+                </ul>`
             },
             harvest: {
                 title: "TerraHarvest Rice & Jaggery",
                 text: `<img src="terra-harvest-detail.jpeg" alt="TerraHarvest" style="width:220px;border-radius:16px;"><br><br>
-                Premium rice and jaggery options for healthy meals.<br><br>
-                <strong>Key Highlights:</strong><ul style="text-align:left;"><li>Red, white, and brown rice</li><li>Wholesome jaggery</li><li>Nature nourishing delight</li></ul>`
+                Enjoy organic rice and jaggery options for meals that nourish and delight.<br><br>
+                <strong>Highlights:</strong>
+                <ul style="text-align:left;">
+                    <li>Red, white, brown rice</li>
+                    <li>Pure jaggery blocks & powder</li>
+                    <li>From fertile Coorg fields</li>
+                </ul>`
             }
         };
         function showDetails(key) {
-            document.getElementById('detailsText').innerHTML = `<h2>${details[key].title}</h2><hr>` + details[key].text;
+            document.getElementById('detailsText').innerHTML =
+                `<h2 style="font-family:'Montserrat',serif; color:#826029;">${details[key].title}</h2><hr style="margin:12px 0;">${details[key].text}`;
             document.getElementById('productDetails').style.display = 'flex';
         }
         function closeDetails() {
