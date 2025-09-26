@@ -1,1 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Material Tracking Dashboard</title>
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#fff; --muted:#6b7280; --accent:#2563eb; --danger:#ef4444;
+  }
+  body{font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;margin:16px;background:var(--bg);color:#111}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  h1{font-size:18px;margin:0}
+  .wrap{display:grid;grid-template-columns:320px 1fr;gap:12px}
+  .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .controls{display:flex;gap:8px;flex-wrap:wrap}
+  select,input[type=file]{padding:6px;border-radius:6px;border:1px solid #e5e7eb}
+  button{background:var(--accent);color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
+  button.ghost{background:transparent;color:var(--accent);border:1px solid #dbeafe}
+  .project-list{margin-top:10px;display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto}
+  .project-item{padding:8px;border-radius:8px;border:1px solid #eef2ff;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .project-item.active{background:linear-gradient(90deg,#eef2ff,#f8fbff)}
+  .metric-row{display:flex;gap:8px;margin-bottom:8px}
+  .metric{flex:1;padding:10px;border-radius:8px;background:#fff;text-align:center}
+  .metric .val{font-weight:700;font-size:18px}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:8px;border-bottom:1px solid #f1f5f9;font-size:13px}
+  .small{font-size:12px;color:var(--muted)}
+  .chart{height:160px;padding:8px}
+  .controls-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .pill{padding:4px 8px;border-radius:999px;border:1px solid #e6eefc;font-size:12px}
+  .prob-High{background:#ecfeff;border-color:#a7f3d0}
+  .prob-Med{background:#fff7ed;border-color:#fed7aa}
+  .prob-Low{background:#fff1f2;border-color:#fecaca}
+  .muted{color:var(--muted)}
+  footer{margin-top:12px;font-size:12px;color:var(--muted)}
+  input[type="number"]{width:100px;padding:6px;border-radius:6px;border:1px solid #e5e7eb}
+  .row{display:flex;gap:8px;align-items:center}
+  .btn-red{background:var(--danger)}
+  .table-wrap{max-height:50vh;overflow:auto}
+</style>
+</head>
+<body>
 
+<header>
+  <h1>Material Tracking — Shop Release vs Delivery</h1>
+  <div class="small muted">Single-file HTML · JSON/CSV import/export</div>
+</header>
+
+<div class="wrap">
+  <!-- LEFT: project list + import/export -->
+  <div>
+    <div class="card">
+      <div class="controls-row">
+        <input id="fileInput" type="file" accept=".json,.csv" />
+        <button id="importBtn" class="ghost">Import</button>
+        <button id="exportJson">Export JSON</button>
+        <button id="exportCsv" class="ghost">Export CSV</button>
+      </div>
+      <div style="margin-top:10px">
+        <label class="small">Filter by probability</label>
+        <div class="controls" style="margin-top:6px">
+          <select id="probFilter"><option value="All">All</option><option>High</option><option>Med</option><option>Low</option></select>
+          <select id="searchProject"><option value="">All projects</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>Projects</strong>
+        <button id="newProjectBtn" class="ghost">+ New</button>
+      </div>
+      <div class="project-list" id="projectList"></div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div><strong>Consolidated Metrics</strong></div>
+      <div class="metric-row" id="consolidatedMetrics"></div>
+      <div style="margin-top:8px" class="small muted">Planned = shop releases; Actual = deliveries; Variance = Planned - Actual</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: details and table -->
+  <div>
+    <div class="card" id="detailCard">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <h2 id="projTitle" style="margin:0;font-size:16px">Select a project</h2>
+          <div class="small muted" id="projSubtitle"></div>
+        </div>
+        <div class="row">
+          <button id="addRowBtn">+ Add row</button>
+          <button id="deleteProject" class="btn-red">Delete</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="metric-row" id="projectMetrics"></div>
+        <div class="chart" id="trendChart"></div>
+      </div>
+
+      <div style="margin-top:12px" class="table-wrap">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Week</th><th>Planned (t)</th><th>Actual (t)</th><th>Prob.</th><th>Variance</th><th>Notes</th><th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end">
+        <button id="saveProject" class="ghost">Save Project</button>
+      </div>
+    </div>
+
+    <footer class="muted">Tip: import JSON exported earlier or CSV from Excel. Weeks are ISO-week-like labels (YYYY-W##).</footer>
+  </div>
+</div>
+
+<script>
+/* Sample data model (array of projects)
+project = {
+ id: string,
+ name: string,
+ code: string,
+ meta: { site: "", manager: "" },
+ rows: [
+   { week: "2025-W10", planned: 30, actual: 20, prob: "High", notes: "" }
+ ]
+}
+*/
+const SAMPLE = [
+  {id:'p-1',name:'The One Tower',code:'18-895',meta:{site:'Bloc A'}, rows:[
+    {week:'2025-W38',planned:120,actual:80,prob:'High',notes:'Main beams'},
+    {week:'2025-W39',planned:80,actual:60,prob:'Med',notes:''},
+    {week:'2025-W42',planned:200,actual:0,prob:'Low',notes:'prefab panels'}
+  ]},
+  {id:'p-2',name:'MGH_4B',code:'20-643',meta:{site:'Zone 4'}, rows:[
+    {week:'2025-W38',planned:50,actual:50,prob:'High',notes:'Delivered on time'},
+    {week:'2025-W40',planned:120,actual:100,prob:'Med',notes:''}
+  ]}
+];
+
+let projects = JSON.parse(JSON.stringify(SAMPLE));
+let activeId = null;
+
+// Utilities
+const $ = id => document.getElementById(id);
+const q = s => document.querySelector(s);
+
+function uid(prefix='id'){return prefix+'-'+Math.random().toString(36).slice(2,9)}
+function sum(arr,fn){return arr.reduce((a,b)=>a+(fn?fn(b):b),0)}
+
+// Render functions
+function renderProjectList(){
+  const el = $('projectList'); el.innerHTML='';
+  const search = $('searchProject').value;
+  projects.forEach(p=>{
+    if(search && search!==p.id) return;
+    const div = document.createElement('div'); div.className='project-item'+(p.id===activeId? ' active':'');
+    div.onclick = ()=>selectProject(p.id);
+    div.innerHTML = `<div>
+        <div style="font-weight:600">${p.name} <span class="small muted">(${p.code})</span></div>
+        <div class="small muted">${p.meta.site||''}</div>
+      </div>
+      <div class="small">
+        <div>Planned: ${sum(p.rows,r=>r.planned).toFixed(0)}t</div>
+        <div>Actual: ${sum(p.rows,r=>r.actual).toFixed(0)}t</div>
+      </div>`;
+    el.appendChild(div);
+  });
+  updateProjectSelect();
+}
+
+function updateProjectSelect(){
+  const sel = $('searchProject'); sel.innerHTML = '<option value="">All projects</option>';
+  projects.forEach(p=> sel.innerHTML += `<option value="${p.id}">${p.name} (${p.code})</option>`);
+}
+
+function renderConsolidated(){
+  const planned = sum(projects,p=>sum(p.rows,r=>r.planned));
+  const actual  = sum(projects,p=>sum(p.rows,r=>r.actual));
+  const variance = planned - actual;
+  const el = $('consolidatedMetrics'); el.innerHTML = '';
+  const m = (title,val,sub)=>`<div class="metric"><div class="small">${title}</div><div class="val">${val}</div><div class="small muted">${sub||''}</div></div>`;
+  el.innerHTML = m('Total Planned', planned.toFixed(0)+' t','Shop releases') + m('Total Actual', actual.toFixed(0)+' t','Deliveries') + m('Variance', variance.toFixed(0)+' t','Planned - Actual');
+}
+
+function selectProject(id){
+  activeId = id;
+  renderProjectList();
+  const p = projects.find(x=>x.id===id);
+  if(!p) return;
+  $('projTitle').innerText = p.name + ` (${p.code})`;
+  $('projSubtitle').innerText = p.meta.site ? `Site: ${p.meta.site}` : '';
+  renderProjectMetrics(p);
+  renderTable(p);
+  renderTrendChart(p);
+}
+
+function renderProjectMetrics(p){
+  const planned = sum(p.rows,r=>r.planned);
+  const actual = sum(p.rows,r=>r.actual);
+  const variance = planned - actual;
+  const el = $('projectMetrics'); el.innerHTML = '';
+  el.innerHTML = `<div class="metric"><div class="small">Planned</div><div class="val">${planned.toFixed(0)} t</div></div>
+                  <div class="metric"><div class="small">Actual</div><div class="val">${actual.toFixed(0)} t</div></div>
+                  <div class="metric"><div class="small">Variance</div><div class="val">${variance.toFixed(0)} t</div></div>`;
+}
+
+function renderTable(p){
+  const tbody = document.querySelector('#dataTable tbody'); tbody.innerHTML='';
+  const probFilter = $('probFilter').value;
+  p.rows.forEach((r, idx)=>{
+    if(probFilter !== 'All' && r.prob !== probFilter) return;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><input data-idx="${idx}" class="week" value="${r.week}" /></td>
+      <td><input type="number" step="1" min="0" data-idx="${idx}" class="planned" value="${r.planned}" /></td>
+      <td><input type="number" step="1" min="0" data-idx="${idx}" class="actual" value="${r.actual}" /></td>
+      <td>
+        <select data-idx="${idx}" class="prob">
+          <option${r.prob==='High'?' selected':''}>High</option>
+          <option${r.prob==='Med'?' selected':''}>Med</option>
+          <option${r.prob==='Low'?' selected':''}>Low</option>
+        </select>
+      </td>
+      <td class="variance">${(r.planned - r.actual).toFixed(0)}</td>
+      <td><input data-idx="${idx}" class="notes" value="${r.notes||''}" /></td>
+      <td><button data-idx="${idx}" class="delRow">Del</button></td>`;
+    tbody.appendChild(tr);
+  });
+  // attach listeners
+  Array.from(tbody.querySelectorAll('input,select')).forEach(inp=>{
+    inp.addEventListener('change', onCellChange);
+  });
+  Array.from(tbody.querySelectorAll('.delRow')).forEach(b=>b.addEventListener('click',onDeleteRow));
+}
+
+function onCellChange(e){
+  const idx = +e.target.dataset.idx;
+  const p = projects.find(x=>x.id===activeId);
+  if(!p) return;
+  const row = p.rows[idx];
+  if(e.target.classList.contains('week')) row.week = e.target.value;
+  if(e.target.classList.contains('planned')) row.planned = Number(e.target.value)||0;
+  if(e.target.classList.contains('actual')) row.actual = Number(e.target.value)||0;
+  if(e.target.classList.contains('notes')) row.notes = e.target.value;
+  if(e.target.classList.contains('prob')) row.prob = e.target.value;
+  renderTable(p);
+  renderProjectMetrics(p);
+  renderConsolidated();
+  renderTrendChart(p);
+}
+
+function onDeleteRow(e){
+  const idx = +e.target.dataset.idx;
+  const p = projects.find(x=>x.id===activeId);
+  p.rows.splice(idx,1);
+  renderTable(p);
+  renderProjectMetrics(p);
+  renderConsolidated();
+  renderTrendChart(p);
+}
+
+// Trend chart: simple stacked bars planned/actual by week using SVG
+function renderTrendChart(p){
+  const div = $('trendChart'); div.innerHTML = '';
+  // aggregate by week
+  const agg = {};
+  p.rows.forEach(r=>{
+    if(!agg[r.week]) agg[r.week] = {planned:0,actual:0};
+    agg[r.week].planned += Number(r.planned)||0;
+    agg[r.week].actual += Number(r.actual)||0;
+  });
+  const weeks = Object.keys(agg).sort();
+  if(weeks.length===0){ div.innerHTML = '<div class="small muted">No rows to chart</div>'; return; }
+  const plannedMax = Math.max(...weeks.map(w=>agg[w].planned));
+  const height = 140, width = Math.max(weeks.length*60,300);
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS,'svg');
+  svg.setAttribute('viewBox',`0 0 ${width} ${height}`); svg.style.width='100%';
+  // y scale
+  const maxv = Math.max(plannedMax, ...weeks.map(w=>agg[w].actual)) || 1;
+  const pad = 10;
+  const barW = Math.min(40, Math.floor(width / weeks.length) - 6);
+  weeks.forEach((wk,i)=>{
+    const x = i * (width / weeks.length) + 10;
+    const pH = (agg[wk].planned / maxv) * (height - 40);
+    const aH = (agg[wk].actual / maxv) * (height - 40);
+    // planned bar (light)
+    const plannedRect = document.createElementNS(svgNS,'rect');
+    plannedRect.setAttribute('x', x);
+    plannedRect.setAttribute('y', height - pH - 20);
+    plannedRect.setAttribute('width', barW);
+    plannedRect.setAttribute('height', pH);
+    plannedRect.setAttribute('fill','#c7ddff');
+    svg.appendChild(plannedRect);
+    // actual bar (darker) - overlay left aligned
+    const actualRect = document.createElementNS(svgNS,'rect');
+    actualRect.setAttribute('x', x);
+    actualRect.setAttribute('y', height - aH - 20);
+    actualRect.setAttribute('width', barW);
+    actualRect.setAttribute('height', aH);
+    actualRect.setAttribute('fill','#2563eb');
+    svg.appendChild(actualRect);
+    // week label
+    const lab = document.createElementNS(svgNS,'text');
+    lab.setAttribute('x', x + barW/2);
+    lab.setAttribute('y', height - 4);
+    lab.setAttribute('font-size',10);
+    lab.setAttribute('text-anchor','middle');
+    lab.textContent = wk.replace('2025-','');
+    svg.appendChild(lab);
+  });
+  // legend
+  const legendP = document.createElementNS(svgNS,'rect'); legendP.setAttribute('x',width-140); legendP.setAttribute('y',6); legendP.setAttribute('width',12); legendP.setAttribute('height',12); legendP.setAttribute('fill','#c7ddff'); svg.appendChild(legendP);
+  const legendPT = document.createElementNS(svgNS,'text'); legendPT.setAttribute('x',width-120); legendPT.setAttribute('y',16); legendPT.setAttribute('font-size',11); legendPT.textContent='Planned'; svg.appendChild(legendPT);
+  const legendA = document.createElementNS(svgNS,'rect'); legendA.setAttribute('x',width-70); legendA.setAttribute('y',6); legendA.setAttribute('width',12); legendA.setAttribute('height',12); legendA.setAttribute('fill','#2563eb'); svg.appendChild(legendA);
+  const legendAT = document.createElementNS(svgNS,'text'); legendAT.setAttribute('x',width-48); legendAT.setAttribute('y',16); legendAT.setAttribute('font-size',11); legendAT.textContent='Actual'; svg.appendChild(legendAT);
+
+  div.appendChild(svg);
+}
+
+// CRUD helpers
+$('newProjectBtn').addEventListener('click',()=>{
+  const id = uid('p');
+  const name = prompt('Project name') || 'New Project';
+  const code = prompt('Project code') || '';
+  projects.unshift({id,name,code,meta:{site:''},rows:[]});
+  renderProjectList(); renderConsolidated();
+});
+
+$('addRowBtn').addEventListener('click',()=>{
+  if(!activeId){ alert('Select a project first'); return;}
+  const p = projects.find(x=>x.id===activeId);
+  p.rows.push({week: prompt('Week label (e.g. 2025-W40)', '2025-W' + new Date().getWeek?.() || '40'), planned:0, actual:0, prob:'Med', notes:''});
+  renderTable(p); renderProjectMetrics(p); renderConsolidated(); renderTrendChart(p);
+});
+
+// delete project
+$('deleteProject').addEventListener('click',()=>{
+  if(!activeId) return alert('Select a project');
+  if(!confirm('Delete project?')) return;
+  projects = projects.filter(p=>p.id!==activeId); activeId=null;
+  renderProjectList(); renderConsolidated();
+  $('projTitle').innerText='Select a project'; $('projSubtitle').innerText=''; $('projectMetrics').innerHTML=''; $('trendChart').innerHTML=''; document.querySelector('#dataTable tbody').innerHTML='';
+});
+
+// save project (noop: data lives in memory; you can export)
+$('saveProject').addEventListener('click', ()=>{ alert('Saved in browser memory. Use Export JSON to download.'); });
+
+// import/export
+function download(filename, text){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type:'text/plain'}));
+  a.download = filename;
+  a.click();
+}
+
+$('exportJson').addEventListener('click', ()=> download('projects.json', JSON.stringify(projects, null, 2)));
+$('exportCsv').addEventListener('click', ()=>{
+  // flatten to CSV rows: projectId,projectName,week,planned,actual,prob,notes
+  let csv = 'projectId,projectName,week,planned,actual,prob,notes\n';
+  projects.forEach(p=>{
+    p.rows.forEach(r=>{
+      csv += [p.id, `"${p.name.replace(/"/g,'""')}"`, r.week, r.planned, r.actual, r.prob, `"${(r.notes||'').replace(/"/g,'""')}"`].join(',') + '\n';
+    })
+  });
+  download('projects.csv', csv);
+});
+
+// import file
+$('importBtn').addEventListener('click', ()=> $('fileInput').click());
+$('fileInput').addEventListener('change', async (e)=>{
+  const f = e.target.files[0]; if(!f) return;
+  const t = await f.text();
+  if(f.name.endsWith('.json')){
+    try{ const data = JSON.parse(t); if(Array.isArray(data)) projects = data; else alert('JSON should be array of projects'); } catch(err){ alert('Invalid JSON'); return; }
+  } else {
+    // parse CSV simple
+    const rows = t.split(/\r?\n/).filter(r=>r.trim());
+    const header = rows.shift().split(',').map(h=>h.trim());
+    const out = {};
+    rows.forEach(r=>{
+      const cols = parseCsvRow(r);
+      const map = {};
+      header.forEach((h,i)=>map[h]=cols[i]||'');
+      const id = map.projectId || uid('p');
+      if(!out[id]) out[id] = {id, name: map.projectName?.replace(/^"|"$/g,''), code:'', meta:{}, rows:[]};
+      out[id].rows.push({week:map.week, planned: Number(map.planned)||0, actual: Number(map.actual)||0, prob: map.prob || 'Med', notes: (map.notes||'').replace(/^"|"$/g,'')});
+    });
+    projects = Object.values(out);
+  }
+  $('fileInput').value='';
+  renderProjectList(); renderConsolidated();
+});
+
+// basic CSV row parser handling quotes
+function parseCsvRow(row){
+  const res = []; let cur='', inQ=false;
+  for(let i=0;i<row.length;i++){
+    const ch=row[i];
+    if(ch==='\"'){ inQ = !inQ; continue;}
+    if(ch===',' && !inQ){ res.push(cur); cur=''; } else cur += ch;
+  }
+  res.push(cur);
+  return res;
+}
+
+// prob filter change
+$('probFilter').addEventListener('change', ()=>{
+  if(activeId) selectProject(activeId); else renderProjectList();
+});
+
+// search project change
+$('searchProject').addEventListener('change', ()=> renderProjectList());
+
+// initial render
+renderProjectList();
+renderConsolidated();
+
+// utility: get ISO week? fallback minimal
+Date.prototype.getWeekNumber = function(){
+  const d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+  return weekNo;
+};
+
+// simple prompt-based row addition improvement: automatically generate a default week label
+if(!String.prototype.getWeek) String.prototype.getWeek = function(){ return '' };
+
+</script>
+</body>
+</html>
