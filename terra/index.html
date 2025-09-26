@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Terra & Co. Organics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: #F5EFE6;
+            margin: 0;
+            font-family: 'Segoe UI', 'Serif', Arial;
+            color: #5E4527;
+        }
+        .hero {
+            background: #A9824B url('WhatsApp-Image-2025-09-14-at-8.15.26-PM-2.jpg') center/contain no-repeat;
+            padding: 60px 20px 100px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0 0 20px 0;
+            color: #3E280E;
+            letter-spacing: 2px;
+        }
+        .hero p {
+            font-size: 1.35rem;
+            color: #7A6644;
+            margin-bottom: 30px;
+        }
+        .product-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 36px;
+            margin: 0 auto 60px;
+            max-width: 1200px;
+        }
+        .product-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(169,130,75,0.13);
+            overflow: hidden;
+            width: 320px;
+            transition: transform 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 16px 40px rgba(169,130,75,0.18);
+        }
+        .product-img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+        .product-info {
+            padding: 20px 22px;
+        }
+        .product-info h2 {
+            font-size: 1.4rem;
+            margin: 0 0 8px;
+            color: #5E4527;
+        }
+        .product-info p {
+            font-size: 1rem;
+            margin: 0 0 12px;
+        }
+        .cta {
+            display: inline-block;
+            background: #A9824B;
+            color: #fff;
+            padding: 10px 28px;
+            border-radius: 32px;
+            font-weight: bold;
+            font-size: 1.12rem;
+            text-decoration: none;
+            letter-spacing: 1px;
+            margin-top: 16px;
+            transition: background 0.24s;
+        }
+        .cta:hover {
+            background: #5E4527;
+        }
+        .footer {
+            text-align: center;
+            padding: 36px 0 18px 0;
+            background: #A9824B;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 850px) {
+            .product-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Banner -->
+    <div class="hero">
+        <h1>Terra & Co. Organics</h1>
+        <p>Tradition Rooted, Taste Perfected. Discover premium organic coffee, spices, nuts, and harvest goodness blended with the spirit of Coorg.</p>
+    </div>
+
+    <!-- Product Showcases -->
+    <div class="product-section">
+        <!-- Coffee Product -->
+        <div class="product-card" onclick="showDetails('coffee')">
+            <img class="product-img" src="WhatsApp-Image-2025-09-14-at-8.15.26-PM-1.jpg" alt="Coffee Delights">
+            <div class="product-info">
+                <h2>Terracafe Coffee Delights</h2>
+                <p>Premium, strong, elegant blends crafted for coffee lovers who adore quality and sustainability from terra soils.</p>
+                <a class="cta" href="#">Shop Coffee</a>
+            </div>
+        </div>
+
+        <!-- Spices Product -->
+        <div class="product-card" onclick="showDetails('spices')">
+            <img class="product-img" src="WhatsApp-Image-2025-09-14-at-8.11.44-PM.jpg" alt="Spices Selection">
+            <div class="product-info">
+                <h2>Terra Spices</h2>
+                <p>Nature's flavorful essentials – turmeric, red chili flakes, pepper. Elevate every dish with authentic taste and health benefits.</p>
+                <a class="cta" href="#">Shop Spices</a>
+            </div>
+        </div>
+
+        <!-- Nuts Product -->
+        <div class="product-card" onclick="showDetails('nuts')">
+            <img class="product-img" src="WhatsApp-Image-2025-09-14-at-8.11.44-PM-2.jpg" alt="Nutritious TerraNuts">
+            <div class="product-info">
+                <h2>TerraNuts Line</h2>
+                <p>Packed with nutrients & flavor. Organic nuts and seeds offer the perfect snack, celebrating nature's goodness in every bite.</p>
+                <a class="cta" href="#">Shop Nuts</a>
+            </div>
+        </div>
+
+        <!-- Rice & Jaggery Product -->
+        <div class="product-card" onclick="showDetails('harvest')">
+            <img class="product-img" src="WhatsApp-Image-2025-09-14-at-8.11.45-PM.jpg" alt="TerraHarvest Line">
+            <div class="product-info">
+                <h2>TerraHarvest Rice & Jaggery</h2>
+                <p>Organic red, white, brown rice, and wholesome jaggery for delightful, healthy meals direct from fertile fields of Coorg.</p>
+                <a class="cta" href="#">Shop Harvest</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2025 Terra & Co. Organics. Taste the spirit of earth. | Contact: info@terraandcoorganics.com | +91 94481 65016
+    </div>
+
+    <!-- Product Details Popup (hidden by default, shown by JS) -->
+    <div id="productDetails" style="
+        display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(94,69,39,0.86);
+        z-index:1000;align-items:center;justify-content:center;color:#fff;">
+        <div id="detailsContent" style="
+            background:#fff; color:#5E4527; border-radius:24px; max-width:400px; padding:34px 28px; box-shadow:0 12px 32px rgba(94,69,39,0.22); text-align:center; position:relative;">
+            <span onclick="closeDetails()" style="position:absolute;top:12px;right:18px;cursor:pointer;font-weight:600;font-size:1.4rem;">&times;</span>
+            <div id="detailsText"></div>
+        </div>
+    </div>
+    <script>
+        // Details for each product
+        const details = {
+            coffee: {
+                title: "Terracafe Coffee Delights",
+                text: `<img src="WhatsApp-Image-2025-09-14-at-8.15.26-PM.jpg" alt="TerraCafe Coorg" style="width:220px;border-radius:16px;"><br><br>
+                Discover rich coffee blends from Coorg, crafted for strength and elegance.<br><br>
+                <strong>Key Highlights:</strong><ul style="text-align:left;"><li>Premium, strong, and elegant blends</li><li>Sustainable organic farming</li><li>The spirit of Coorg soil</li></ul>`
+            },
+            spices: {
+                title: "TerraSpices",
+                text: `<img src="WhatsApp-Image-2025-09-14-at-8.15.26-PM-3.jpg" alt="Terra Spices" style="width:220px;border-radius:16px;"><br><br>
+                Flavorful organic spices to elevate culinary experiences.<br><br>
+                <strong>Key Highlights:</strong><ul style="text-align:left;"><li>Authentic spices: Turmeric, chili flakes, pepper</li><li>Health-packed flavors</li><li>Timeless taste traditions</li></ul>`
+            },
+            nuts: {
+                title: "TerraNuts Line",
+                text: `<img src="WhatsApp-Image-2025-09-14-at-8.11.44-PM-1.jpg" alt="Terra Nuts" style="width:220px;border-radius:16px;"><br><br>
+                Nutritious, organic nuts and seeds for health enthusiasts.<br><br>
+                <strong>Key Highlights:</strong><ul style="text-align:left;"><li>Wholesome selection</li><li>Nutrient-rich snacks</li><li>Best in every bite</li></ul>`
+            },
+            harvest: {
+                title: "TerraHarvest Rice & Jaggery",
+                text: `<img src="WhatsApp-Image-2025-09-14-at-8.15.26-PM-2.jpg" alt="TerraHarvest" style="width:220px;border-radius:16px;"><br><br>
+                Premium rice and jaggery options for healthy meals.<br><br>
+                <strong>Key Highlights:</strong><ul style="text-align:left;"><li>Red, white, and brown rice</li><li>Wholesome jaggery</li><li>Nature nourishing delight</li></ul>`
+            }
+        };
+        function showDetails(key) {
+            document.getElementById('detailsText').innerHTML = `<h2>${details[key].title}</h2><hr>` + details[key].text;
+            document.getElementById('productDetails').style.display = 'flex';
+        }
+        function closeDetails() {
+            document.getElementById('productDetails').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
