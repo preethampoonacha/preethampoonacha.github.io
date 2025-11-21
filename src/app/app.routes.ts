@@ -17,6 +17,10 @@ export const routes: Routes = [
   {
     path: 'tasks/edit/:id',
     loadComponent: () => import('./components/task-form/task-form.component').then(m => m.TaskFormComponent)
+  },
+  {
+    path: 'signalr-poc',
+    loadComponent: () => import('./components/signalr-poc/signalr-poc.component').then(m => m.SignalRPocComponent)
   }
 ];
 
