@@ -1,0 +1,115 @@
+<div class="pizza-restaurant">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="title-line">Artisanal</span>
+          <span class="title-line highlight">Pizza</span>
+          <span class="title-line">Perfection</span>
+        </h1>
+        <p class="hero-subtitle">Handcrafted with passion, served with love</p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" (click)="scrollToMenu()">View Menu</button>
+          <button class="btn btn-outline">Order Now</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="pizza-illustration">🍕</div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔥</div>
+          <h3>Wood-Fired</h3>
+          <p>Authentic Italian wood-fired oven</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌿</div>
+          <h3>Fresh Ingredients</h3>
+          <p>Locally sourced, daily fresh</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👨‍🍳</div>
+          <h3>Master Chefs</h3>
+          <p>Traditional recipes, modern twist</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Fast Delivery</h3>
+          <p>Hot & fresh in 30 minutes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section class="menu" id="menu">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Our Menu</h2>
+        <p class="section-subtitle">Discover our signature pizzas</p>
+      </div>
+      <div class="pizza-grid">
+        <div 
+          *ngFor="let pizza of pizzas" 
+          class="pizza-card"
+          [class.popular]="pizza.popular"
+          (click)="selectPizza(pizza)">
+          <div *ngIf="pizza.popular" class="popular-badge">Popular</div>
+          <div class="pizza-image">{{ pizza.image }}</div>
+          <div class="pizza-info">
+            <h3 class="pizza-name">{{ pizza.name }}</h3>
+            <p class="pizza-description">{{ pizza.description }}</p>
+            <div class="pizza-ingredients">
+              <span *ngFor="let ingredient of pizza.ingredients" class="ingredient-tag">
+                {{ ingredient }}
+              </span>
+            </div>
+            <div class="pizza-footer">
+              <span class="pizza-price">${{ pizza.price.toFixed(2) }}</span>
+              <button class="btn-add">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal-overlay" *ngIf="selectedPizza" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeModal()">×</button>
+      <div class="modal-pizza">
+        <div class="modal-pizza-image">{{ selectedPizza.image }}</div>
+        <div class="modal-pizza-info">
+          <h2>{{ selectedPizza.name }}</h2>
+          <p class="modal-description">{{ selectedPizza.description }}</p>
+          <div class="modal-ingredients">
+            <h3>Ingredients:</h3>
+            <div class="ingredients-list">
+              <span *ngFor="let ingredient of selectedPizza.ingredients" class="ingredient-badge">
+                {{ ingredient }}
+              </span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <span class="modal-price">${{ selectedPizza.price.toFixed(2) }}</span>
+            <button class="btn btn-primary" (click)="addToCart(selectedPizza)">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

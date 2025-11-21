@@ -21,6 +21,10 @@ export const routes: Routes = [
   {
     path: 'signalr-poc',
     loadComponent: () => import('./components/signalr-poc/signalr-poc.component').then(m => m.SignalRPocComponent)
+  },
+  {
+    path: 'pizza',
+    loadComponent: () => import('./components/pizza-restaurant/pizza-restaurant.component').then(m => m.PizzaRestaurantComponent)
   }
 ];
 

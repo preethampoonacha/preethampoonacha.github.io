@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
     <div class="container">
       <nav class="main-nav">
         <a routerLink="/tasks" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">Tasks</a>
-        <a routerLink="/signalr-poc" routerLinkActive="active">SignalR POC</a>
+        <!-- <a routerLink="/signalr-poc" routerLinkActive="active">SignalR POC</a> -->
       </nav>
       <router-outlet></router-outlet>
     </div>
