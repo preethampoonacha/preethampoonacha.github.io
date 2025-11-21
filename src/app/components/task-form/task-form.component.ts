@@ -110,14 +110,14 @@ export class TaskFormComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.taskForm.valid) {
       const formValue = this.taskForm.value;
       
       if (this.isEditMode && this.taskId) {
-        this.taskService.updateTask(this.taskId, formValue);
+        await this.taskService.updateTask(this.taskId, formValue);
       } else {
-        this.taskService.createTask(formValue);
+        await this.taskService.createTask(formValue);
       }
       
       this.router.navigate(['/tasks']);
