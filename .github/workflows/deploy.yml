@@ -10,8 +10,15 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,6 +47,7 @@ jobs:
           else
             BASE_HREF="/${REPO_NAME}/"
           fi
+          echo "Building with base-href: ${BASE_HREF}"
           npm run build -- --base-href "${BASE_HREF}"
 
       - name: Determine output directory
@@ -54,7 +62,9 @@ jobs:
       - name: Copy index.html to 404.html
         run: |
           OUTPUT_DIR="${{ steps.output.outputs.path }}"
+          echo "Copying index.html to 404.html in ${OUTPUT_DIR}"
           cp "${OUTPUT_DIR}/index.html" "${OUTPUT_DIR}/404.html"
+          ls -la "${OUTPUT_DIR}"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
