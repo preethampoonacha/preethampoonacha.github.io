@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AdventureService } from '../../services/adventure.service';
 import { Adventure, CoupleStats, Achievement, Partner } from '../../models/task.model';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, LoaderComponent],
   template: `
+    <app-loader *ngIf="isLoading"></app-loader>
     <div class="dashboard-container">
       <div class="dashboard-header">
         <h1>💑 Our Adventure Dashboard</h1>
@@ -566,12 +568,107 @@ import { Adventure, CoupleStats, Achievement, Partner } from '../../models/task.
     }
 
     @media (max-width: 768px) {
-      .stats-grid {
-        grid-template-columns: 1fr;
+      .dashboard-container {
+        padding: 12px;
       }
 
-      .category-grid, .achievements-grid, .adventures-mini-grid {
+      .dashboard-header {
+        margin-bottom: 16px;
+        gap: 10px;
+      }
+
+      .dashboard-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .notification-bell {
+        width: 40px;
+        height: 40px;
+      }
+
+      .bell-icon {
+        font-size: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        padding: 16px;
+        gap: 12px;
+      }
+
+      .stat-icon {
+        font-size: 32px;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+      }
+
+      .stat-label {
+        font-size: 12px;
+      }
+
+      .category-stats, .achievements-section, .recent-section {
+        margin-bottom: 20px;
+      }
+
+      .category-stats h2, .achievements-section h2, .recent-section h2 {
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .category-stat-card {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .category-icon {
+        font-size: 24px;
+      }
+
+      .achievements-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .achievement-card {
+        padding: 14px;
+        gap: 12px;
+      }
+
+      .achievement-icon {
+        font-size: 32px;
+      }
+
+      .adventures-mini-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .adventure-mini-card {
+        padding: 12px;
+      }
+
+      .mini-card-header h4 {
+        font-size: 14px;
+      }
+
+      .section-header {
+        margin-bottom: 12px;
+      }
+
+      .empty-mini {
+        padding: 24px 16px;
       }
     }
   `]
@@ -593,6 +690,7 @@ export class DashboardComponent implements OnInit {
   unlockedAchievements: Achievement[] = [];
   doreeAdventures: Adventure[] = [];
   nobuuAdventures: Adventure[] = [];
+  isLoading = false;
 
   categories = [
     { value: 'travel', label: 'Travel', icon: '✈️' },
@@ -616,6 +714,9 @@ export class DashboardComponent implements OnInit {
     this.adventureService.achievements$.subscribe(achievements => {
       this.allAchievements = achievements;
       this.unlockedAchievements = achievements.filter(a => a.unlockedAt);
+    });
+    this.adventureService.loading$.subscribe(loading => {
+      this.isLoading = loading;
     });
   }
 

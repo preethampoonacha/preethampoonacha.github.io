@@ -43,6 +43,10 @@ export class AdventureService {
   });
   public firebaseStatus$: Observable<{ connected: boolean; message: string }> = this.firebaseStatusSubject.asObservable();
 
+  // Loading state
+  private loadingSubject = new BehaviorSubject<boolean>(true);
+  public loading$: Observable<boolean> = this.loadingSubject.asObservable();
+
   // Default achievements
   private readonly DEFAULT_ACHIEVEMENTS: Achievement[] = [
     { id: 'first-adventure', name: 'First Adventure', description: 'Created your first adventure together', icon: '🌟', category: 'milestone' },
@@ -111,6 +115,7 @@ export class AdventureService {
         q = query(adventuresRef);
       }
 
+      this.loadingSubject.next(true);
       this.unsubscribeSnapshot = onSnapshot(
         q,
         (snapshot) => {
@@ -127,6 +132,7 @@ export class AdventureService {
           this.adventuresSubject.next([...this.adventures]);
           this.checkAchievements();
           this.firebaseStatusSubject.next({ connected: true, message: 'Synced with Firebase' });
+          this.loadingSubject.next(false);
         },
         (error: any) => {
           console.error('Error listening to Firestore:', error);
@@ -142,6 +148,7 @@ export class AdventureService {
           this.useFirestore = false;
           this.firebaseStatusSubject.next({ connected: false, message: errorMessage });
           this.loadAdventuresFromStorage();
+          this.loadingSubject.next(false);
         }
       );
     } catch (error: any) {
@@ -150,6 +157,7 @@ export class AdventureService {
       const errorMessage = error?.message || 'Firebase setup error - using Local Storage';
       this.firebaseStatusSubject.next({ connected: false, message: errorMessage });
       this.loadAdventuresFromStorage();
+      this.loadingSubject.next(false);
     }
   }
 
@@ -186,6 +194,7 @@ export class AdventureService {
   }
 
   private loadAdventuresFromStorage(): void {
+    this.loadingSubject.next(true);
     try {
       const storedAdventures = localStorage.getItem(this.STORAGE_KEY);
       const storedNextId = localStorage.getItem(this.NEXT_ID_KEY);

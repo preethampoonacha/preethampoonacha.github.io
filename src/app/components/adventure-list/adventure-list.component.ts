@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AdventureService } from '../../services/adventure.service';
 import { Adventure, AdventureCategory, Partner } from '../../models/task.model';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-adventure-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, LoaderComponent],
   template: `
+    <app-loader *ngIf="isLoading"></app-loader>
     <div class="adventure-container">
       <div class="header-section">
         <div class="header-content">
@@ -570,13 +572,125 @@ import { Adventure, AdventureCategory, Partner } from '../../models/task.model';
     }
 
     @media (max-width: 768px) {
+      .adventure-container {
+        padding: 12px;
+      }
+
+      .header-section {
+        margin-bottom: 20px;
+      }
+
       .header-content {
         flex-direction: column;
         align-items: flex-start;
+        margin-bottom: 16px;
+        gap: 12px;
+      }
+
+      .header-content h1 {
+        font-size: 1.75rem;
+      }
+
+      .filter-section {
+        gap: 10px;
+      }
+
+      .filter-buttons {
+        gap: 8px;
+      }
+
+      .filter-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+        border-radius: 12px;
       }
 
       .adventures-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .adventure-card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .adventure-title {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+
+      .card-header {
+        margin-bottom: 12px;
+      }
+
+      .partner-badges {
+        gap: 6px;
+      }
+
+      .partner-badge {
+        padding: 3px 8px;
+        font-size: 11px;
+      }
+
+      .status-badge {
+        padding: 4px 10px;
+        font-size: 11px;
+      }
+
+      .photo-thumbnail {
+        margin-bottom: 12px;
+        border-radius: 10px;
+      }
+
+      .adventure-description {
+        margin-bottom: 12px;
+        font-size: 13px;
+      }
+
+      .adventure-meta {
+        gap: 8px;
+        margin-bottom: 12px;
+        padding-top: 12px;
+      }
+
+      .meta-item {
+        font-size: 12px;
+        gap: 4px;
+      }
+
+      .meta-icon {
+        font-size: 14px;
+      }
+
+      .card-actions {
+        gap: 8px;
+      }
+
+      .card-actions .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        flex: 1;
+      }
+
+      .empty-state {
+        padding: 40px 20px;
+        border-radius: 16px;
+      }
+
+      .empty-icon {
+        font-size: 56px;
+        margin-bottom: 16px;
+      }
+
+      .empty-state h2 {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+      }
+
+      .empty-state p {
+        font-size: 14px;
+        margin-bottom: 20px;
       }
     }
   `]
@@ -588,6 +702,7 @@ export class AdventureListComponent implements OnInit {
   selectedStatus: Adventure['status'] | null = null;
   selectedCategory: AdventureCategory | null = null;
   selectedCreatedBy: Partner | null = null;
+  isLoading = false;
 
   categories = [
     { value: 'travel' as AdventureCategory, label: 'Travel', icon: '✈️' },
@@ -608,6 +723,9 @@ export class AdventureListComponent implements OnInit {
     });
     this.adventureService.firebaseStatus$.subscribe(status => {
       this.firebaseStatus = status;
+    });
+    this.adventureService.loading$.subscribe(loading => {
+      this.isLoading = loading;
     });
   }
 
