@@ -11,15 +11,21 @@ import { AuthService } from './services/auth.service';
     <div class="container" *ngIf="isAuthenticated">
       <nav class="main-nav">
         <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          💑 Dashboard
+          <span class="nav-icon">💑</span>
+          <span class="nav-text">Dashboard</span>
         </a>
         <a routerLink="/adventures" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
-          📋 Adventures
+          <span class="nav-icon">📋</span>
+          <span class="nav-text">Adventures</span>
         </a>
         <a routerLink="/timeline" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          📖 Timeline
+          <span class="nav-icon">📖</span>
+          <span class="nav-text">Timeline</span>
         </a>
-        <button (click)="logout()" class="logout-btn">🔒 Logout</button>
+        <button (click)="logout()" class="logout-btn">
+          <span class="nav-icon">🔒</span>
+          <span class="nav-text">Logout</span>
+        </button>
       </nav>
       <router-outlet></router-outlet>
     </div>
@@ -63,6 +69,18 @@ import { AuthService } from './services/auth.service';
       position: relative;
       overflow: hidden;
       letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .nav-text {
+      display: inline;
     }
 
     .main-nav a::before {
@@ -106,6 +124,9 @@ import { AuthService } from './services/auth.service';
       box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .logout-btn::before {
@@ -138,19 +159,33 @@ import { AuthService } from './services/auth.service';
 
     @media (max-width: 768px) {
       .main-nav {
-        flex-direction: column;
-        gap: 10px;
-        padding: 16px;
+        flex-direction: row;
+        gap: 8px;
+        padding: 12px 16px;
+        justify-content: space-between;
       }
 
       .main-nav a {
-        text-align: center;
-        width: 100%;
+        flex: 1;
+        justify-content: center;
+        padding: 12px 8px;
+        min-width: 0;
+      }
+
+      .nav-text {
+        display: none;
+      }
+
+      .nav-icon {
+        font-size: 20px;
       }
 
       .logout-btn {
         margin-left: 0;
-        width: 100%;
+        flex: 1;
+        justify-content: center;
+        padding: 12px 8px;
+        min-width: 0;
       }
     }
   `]

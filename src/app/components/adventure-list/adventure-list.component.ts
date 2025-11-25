@@ -20,78 +20,135 @@ import { LoaderComponent } from '../loader/loader.component';
               <span class="status-dot"></span>
               <span class="status-text">{{ firebaseStatus.message }}</span>
             </div>
+            <div class="view-toggle">
+              <button
+                class="view-btn"
+                [class.active]="viewMode === 'card'"
+                (click)="setViewMode('card')"
+                title="Card View"
+              >
+                ⬜
+              </button>
+              <button
+                class="view-btn"
+                [class.active]="viewMode === 'list'"
+                (click)="setViewMode('list')"
+                title="List View"
+              >
+                ☰
+              </button>
+            </div>
+            <button class="filter-icon-btn" (click)="toggleFilterPopup()" title="Filters">
+              🔍
+            </button>
             <a routerLink="/adventures/new" class="btn btn-primary">+ New Adventure</a>
           </div>
         </div>
+      </div>
 
-        <div class="filter-section">
-          <div class="filter-buttons">
-            <button
-              class="filter-btn"
-              [class.active]="selectedStatus === null"
-              (click)="filterByStatus(null)"
-            >
-              All
-            </button>
-            <button
-              class="filter-btn"
-              [class.active]="selectedStatus === 'wishlist'"
-              (click)="filterByStatus('wishlist')"
-            >
-              💭 Wishlist
-            </button>
-            <button
-              class="filter-btn"
-              [class.active]="selectedStatus === 'planned'"
-              (click)="filterByStatus('planned')"
-            >
-              📅 Planned
-            </button>
-            <button
-              class="filter-btn"
-              [class.active]="selectedStatus === 'in-progress'"
-              (click)="filterByStatus('in-progress')"
-            >
-              🚀 In Progress
-            </button>
-            <button
-              class="filter-btn"
-              [class.active]="selectedStatus === 'completed'"
-              (click)="filterByStatus('completed')"
-            >
-              ✅ Completed
-            </button>
+      <!-- Filter Popup -->
+      <div class="filter-popup-overlay" *ngIf="showFilterPopup" (click)="closeFilterPopup()">
+        <div class="filter-popup" (click)="$event.stopPropagation()">
+          <div class="filter-popup-header">
+            <h3>Filters</h3>
+            <button class="close-btn" (click)="closeFilterPopup()">×</button>
           </div>
+          <div class="filter-popup-content">
+            <div class="filter-group">
+              <label>Status</label>
+              <div class="filter-buttons">
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedStatus === null"
+                  (click)="filterByStatus(null)"
+                >
+                  All
+                </button>
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedStatus === 'wishlist'"
+                  (click)="filterByStatus('wishlist')"
+                >
+                  💭 Wishlist
+                </button>
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedStatus === 'planned'"
+                  (click)="filterByStatus('planned')"
+                >
+                  📅 Planned
+                </button>
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedStatus === 'in-progress'"
+                  (click)="filterByStatus('in-progress')"
+                >
+                  🚀 In Progress
+                </button>
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedStatus === 'completed'"
+                  (click)="filterByStatus('completed')"
+                >
+                  ✅ Completed
+                </button>
+              </div>
+            </div>
 
-          <div class="filter-buttons">
-            <button
-              class="filter-btn"
-              [class.active]="selectedCreatedBy === null"
-              (click)="filterByCreatedBy(null)"
-            >
-              All Creators
-            </button>
-            <button
-              class="filter-btn"
-              [class.active]="selectedCreatedBy === 'partner1'"
-              (click)="filterByCreatedBy('partner1')"
-            >
-              👨 Doree
-            </button>
-            <button
-              class="filter-btn"
-              [class.active]="selectedCreatedBy === 'partner2'"
-              (click)="filterByCreatedBy('partner2')"
-            >
-              👩 Nobuu
-            </button>
-            <button
-              class="filter-btn"
-              [class.active]="selectedCreatedBy === 'both'"
-              (click)="filterByCreatedBy('both')"
-            >
-              💑 Both
-            </button>
+            <div class="filter-group">
+              <label>Created By</label>
+              <div class="filter-buttons">
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedCreatedBy === null"
+                  (click)="filterByCreatedBy(null)"
+                >
+                  All Creators
+                </button>
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedCreatedBy === 'partner1'"
+                  (click)="filterByCreatedBy('partner1')"
+                >
+                  👨 Doree
+                </button>
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedCreatedBy === 'partner2'"
+                  (click)="filterByCreatedBy('partner2')"
+                >
+                  👩 Nobuu
+                </button>
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedCreatedBy === 'both'"
+                  (click)="filterByCreatedBy('both')"
+                >
+                  💑 Both
+                </button>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label>Category</label>
+              <div class="filter-buttons">
+                <button
+                  class="filter-btn"
+                  [class.active]="selectedCategory === null"
+                  (click)="filterByCategory(null)"
+                >
+                  All Categories
+                </button>
+                <button
+                  *ngFor="let cat of categories"
+                  class="filter-btn"
+                  [class.active]="selectedCategory === cat.value"
+                  (click)="filterByCategory(cat.value)"
+                >
+                  {{ cat.icon }} {{ cat.label }}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -103,12 +160,12 @@ import { LoaderComponent } from '../loader/loader.component';
         <a routerLink="/adventures/new" class="btn btn-primary">Create Adventure</a>
       </div>
 
-      <div class="adventures-grid">
-        <div *ngFor="let adventure of filteredAdventures" class="adventure-card" [class.surprise]="adventure.isSurprise && !adventure.revealed">
+      <div class="adventures-grid" [class.list-view]="viewMode === 'list'">
+        <div *ngFor="let adventure of filteredAdventures" class="adventure-card" [class.surprise]="adventure.isSurprise && !adventure.revealed" [class.list-item]="viewMode === 'list'">
           <div class="card-header">
             <div class="card-title-section">
               <h3 class="adventure-title">{{ adventure.title }}</h3>
-              <div class="partner-badges">
+              <div class="partner-badges" *ngIf="viewMode !== 'list'">
                 <span class="partner-badge" [class.partner1]="adventure.assignedTo === 'partner1'"
                       [class.partner2]="adventure.assignedTo === 'partner2'"
                       [class.both]="adventure.assignedTo === 'both'">
@@ -123,17 +180,17 @@ import { LoaderComponent } from '../loader/loader.component';
                 <span *ngIf="adventure.isSurprise && adventure.revealed" class="surprise-badge">🎁 Surprise</span>
               </div>
             </div>
-            <span class="status-badge status-{{ adventure.status }}">{{ getStatusLabel(adventure.status) }}</span>
+            <span class="status-badge status-{{ adventure.status }}" *ngIf="viewMode !== 'list'">{{ getStatusLabel(adventure.status) }}</span>
           </div>
 
-          <div *ngIf="adventure.photos && adventure.photos.length > 0" class="photo-thumbnail">
+          <div *ngIf="adventure.photos && adventure.photos.length > 0 && viewMode !== 'list'" class="photo-thumbnail">
             <img [src]="adventure.photos[0]" [alt]="adventure.title" />
             <span *ngIf="adventure.photos.length > 1" class="photo-count">+{{ adventure.photos.length - 1 }}</span>
           </div>
 
-          <p class="adventure-description" *ngIf="adventure.description">{{ adventure.description }}</p>
+          <p class="adventure-description" *ngIf="adventure.description && viewMode !== 'list'">{{ adventure.description }}</p>
 
-          <div class="adventure-meta">
+          <div class="adventure-meta" *ngIf="viewMode !== 'list'">
             <div class="meta-item">
               <span class="meta-icon">{{ getCategoryIcon(adventure.category) }}</span>
               <span>{{ getCategoryLabel(adventure.category) }}</span>
@@ -153,9 +210,15 @@ import { LoaderComponent } from '../loader/loader.component';
           </div>
 
           <div class="card-actions">
-            <a [routerLink]="['/adventures', adventure.id]" class="btn btn-secondary">View</a>
-            <a [routerLink]="['/adventures', adventure.id, 'edit']" class="btn btn-secondary">Edit</a>
-            <button (click)="deleteAdventure(adventure.id)" class="btn btn-danger">Delete</button>
+            <a [routerLink]="['/adventures', adventure.id]" class="btn btn-secondary" title="View">
+              <span>👁</span>
+            </a>
+            <a [routerLink]="['/adventures', adventure.id, 'edit']" class="btn btn-secondary" title="Edit">
+              <span>✏</span>
+            </a>
+            <button (click)="deleteAdventure(adventure.id)" class="btn btn-danger" title="Delete">
+              <span>🗑</span>
+            </button>
           </div>
         </div>
       </div>
@@ -211,6 +274,49 @@ import { LoaderComponent } from '../loader/loader.component';
       gap: 15px;
     }
 
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 4px;
+    }
+
+    .view-btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+
+    .view-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .view-btn.active {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .filter-icon-btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
     .sync-status {
       display: flex;
       align-items: center;
@@ -264,16 +370,139 @@ import { LoaderComponent } from '../loader/loader.component';
       }
     }
 
-    .filter-section {
+    .filter-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
       display: flex;
-      flex-direction: column;
-      gap: 15px;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .filter-popup {
+      background: white;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .filter-popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .filter-popup-header h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #1f2937;
+    }
+
+    .filter-popup-header .close-btn {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .filter-popup-header .close-btn:hover {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+
+    .filter-popup-content {
+      padding: 24px;
+    }
+
+    .filter-group {
+      margin-bottom: 24px;
+    }
+
+    .filter-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .filter-group label {
+      display: block;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 12px;
+      font-size: 14px;
     }
 
     .filter-buttons, .category-filters {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+    }
+
+    .filter-popup .filter-btn {
+      padding: 10px 16px;
+      border: 2px solid #e5e7eb;
+      background: #f9fafb;
+      backdrop-filter: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      transition: all 0.2s;
+    }
+
+    .filter-popup .filter-btn:hover {
+      border-color: #d1d5db;
+      background: #f3f4f6;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-popup .filter-btn.active {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);
+    }
+
+    .filter-popup .filter-btn::before {
+      display: none;
     }
 
     .filter-btn, .category-btn {
@@ -324,6 +553,45 @@ import { LoaderComponent } from '../loader/loader.component';
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
       gap: 24px;
+      align-items: stretch;
+    }
+
+    .adventures-grid.list-view {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .adventure-card.list-item {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      padding: 16px 20px;
+      height: auto;
+      align-items: center;
+    }
+
+    .adventure-card.list-item .card-header {
+      flex: 1;
+      margin-bottom: 0;
+      min-height: auto;
+    }
+
+    .adventure-card.list-item .card-title-section {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .adventure-card.list-item .adventure-title {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .adventure-card.list-item .card-actions {
+      margin: 0;
+      border-top: none;
+      padding-top: 0;
+      flex-shrink: 0;
     }
 
     .adventure-card {
@@ -338,6 +606,9 @@ import { LoaderComponent } from '../loader/loader.component';
       position: relative;
       overflow: hidden;
       animation: cardFadeIn 0.6s ease-out backwards;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
 
     @keyframes cardFadeIn {
@@ -479,7 +750,9 @@ import { LoaderComponent } from '../loader/loader.component';
       overflow: hidden;
       margin-bottom: 15px;
       background: #f3f4f6;
+      flex-shrink: 0;
     }
+
 
     .photo-thumbnail img {
       width: 100%;
@@ -509,6 +782,10 @@ import { LoaderComponent } from '../loader/loader.component';
       overflow: hidden;
     }
 
+    .adventure-description:empty {
+      display: none;
+    }
+
     .adventure-meta {
       display: flex;
       flex-wrap: wrap;
@@ -516,6 +793,7 @@ import { LoaderComponent } from '../loader/loader.component';
       margin-bottom: 15px;
       padding-top: 15px;
       border-top: 1px solid #e5e7eb;
+      align-items: center;
     }
 
     .meta-item {
@@ -534,6 +812,25 @@ import { LoaderComponent } from '../loader/loader.component';
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .card-actions .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: 8px;
+    }
+
+    .card-actions .btn span {
+      font-size: 18px;
+      line-height: 1;
     }
 
     .empty-state {
@@ -585,6 +882,71 @@ import { LoaderComponent } from '../loader/loader.component';
         align-items: flex-start;
         margin-bottom: 16px;
         gap: 12px;
+      }
+
+      .header-actions {
+        gap: 8px;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+
+      .view-toggle {
+        order: 1;
+      }
+
+      .filter-icon-btn {
+        order: 2;
+        padding: 8px 12px;
+        font-size: 16px;
+      }
+
+      .sync-status {
+        order: 3;
+        font-size: 11px;
+        padding: 4px 8px;
+      }
+
+      .sync-status .status-text {
+        display: none;
+      }
+
+      .btn-primary {
+        order: 4;
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+
+      .filter-popup {
+        max-width: 95%;
+        max-height: 85vh;
+      }
+
+      .filter-popup-content {
+        padding: 16px;
+      }
+
+      .filter-group {
+        margin-bottom: 20px;
+      }
+
+      .adventure-card.list-item {
+        flex-direction: row;
+        gap: 12px;
+        padding: 12px 16px;
+      }
+
+      .adventure-card.list-item .card-actions .btn {
+        min-width: 36px;
+        width: 36px;
+        height: 36px;
+      }
+
+      .adventure-card.list-item .card-actions .btn span {
+        font-size: 16px;
+      }
+
+      .adventure-card.list-item .adventure-title {
+        font-size: 1rem;
       }
 
       .header-content h1 {
@@ -668,9 +1030,14 @@ import { LoaderComponent } from '../loader/loader.component';
       }
 
       .card-actions .btn {
-        padding: 10px 16px;
-        font-size: 13px;
-        flex: 1;
+        min-width: 36px;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+      }
+
+      .card-actions .btn span {
+        font-size: 16px;
       }
 
       .empty-state {
@@ -703,6 +1070,8 @@ export class AdventureListComponent implements OnInit {
   selectedCategory: AdventureCategory | null = null;
   selectedCreatedBy: Partner | null = null;
   isLoading = false;
+  viewMode: 'card' | 'list' = 'card';
+  showFilterPopup = false;
 
   categories = [
     { value: 'travel' as AdventureCategory, label: 'Travel', icon: '✈️' },
@@ -816,5 +1185,17 @@ export class AdventureListComponent implements OnInit {
     if (confirm('Are you sure you want to delete this adventure?')) {
       await this.adventureService.deleteAdventure(id);
     }
+  }
+
+  toggleFilterPopup(): void {
+    this.showFilterPopup = !this.showFilterPopup;
+  }
+
+  closeFilterPopup(): void {
+    this.showFilterPopup = false;
+  }
+
+  setViewMode(mode: 'card' | 'list'): void {
+    this.viewMode = mode;
   }
 }

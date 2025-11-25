@@ -79,89 +79,111 @@ import { LoaderComponent } from '../loader/loader.component';
           </div>
         </div>
 
-        <div class="stat-card">
+        <!-- Achievements stat card disabled -->
+        <!-- <div class="stat-card">
           <div class="stat-icon">🏆</div>
           <div class="stat-content">
             <div class="stat-value">{{ unlockedAchievements.length }}</div>
             <div class="stat-label">Achievements</div>
             <div class="stat-subtext">{{ allAchievements.length }} total</div>
           </div>
-        </div>
+        </div> -->
       </div>
 
-      <div class="category-stats">
-        <h2>Adventures by Category</h2>
-        <div class="category-grid">
-          <div *ngFor="let cat of getCategoryStats()" class="category-stat-card">
-            <div class="category-icon">{{ cat.icon }}</div>
-            <div class="category-info">
-              <div class="category-name">{{ cat.label }}</div>
-              <div class="category-count">{{ cat.count }} completed</div>
-            </div>
-          </div>
+      <div class="category-stats collapsible-section">
+        <div class="section-header-clickable" (click)="toggleSection('category')">
+          <h2>Adventures by Category</h2>
+          <span class="chevron" [class.expanded]="!isSectionCollapsed('category')">▼</span>
         </div>
-      </div>
-
-      <div class="achievements-section">
-        <h2>🏆 Achievements</h2>
-        <div class="achievements-grid">
-          <div *ngFor="let achievement of allAchievements" class="achievement-card" [class.unlocked]="achievement.unlockedAt">
-            <div class="achievement-icon">{{ achievement.icon }}</div>
-            <div class="achievement-info">
-              <div class="achievement-name">{{ achievement.name }}</div>
-              <div class="achievement-description">{{ achievement.description }}</div>
-              <div class="achievement-date" *ngIf="achievement.unlockedAt">
-                Unlocked {{ achievement.unlockedAt | date:'shortDate' }}
+        <div class="section-content" [class.collapsed]="isSectionCollapsed('category')">
+          <div class="category-grid">
+            <div *ngFor="let cat of getCategoryStats()" class="category-stat-card">
+              <div class="category-icon">{{ cat.icon }}</div>
+              <div class="category-info">
+                <div class="category-name">{{ cat.label }}</div>
+                <div class="category-count">{{ cat.count }} {{ cat.count === 1 ? 'adventure' : 'adventures' }}</div>
               </div>
             </div>
-            <div class="achievement-status" *ngIf="!achievement.unlockedAt">🔒</div>
           </div>
         </div>
       </div>
 
-      <div class="recent-section">
-        <div class="section-header">
+      <!-- Achievements section disabled -->
+      <!-- <div class="achievements-section collapsible-section">
+        <div class="section-header-clickable" (click)="toggleSection('achievements')">
+          <h2>🏆 Achievements</h2>
+          <span class="chevron" [class.expanded]="!isSectionCollapsed('achievements')">▼</span>
+        </div>
+        <div class="section-content" [class.collapsed]="isSectionCollapsed('achievements')">
+          <div class="achievements-grid">
+            <div *ngFor="let achievement of allAchievements" class="achievement-card" [class.unlocked]="achievement.unlockedAt">
+              <div class="achievement-icon">{{ achievement.icon }}</div>
+              <div class="achievement-info">
+                <div class="achievement-name">{{ achievement.name }}</div>
+                <div class="achievement-description">{{ achievement.description }}</div>
+                <div class="achievement-date" *ngIf="achievement.unlockedAt">
+                  Unlocked {{ achievement.unlockedAt | date:'shortDate' }}
+                </div>
+              </div>
+              <div class="achievement-status" *ngIf="!achievement.unlockedAt">🔒</div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="recent-section collapsible-section">
+        <div class="section-header-clickable" (click)="toggleSection('upcoming')">
           <h2>📅 Upcoming Adventures</h2>
-          <a routerLink="/adventures" [queryParams]="{status: 'planned'}" class="view-all">View All</a>
+          <div class="section-header-actions">
+            <a routerLink="/adventures" [queryParams]="{status: 'planned'}" class="view-all" (click)="$event.stopPropagation()">View All</a>
+            <span class="chevron" [class.expanded]="!isSectionCollapsed('upcoming')">▼</span>
+          </div>
         </div>
-        <div *ngIf="upcomingAdventures.length === 0" class="empty-mini">
-          <p>No upcoming adventures planned</p>
-        </div>
-        <div class="adventures-mini-grid" *ngIf="upcomingAdventures.length > 0">
-          <div *ngFor="let adventure of upcomingAdventures.slice(0, 3)" class="adventure-mini-card" [routerLink]="['/adventures', adventure.id]">
-            <div class="mini-card-header">
-              <h4>{{ adventure.title }}</h4>
-              <span class="mini-badge">{{ getCategoryIcon(adventure.category) }}</span>
-            </div>
-            <div class="mini-card-meta" *ngIf="adventure.targetDate">
-              📅 {{ adventure.targetDate | date:'shortDate' }}
+        <div class="section-content" [class.collapsed]="isSectionCollapsed('upcoming')">
+          <div *ngIf="upcomingAdventures.length === 0" class="empty-mini">
+            <p>No upcoming adventures planned</p>
+          </div>
+          <div class="adventures-mini-grid" *ngIf="upcomingAdventures.length > 0">
+            <div *ngFor="let adventure of upcomingAdventures.slice(0, 3)" class="adventure-mini-card" [routerLink]="['/adventures', adventure.id]">
+              <div class="mini-card-header">
+                <h4>{{ adventure.title }}</h4>
+                <span class="mini-badge">{{ getCategoryIcon(adventure.category) }}</span>
+              </div>
+              <div class="mini-card-meta" *ngIf="adventure.targetDate">
+                📅 {{ adventure.targetDate | date:'shortDate' }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="recent-section">
-        <div class="section-header">
+      <div class="recent-section collapsible-section">
+        <div class="section-header-clickable" (click)="toggleSection('recent')">
           <h2>✨ Recent Completions</h2>
-          <a routerLink="/adventures" [queryParams]="{status: 'completed'}" class="view-all">View All</a>
+          <div class="section-header-actions">
+            <a routerLink="/adventures" [queryParams]="{status: 'completed'}" class="view-all" (click)="$event.stopPropagation()">View All</a>
+            <span class="chevron" [class.expanded]="!isSectionCollapsed('recent')">▼</span>
+          </div>
         </div>
-        <div *ngIf="recentCompleted.length === 0" class="empty-mini">
-          <p>No completed adventures yet</p>
-        </div>
-        <div class="adventures-mini-grid" *ngIf="recentCompleted.length > 0">
-          <div *ngFor="let adventure of recentCompleted.slice(0, 3)" class="adventure-mini-card" [routerLink]="['/adventures', adventure.id]">
-            <div class="mini-card-header">
-              <h4>{{ adventure.title }}</h4>
-              <div class="mini-badges">
-                <span class="mini-badge">{{ getCategoryIcon(adventure.category) }}</span>
-                <span class="mini-badge rating" *ngIf="adventure.rating">⭐ {{ adventure.rating }}</span>
+        <div class="section-content" [class.collapsed]="isSectionCollapsed('recent')">
+          <div *ngIf="recentCompleted.length === 0" class="empty-mini">
+            <p>No completed adventures yet</p>
+          </div>
+          <div class="adventures-mini-grid" *ngIf="recentCompleted.length > 0">
+            <div *ngFor="let adventure of recentCompleted.slice(0, 3)" class="adventure-mini-card" [routerLink]="['/adventures', adventure.id]">
+              <div class="mini-card-header">
+                <h4>{{ adventure.title }}</h4>
+                <div class="mini-badges">
+                  <span class="mini-badge">{{ getCategoryIcon(adventure.category) }}</span>
+                  <span class="mini-badge rating" *ngIf="adventure.rating">⭐ {{ adventure.rating }}</span>
+                </div>
               </div>
-            </div>
-            <div class="mini-card-meta" *ngIf="adventure.completedDate">
-              ✅ {{ adventure.completedDate | date:'shortDate' }}
-            </div>
-            <div class="mini-photo" *ngIf="adventure.photos && adventure.photos.length > 0">
-              <img [src]="adventure.photos[0]" [alt]="adventure.title" />
+              <div class="mini-card-meta" *ngIf="adventure.completedDate">
+                ✅ {{ adventure.completedDate | date:'shortDate' }}
+              </div>
+              <div class="mini-photo" *ngIf="adventure.photos && adventure.photos.length > 0">
+                <img [src]="adventure.photos[0]" [alt]="adventure.title" />
+              </div>
             </div>
           </div>
         </div>
@@ -379,8 +401,66 @@ import { LoaderComponent } from '../loader/loader.component';
       margin-bottom: 40px;
     }
 
+    .collapsible-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header-clickable {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      padding: 8px 0;
+      transition: all 0.2s;
+    }
+
+    .section-header-clickable:hover {
+      opacity: 0.8;
+    }
+
+    .section-header-clickable h2 {
+      margin: 0;
+      color: #1f2937;
+      font-size: 1.5rem;
+    }
+
+    .section-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .chevron {
+      font-size: 14px;
+      color: #6b7280;
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+
+    .chevron.expanded {
+      transform: rotate(180deg);
+    }
+
+    .section-content {
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      max-height: 5000px;
+      opacity: 1;
+    }
+
+    .section-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
     .category-stats h2, .achievements-section h2, .recent-section h2 {
-      margin: 0 0 20px 0;
+      margin: 0;
       color: #1f2937;
       font-size: 1.5rem;
     }
@@ -474,6 +554,10 @@ import { LoaderComponent } from '../loader/loader.component';
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+    }
+
+    .section-content:not(.collapsed) {
+      padding-top: 20px;
     }
 
     .view-all {
@@ -615,11 +699,20 @@ import { LoaderComponent } from '../loader/loader.component';
 
       .category-stats, .achievements-section, .recent-section {
         margin-bottom: 20px;
+        padding: 16px;
+      }
+
+      .section-header-clickable h2 {
+        font-size: 1.25rem;
       }
 
       .category-stats h2, .achievements-section h2, .recent-section h2 {
         font-size: 1.25rem;
-        margin-bottom: 12px;
+        margin-bottom: 0;
+      }
+
+      .section-content:not(.collapsed) {
+        padding-top: 16px;
       }
 
       .category-grid {
@@ -691,6 +784,14 @@ export class DashboardComponent implements OnInit {
   doreeAdventures: Adventure[] = [];
   nobuuAdventures: Adventure[] = [];
   isLoading = false;
+  
+  // Collapsible sections state (all collapsed by default)
+  collapsedSections: { [key: string]: boolean } = {
+    category: true,
+    achievements: true,
+    upcoming: true,
+    recent: true
+  };
 
   categories = [
     { value: 'travel', label: 'Travel', icon: '✈️' },
@@ -711,10 +812,11 @@ export class DashboardComponent implements OnInit {
     this.adventureService.adventures$.subscribe(() => {
       this.loadData();
     });
-    this.adventureService.achievements$.subscribe(achievements => {
-      this.allAchievements = achievements;
-      this.unlockedAchievements = achievements.filter(a => a.unlockedAt);
-    });
+    // Achievements subscription disabled
+    // this.adventureService.achievements$.subscribe(achievements => {
+    //   this.allAchievements = achievements;
+    //   this.unlockedAchievements = achievements.filter(a => a.unlockedAt);
+    // });
     this.adventureService.loading$.subscribe(loading => {
       this.isLoading = loading;
     });
@@ -748,14 +850,31 @@ export class DashboardComponent implements OnInit {
   }
 
   getCategoryStats(): Array<{label: string; icon: string; count: number}> {
+    const allAdventures = this.adventureService.getAllAdventures();
+    const categoryCounts: Record<string, number> = {};
+    
+    // Count all adventures by category
+    allAdventures.forEach(adventure => {
+      const cat = adventure.category;
+      categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+    });
+    
     return this.categories.map(cat => ({
       ...cat,
-      count: this.stats.byCategory[cat.value] || 0
-    })).filter(cat => cat.count > 0);
+      count: categoryCounts[cat.value] || 0
+    }));
   }
 
   getCategoryIcon(category: string): string {
     const cat = this.categories.find(c => c.value === category);
     return cat?.icon || '✨';
+  }
+
+  toggleSection(section: string): void {
+    this.collapsedSections[section] = !this.collapsedSections[section];
+  }
+
+  isSectionCollapsed(section: string): boolean {
+    return this.collapsedSections[section] ?? true;
   }
 }
