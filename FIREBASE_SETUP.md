@@ -47,15 +47,21 @@ const firebaseConfig = {
 ## Step 5: Set Up Firestore Security Rules (Important!)
 
 1. In Firebase Console, go to "Firestore Database" → "Rules"
-2. Update the rules to allow read/write access:
+2. Update the rules to allow read/write access for the **adventures** collection:
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /tasks/{taskId} {
+    // Allow read/write access to adventures collection
+    match /adventures/{adventureId} {
       allow read, write: if true; // For development - allows all access
       // For production, implement proper authentication rules
+    }
+    
+    // Allow read/write access to achievements collection (if using)
+    match /achievements/{achievementId} {
+      allow read, write: if true; // For development - allows all access
     }
   }
 }
@@ -63,7 +69,19 @@ service cloud.firestore {
 
 3. Click "Publish"
 
-**Note:** The rule above allows anyone to read/write. For production, implement proper authentication and security rules.
+**Note:** The rules above allow anyone to read/write. For production, implement proper authentication and security rules. For example:
+
+```javascript
+// Production rules with authentication
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /adventures/{adventureId} {
+      allow read, write: if request.auth != null; // Requires authentication
+    }
+  }
+}
+```
 
 ## Step 6: Deploy Your App
 

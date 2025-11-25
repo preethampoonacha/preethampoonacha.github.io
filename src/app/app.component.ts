@@ -9,8 +9,15 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="container">
       <nav class="main-nav">
-        <a routerLink="/tasks" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">Tasks</a>
-        <!-- <a routerLink="/signalr-poc" routerLinkActive="active">SignalR POC</a> -->
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          💑 Dashboard
+        </a>
+        <a routerLink="/adventures" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+          📋 Adventures
+        </a>
+        <a routerLink="/timeline" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          📖 Timeline
+        </a>
       </nav>
       <router-outlet></router-outlet>
     </div>
@@ -59,6 +66,6 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class AppComponent {
-  title = 'Task Tracker';
+  title = 'Our Adventure List';
 }
 

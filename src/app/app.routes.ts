@@ -3,20 +3,38 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/tasks',
+    redirectTo: '/dashboard',
     pathMatch: 'full'
   },
   {
+    path: 'dashboard',
+    loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent)
+  },
+  {
+    path: 'adventures',
+    loadComponent: () => import('./components/adventure-list/adventure-list.component').then(m => m.AdventureListComponent)
+  },
+  {
+    path: 'adventures/new',
+    loadComponent: () => import('./components/adventure-form/adventure-form.component').then(m => m.AdventureFormComponent)
+  },
+  {
+    path: 'adventures/:id',
+    loadComponent: () => import('./components/adventure-detail/adventure-detail.component').then(m => m.AdventureDetailComponent)
+  },
+  {
+    path: 'adventures/:id/edit',
+    loadComponent: () => import('./components/adventure-form/adventure-form.component').then(m => m.AdventureFormComponent)
+  },
+  {
+    path: 'timeline',
+    loadComponent: () => import('./components/timeline/timeline.component').then(m => m.TimelineComponent)
+  },
+  // Legacy routes for backward compatibility
+  {
     path: 'tasks',
-    loadComponent: () => import('./components/task-list/task-list.component').then(m => m.TaskListComponent)
-  },
-  {
-    path: 'tasks/new',
-    loadComponent: () => import('./components/task-form/task-form.component').then(m => m.TaskFormComponent)
-  },
-  {
-    path: 'tasks/edit/:id',
-    loadComponent: () => import('./components/task-form/task-form.component').then(m => m.TaskFormComponent)
+    redirectTo: '/adventures',
+    pathMatch: 'full'
   },
   {
     path: 'signalr-poc',
