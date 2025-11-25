@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { AdventureService } from '../../services/adventure.service';
-import { Adventure } from '../../models/task.model';
+import { Adventure, Comment, Partner } from '../../models/task.model';
 
 @Component({
   selector: 'app-adventure-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   template: `
     <div class="detail-container" *ngIf="adventure">
       <div class="detail-header">
@@ -113,6 +114,59 @@ import { Adventure } from '../../models/task.model';
           <div class="detail-section" *ngIf="adventure.notes">
             <h3>Notes</h3>
             <p class="notes-text">{{ adventure.notes }}</p>
+          </div>
+
+          <div class="detail-section comments-section">
+            <div class="comments-header">
+              <h3>💬 Comments</h3>
+              <span class="comment-count">{{ (adventure.comments || []).length }}</span>
+            </div>
+
+            <div class="comments-list" *ngIf="adventure.comments && adventure.comments.length > 0">
+              <div *ngFor="let comment of adventure.comments" class="comment-item" [class.partner1]="comment.author === 'partner1'" [class.partner2]="comment.author === 'partner2'">
+                <div class="comment-avatar">
+                  {{ comment.author === 'partner1' ? '👤' : comment.author === 'partner2' ? '👤' : '💑' }}
+                </div>
+                <div class="comment-content">
+                  <div class="comment-header">
+                    <span class="comment-author">{{ getPartnerLabel(comment.author) }}</span>
+                    <span class="comment-date">{{ comment.createdAt | date:'short' }}</span>
+                  </div>
+                  <p class="comment-text">{{ comment.text }}</p>
+                </div>
+                <button class="comment-delete" (click)="deleteComment(comment.id)" title="Delete comment">×</button>
+              </div>
+            </div>
+
+            <div class="comment-form">
+              <div class="comment-input-wrapper">
+                <textarea
+                  [(ngModel)]="newCommentText"
+                  placeholder="Add a comment..."
+                  class="comment-input"
+                  rows="2"
+                  (keydown.enter)="onCommentKeyDown($event)"
+                ></textarea>
+                <div class="comment-author-selector">
+                  <button
+                    type="button"
+                    *ngFor="let partner of commentAuthorOptions"
+                    class="author-btn"
+                    [class.active]="selectedCommentAuthor === partner.value"
+                    (click)="selectedCommentAuthor = partner.value"
+                  >
+                    {{ partner.icon }} {{ partner.label }}
+                  </button>
+                </div>
+              </div>
+              <button
+                class="comment-submit-btn"
+                (click)="addComment()"
+                [disabled]="!newCommentText?.trim()"
+              >
+                Post
+              </button>
+            </div>
           </div>
 
           <div class="detail-section">
@@ -432,6 +486,207 @@ import { Adventure } from '../../models/task.model';
       color: #1f2937;
     }
 
+    .comments-section {
+      border-top: 2px solid #f3f4f6;
+      padding-top: 30px;
+    }
+
+    .comments-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .comments-header h3 {
+      margin: 0;
+    }
+
+    .comment-count {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .comment-item {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 16px;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .comment-item:hover {
+      background: #f3f4f6;
+    }
+
+    .comment-item.partner1 {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border-left: 4px solid #3b82f6;
+    }
+
+    .comment-item.partner2 {
+      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+      border-left: 4px solid #ec4899;
+    }
+
+    .comment-avatar {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+
+    .comment-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: #1f2937;
+      font-size: 14px;
+    }
+
+    .comment-date {
+      font-size: 12px;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .comment-text {
+      color: #4b5563;
+      line-height: 1.6;
+      margin: 0;
+      word-wrap: break-word;
+    }
+
+    .comment-delete {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.2s;
+    }
+
+    .comment-item:hover .comment-delete {
+      opacity: 1;
+    }
+
+    .comment-delete:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .comment-input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .comment-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
+      transition: all 0.2s;
+    }
+
+    .comment-input:focus {
+      outline: none;
+      border-color: #f5576c;
+      box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.1);
+    }
+
+    .comment-author-selector {
+      display: flex;
+      gap: 8px;
+    }
+
+    .author-btn {
+      padding: 6px 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .author-btn:hover {
+      border-color: #f5576c;
+      background: #fef2f2;
+    }
+
+    .author-btn.active {
+      border-color: #f5576c;
+      background: linear-gradient(135deg, #fef2f2 0%, #fce7f3 100%);
+      color: #f5576c;
+    }
+
+    .comment-submit-btn {
+      align-self: flex-end;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .comment-submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+    }
+
+    .comment-submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 768px) {
       .adventure-detail-card {
         padding: 20px;
@@ -444,12 +699,32 @@ import { Adventure } from '../../models/task.model';
       .detail-grid {
         grid-template-columns: 1fr;
       }
+
+      .comment-item {
+        padding: 12px;
+      }
+
+      .comment-avatar {
+        font-size: 24px;
+      }
+
+      .comment-author-selector {
+        flex-wrap: wrap;
+      }
     }
   `]
 })
 export class AdventureDetailComponent implements OnInit {
   adventure: Adventure | undefined;
   mainPhoto: string | null = null;
+  newCommentText = '';
+  selectedCommentAuthor: Partner = 'both';
+
+  commentAuthorOptions = [
+    { value: 'both' as Partner, label: 'Both', icon: '💑' },
+    { value: 'partner1' as Partner, label: 'Doree', icon: '👤' },
+    { value: 'partner2' as Partner, label: 'Nobuu', icon: '👤' }
+  ];
 
   categories = [
     { value: 'travel', label: 'Travel', icon: '✈️' },
@@ -471,6 +746,12 @@ export class AdventureDetailComponent implements OnInit {
     if (id) {
       this.loadAdventure(+id);
     }
+    this.adventureService.adventures$.subscribe(() => {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.loadAdventure(+id);
+      }
+    });
   }
 
   loadAdventure(id: number): void {
@@ -479,6 +760,10 @@ export class AdventureDetailComponent implements OnInit {
       this.mainPhoto = this.adventure.photos[0];
     } else {
       this.mainPhoto = null;
+    }
+    // Ensure comments array exists
+    if (this.adventure && !this.adventure.comments) {
+      this.adventure.comments = [];
     }
   }
 
@@ -532,5 +817,30 @@ export class AdventureDetailComponent implements OnInit {
       await this.adventureService.deleteAdventure(this.adventure.id);
       this.router.navigate(['/adventures']);
     }
+  }
+
+  onCommentKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      this.addComment();
+    }
+  }
+
+  async addComment(): Promise<void> {
+    if (!this.adventure || !this.newCommentText?.trim()) return;
+
+    await this.adventureService.addCommentToAdventure(
+      this.adventure.id,
+      this.newCommentText.trim(),
+      this.selectedCommentAuthor
+    );
+    this.newCommentText = '';
+    this.loadAdventure(this.adventure.id);
+  }
+
+  async deleteComment(commentId: string): Promise<void> {
+    if (!this.adventure) return;
+    await this.adventureService.deleteCommentFromAdventure(this.adventure.id, commentId);
+    this.loadAdventure(this.adventure.id);
   }
 }

@@ -2,6 +2,13 @@ export type AdventureCategory = 'travel' | 'food' | 'activity' | 'milestone' | '
 export type AdventureStatus = 'wishlist' | 'planned' | 'in-progress' | 'completed';
 export type Partner = 'partner1' | 'partner2' | 'both';
 
+export interface Comment {
+  id: string;
+  text: string;
+  author: Partner;
+  createdAt: Date;
+}
+
 export interface Adventure {
   id: number;
   title: string;
@@ -27,6 +34,9 @@ export interface Adventure {
   location?: string;
   estimatedCost?: number;
   notes?: string;
+  
+  // Comments
+  comments: Comment[];
   
   // Metadata
   isSurprise: boolean;

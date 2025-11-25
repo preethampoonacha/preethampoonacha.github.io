@@ -154,6 +154,7 @@ export class AdventureService {
   }
 
   private mapFirestoreDataToAdventure(data: any): Adventure {
+    const comments = data['comments'] || [];
     return {
       id: data['id'] || 0,
       title: data['title'],
@@ -171,6 +172,12 @@ export class AdventureService {
       location: data['location'],
       estimatedCost: data['estimatedCost'],
       notes: data['notes'],
+      comments: comments.map((c: any) => ({
+        id: c.id,
+        text: c.text,
+        author: c.author,
+        createdAt: c.createdAt?.toDate ? c.createdAt.toDate() : new Date(c.createdAt)
+      })),
       isSurprise: data['isSurprise'] || false,
       revealed: data['revealed'] || false,
       createdAt: data['createdAt']?.toDate ? data['createdAt'].toDate() : new Date(data['createdAt']),
@@ -190,7 +197,11 @@ export class AdventureService {
           createdAt: new Date(adventure.createdAt),
           updatedAt: new Date(adventure.updatedAt),
           targetDate: adventure.targetDate ? new Date(adventure.targetDate) : undefined,
-          completedDate: adventure.completedDate ? new Date(adventure.completedDate) : undefined
+          completedDate: adventure.completedDate ? new Date(adventure.completedDate) : undefined,
+          comments: (adventure.comments || []).map((c: any) => ({
+            ...c,
+            createdAt: new Date(c.createdAt)
+          }))
         }));
       } else {
         // Initialize with sample couple bucket list items
@@ -204,6 +215,7 @@ export class AdventureService {
             createdBy: 'both',
             status: 'wishlist',
             photos: [],
+            comments: [],
             isSurprise: false,
             revealed: true,
             createdAt: new Date(),
@@ -218,6 +230,7 @@ export class AdventureService {
             createdBy: 'both',
             status: 'wishlist',
             photos: [],
+            comments: [],
             isSurprise: false,
             revealed: true,
             createdAt: new Date(),
@@ -386,6 +399,7 @@ export class AdventureService {
       createdAt: new Date(),
       updatedAt: new Date(),
       photos: adventure.photos || [],
+      comments: adventure.comments || [],
       isSurprise: adventure.isSurprise || false,
       revealed: adventure.isSurprise ? false : true
     };
@@ -426,6 +440,13 @@ export class AdventureService {
       ...updates,
       updatedAt: new Date()
     };
+
+    // Preserve comments if not provided in updates
+    if (!updates.comments && this.adventures[index].comments) {
+      updatedAdventure.comments = this.adventures[index].comments;
+    } else if (!updatedAdventure.comments) {
+      updatedAdventure.comments = [];
+    }
 
     // If marking as completed, set completedDate if not already set
     if (updates.status === 'completed' && !updatedAdventure.completedDate) {
@@ -478,6 +499,31 @@ export class AdventureService {
 
     const updatedPhotos = adventure.photos.filter((_, index) => index !== photoIndex);
     await this.updateAdventure(id, { photos: updatedPhotos });
+    return true;
+  }
+
+  async addCommentToAdventure(id: number, text: string, author: Partner): Promise<boolean> {
+    const adventure = this.getAdventureById(id);
+    if (!adventure || !text.trim()) return false;
+
+    const newComment = {
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      text: text.trim(),
+      author: author,
+      createdAt: new Date()
+    };
+
+    const updatedComments = [...(adventure.comments || []), newComment];
+    await this.updateAdventure(id, { comments: updatedComments });
+    return true;
+  }
+
+  async deleteCommentFromAdventure(id: number, commentId: string): Promise<boolean> {
+    const adventure = this.getAdventureById(id);
+    if (!adventure) return false;
+
+    const updatedComments = (adventure.comments || []).filter(c => c.id !== commentId);
+    await this.updateAdventure(id, { comments: updatedComments });
     return true;
   }
 
@@ -539,6 +585,14 @@ export class AdventureService {
     if (adventure.location) data.location = adventure.location;
     if (adventure.estimatedCost) data.estimatedCost = adventure.estimatedCost;
     if (adventure.notes) data.notes = adventure.notes;
+    if (adventure.comments && adventure.comments.length > 0) {
+      data.comments = adventure.comments.map(c => ({
+        id: c.id,
+        text: c.text,
+        author: c.author,
+        createdAt: Timestamp.fromDate(c.createdAt)
+      }));
+    }
 
     return data;
   }
