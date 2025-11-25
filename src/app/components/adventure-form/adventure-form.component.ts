@@ -427,8 +427,8 @@ export class AdventureFormComponent implements OnInit {
 
   partnerOptions = [
     { value: 'both' as Partner, label: 'Both of Us', icon: '💑' },
-    { value: 'partner1' as Partner, label: 'Partner 1', icon: '👤' },
-    { value: 'partner2' as Partner, label: 'Partner 2', icon: '👤' }
+    { value: 'partner1' as Partner, label: 'Doree', icon: '👤' },
+    { value: 'partner2' as Partner, label: 'Nobuu', icon: '👤' }
   ];
 
   statusOptions = [

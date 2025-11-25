@@ -567,8 +567,8 @@ export class AdventureListComponent implements OnInit {
 
   getPartnerLabel(partner: string): string {
     const labels: Record<string, string> = {
-      'partner1': '👤 Partner 1',
-      'partner2': '👤 Partner 2',
+      'partner1': '👤 Doree',
+      'partner2': '👤 Nobuu',
       'both': '💑 Both'
     };
     return labels[partner] || partner;
