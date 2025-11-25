@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { AdventureService } from '../../services/adventure.service';
-import { Adventure, CoupleStats, Achievement } from '../../models/task.model';
+import { Adventure, CoupleStats, Achievement, Partner } from '../../models/task.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +12,21 @@ import { Adventure, CoupleStats, Achievement } from '../../models/task.model';
     <div class="dashboard-container">
       <div class="dashboard-header">
         <h1>💑 Our Adventure Dashboard</h1>
-        <a routerLink="/adventures/new" class="btn btn-primary">+ New Adventure</a>
+        <div class="header-right">
+          <div class="notification-bells">
+            <div class="notification-bell" [class.has-notifications]="doreeAdventures.length > 0" (click)="filterByPartner('partner1')">
+              <span class="bell-icon">👨</span>
+              <span class="notification-count" *ngIf="doreeAdventures.length > 0">{{ doreeAdventures.length }}</span>
+              <div class="notification-tooltip">Doree's Adventures</div>
+            </div>
+            <div class="notification-bell" [class.has-notifications]="nobuuAdventures.length > 0" (click)="filterByPartner('partner2')">
+              <span class="bell-icon">👩</span>
+              <span class="notification-count" *ngIf="nobuuAdventures.length > 0">{{ nobuuAdventures.length }}</span>
+              <div class="notification-tooltip">Nobuu's Adventures</div>
+            </div>
+          </div>
+          <a routerLink="/adventures/new" class="btn btn-primary">+ New Adventure</a>
+        </div>
       </div>
 
       <div class="stats-grid">
@@ -166,6 +180,105 @@ import { Adventure, CoupleStats, Achievement } from '../../models/task.model';
       margin-bottom: 30px;
       flex-wrap: wrap;
       gap: 15px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .notification-bells {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .notification-bell {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .notification-bell:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .notification-bell.has-notifications {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+      border-color: rgba(102, 126, 234, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+      }
+      50% {
+        box-shadow: 0 4px 24px rgba(102, 126, 234, 0.4);
+      }
+    }
+
+    .bell-icon {
+      font-size: 24px;
+      transition: transform 0.3s;
+    }
+
+    .notification-bell:hover .bell-icon {
+      transform: rotate(-15deg);
+    }
+
+    .notification-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 12px;
+      min-width: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+      animation: bounce 0.5s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .notification-tooltip {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .notification-bell:hover .notification-tooltip {
+      opacity: 1;
     }
 
     .dashboard-header h1 {
@@ -478,6 +591,8 @@ export class DashboardComponent implements OnInit {
   recentCompleted: Adventure[] = [];
   allAchievements: Achievement[] = [];
   unlockedAchievements: Achievement[] = [];
+  doreeAdventures: Adventure[] = [];
+  nobuuAdventures: Adventure[] = [];
 
   categories = [
     { value: 'travel', label: 'Travel', icon: '✈️' },
@@ -488,7 +603,10 @@ export class DashboardComponent implements OnInit {
     { value: 'home', label: 'Home', icon: '🏠' }
   ];
 
-  constructor(private adventureService: AdventureService) {}
+  constructor(
+    private adventureService: AdventureService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -505,6 +623,22 @@ export class DashboardComponent implements OnInit {
     this.stats = this.adventureService.getStats();
     this.upcomingAdventures = this.adventureService.getUpcomingAdventures();
     this.recentCompleted = this.adventureService.getCompletedAdventures();
+    
+    const allAdventures = this.adventureService.getAllAdventures();
+    this.doreeAdventures = allAdventures.filter(a => 
+      (a.assignedTo === 'partner1' || a.assignedTo === 'both') && 
+      a.status !== 'completed'
+    );
+    this.nobuuAdventures = allAdventures.filter(a => 
+      (a.assignedTo === 'partner2' || a.assignedTo === 'both') && 
+      a.status !== 'completed'
+    );
+  }
+
+  filterByPartner(partner: Partner): void {
+    this.router.navigate(['/adventures'], { 
+      queryParams: { assignedTo: partner } 
+    });
   }
 
   getCompletionPercentage(): number {

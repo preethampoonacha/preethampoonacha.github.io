@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AdventureService } from '../../services/adventure.service';
-import { Adventure, AdventureCategory } from '../../models/task.model';
+import { Adventure, AdventureCategory, Partner } from '../../models/task.model';
 
 @Component({
   selector: 'app-adventure-list',
@@ -61,21 +61,34 @@ import { Adventure, AdventureCategory } from '../../models/task.model';
             </button>
           </div>
 
-          <div class="category-filters">
+          <div class="filter-buttons">
             <button
-              class="category-btn"
-              [class.active]="selectedCategory === null"
-              (click)="filterByCategory(null)"
+              class="filter-btn"
+              [class.active]="selectedCreatedBy === null"
+              (click)="filterByCreatedBy(null)"
             >
-              All Categories
+              All Creators
             </button>
             <button
-              *ngFor="let cat of categories"
-              class="category-btn"
-              [class.active]="selectedCategory === cat.value"
-              (click)="filterByCategory(cat.value)"
+              class="filter-btn"
+              [class.active]="selectedCreatedBy === 'partner1'"
+              (click)="filterByCreatedBy('partner1')"
             >
-              {{ cat.icon }} {{ cat.label }}
+              👨 Doree
+            </button>
+            <button
+              class="filter-btn"
+              [class.active]="selectedCreatedBy === 'partner2'"
+              (click)="filterByCreatedBy('partner2')"
+            >
+              👩 Nobuu
+            </button>
+            <button
+              class="filter-btn"
+              [class.active]="selectedCreatedBy === 'both'"
+              (click)="filterByCreatedBy('both')"
+            >
+              💑 Both
             </button>
           </div>
         </div>
@@ -97,7 +110,13 @@ import { Adventure, AdventureCategory } from '../../models/task.model';
                 <span class="partner-badge" [class.partner1]="adventure.assignedTo === 'partner1'"
                       [class.partner2]="adventure.assignedTo === 'partner2'"
                       [class.both]="adventure.assignedTo === 'both'">
-                  {{ getPartnerLabel(adventure.assignedTo) }}
+                  📌 {{ getPartnerLabel(adventure.assignedTo) }}
+                </span>
+                <span class="partner-badge created-by" 
+                      [class.partner1]="adventure.createdBy === 'partner1'"
+                      [class.partner2]="adventure.createdBy === 'partner2'"
+                      [class.both]="adventure.createdBy === 'both'">
+                  ✨ {{ getPartnerLabel(adventure.createdBy) }}
                 </span>
                 <span *ngIf="adventure.isSurprise && adventure.revealed" class="surprise-badge">🎁 Surprise</span>
               </div>
@@ -145,28 +164,43 @@ import { Adventure, AdventureCategory } from '../../models/task.model';
       max-width: 1400px;
       margin: 0 auto;
       padding: 20px;
+      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .header-section {
-      margin-bottom: 30px;
+      margin-bottom: 40px;
     }
 
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 20px;
     }
 
     .header-content h1 {
       margin: 0;
-      font-size: 2rem;
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      letter-spacing: -0.5px;
     }
 
     .header-actions {
@@ -241,46 +275,100 @@ import { Adventure, AdventureCategory } from '../../models/task.model';
     }
 
     .filter-btn, .category-btn {
-      padding: 8px 16px;
-      border: 2px solid #e5e7eb;
-      background: white;
-      border-radius: 20px;
+      padding: 10px 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
       cursor: pointer;
       font-size: 14px;
-      transition: all 0.2s;
-      font-weight: 500;
+      font-weight: 600;
+      color: white;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .filter-btn::before, .category-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: left 0.4s;
+    }
+
+    .filter-btn:hover::before, .category-btn:hover::before {
+      left: 100%;
     }
 
     .filter-btn:hover, .category-btn:hover {
-      border-color: #f5576c;
-      background: #fef2f2;
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     }
 
     .filter-btn.active, .category-btn.active {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: rgba(255, 255, 255, 0.35);
       color: white;
-      border-color: transparent;
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     }
 
     .adventures-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
     }
 
     .adventure-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      animation: cardFadeIn 0.6s ease-out backwards;
+    }
+
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .adventure-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .adventure-card:hover::before {
+      opacity: 1;
     }
 
     .adventure-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-      border-color: #f5576c;
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 64px rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
     }
 
     .adventure-card.surprise {
@@ -300,9 +388,12 @@ import { Adventure, AdventureCategory } from '../../models/task.model';
     }
 
     .adventure-title {
-      margin: 0 0 8px 0;
-      font-size: 1.25rem;
+      margin: 0 0 10px 0;
+      font-size: 1.35rem;
+      font-weight: 700;
       color: #1f2937;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
     }
 
     .partner-badges {
@@ -333,6 +424,12 @@ import { Adventure, AdventureCategory } from '../../models/task.model';
     .partner-badge.both {
       background: linear-gradient(135deg, #fce7f3 0%, #dbeafe 100%);
       color: #7c2d12;
+    }
+
+    .partner-badge.created-by {
+      font-size: 11px;
+      opacity: 0.85;
+      border: 1px dashed currentColor;
     }
 
     .surprise-badge {
@@ -439,25 +536,37 @@ import { Adventure, AdventureCategory } from '../../models/task.model';
 
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 80px 40px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .empty-icon {
-      font-size: 64px;
-      margin-bottom: 20px;
+      font-size: 80px;
+      margin-bottom: 24px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     .empty-state h2 {
-      margin: 0 0 10px 0;
+      margin: 0 0 12px 0;
       color: #1f2937;
+      font-size: 1.75rem;
+      font-weight: 700;
     }
 
     .empty-state p {
       color: #6b7280;
-      margin-bottom: 20px;
+      margin-bottom: 28px;
+      font-size: 16px;
     }
 
     @media (max-width: 768px) {
@@ -478,6 +587,7 @@ export class AdventureListComponent implements OnInit {
   firebaseStatus = { connected: false, message: '' };
   selectedStatus: Adventure['status'] | null = null;
   selectedCategory: AdventureCategory | null = null;
+  selectedCreatedBy: Partner | null = null;
 
   categories = [
     { value: 'travel' as AdventureCategory, label: 'Travel', icon: '✈️' },
@@ -516,6 +626,11 @@ export class AdventureListComponent implements OnInit {
     this.applyFilters();
   }
 
+  filterByCreatedBy(createdBy: Partner | null): void {
+    this.selectedCreatedBy = createdBy;
+    this.applyFilters();
+  }
+
   applyFilters(): void {
     let filtered = [...this.adventures];
 
@@ -527,6 +642,11 @@ export class AdventureListComponent implements OnInit {
     // Filter by category
     if (this.selectedCategory !== null) {
       filtered = filtered.filter(a => a.category === this.selectedCategory);
+    }
+
+    // Filter by created by
+    if (this.selectedCreatedBy !== null) {
+      filtered = filtered.filter(a => a.createdBy === this.selectedCreatedBy);
     }
 
     // Hide unrevealed surprises
@@ -567,8 +687,8 @@ export class AdventureListComponent implements OnInit {
 
   getPartnerLabel(partner: string): string {
     const labels: Record<string, string> = {
-      'partner1': '👤 Doree',
-      'partner2': '👤 Nobuu',
+      'partner1': '👨 Doree',
+      'partner2': '👩 Nobuu',
       'both': '💑 Both'
     };
     return labels[partner] || partner;

@@ -125,7 +125,7 @@ import { Adventure, Comment, Partner } from '../../models/task.model';
             <div class="comments-list" *ngIf="adventure.comments && adventure.comments.length > 0">
               <div *ngFor="let comment of adventure.comments" class="comment-item" [class.partner1]="comment.author === 'partner1'" [class.partner2]="comment.author === 'partner2'">
                 <div class="comment-avatar">
-                  {{ comment.author === 'partner1' ? '👤' : comment.author === 'partner2' ? '👤' : '💑' }}
+                  {{ comment.author === 'partner1' ? '👨' : comment.author === 'partner2' ? '👩' : '💑' }}
                 </div>
                 <div class="comment-content">
                   <div class="comment-header">
@@ -145,7 +145,7 @@ import { Adventure, Comment, Partner } from '../../models/task.model';
                   placeholder="Add a comment..."
                   class="comment-input"
                   rows="2"
-                  (keydown.enter)="onCommentKeyDown($event)"
+                  (keydown)="onCommentKeyDown($event)"
                 ></textarea>
                 <div class="comment-author-selector">
                   <button
@@ -722,8 +722,8 @@ export class AdventureDetailComponent implements OnInit {
 
   commentAuthorOptions = [
     { value: 'both' as Partner, label: 'Both', icon: '💑' },
-    { value: 'partner1' as Partner, label: 'Doree', icon: '👤' },
-    { value: 'partner2' as Partner, label: 'Nobuu', icon: '👤' }
+    { value: 'partner1' as Partner, label: 'Doree', icon: '👨' },
+    { value: 'partner2' as Partner, label: 'Nobuu', icon: '👩' }
   ];
 
   categories = [
@@ -801,8 +801,8 @@ export class AdventureDetailComponent implements OnInit {
 
   getPartnerLabel(partner: string): string {
     const labels: Record<string, string> = {
-      'partner1': '👤 Doree',
-      'partner2': '👤 Nobuu',
+      'partner1': '👨 Doree',
+      'partner2': '👩 Nobuu',
       'both': '💑 Both'
     };
     return labels[partner] || partner;
@@ -819,9 +819,10 @@ export class AdventureDetailComponent implements OnInit {
     }
   }
 
-  onCommentKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
-      event.preventDefault();
+  onCommentKeyDown(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+    if (keyboardEvent.key === 'Enter' && (keyboardEvent.ctrlKey || keyboardEvent.metaKey)) {
+      keyboardEvent.preventDefault();
       this.addComment();
     }
   }
