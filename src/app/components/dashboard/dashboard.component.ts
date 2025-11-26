@@ -32,7 +32,7 @@ import { LoaderComponent } from '../loader/loader.component';
       </div>
 
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" (click)="viewAllAdventures()" style="cursor: pointer;">
           <div class="stat-icon">📋</div>
           <div class="stat-content">
             <div class="stat-value">{{ stats.totalAdventures }}</div>
@@ -97,7 +97,7 @@ import { LoaderComponent } from '../loader/loader.component';
         </div>
         <div class="section-content" [class.collapsed]="isSectionCollapsed('category')">
           <div class="category-grid">
-            <div *ngFor="let cat of getCategoryStats()" class="category-stat-card">
+            <div *ngFor="let cat of getCategoryStats()" class="category-stat-card" (click)="filterByCategory(cat.value)" style="cursor: pointer;">
               <div class="category-icon">{{ cat.icon }}</div>
               <div class="category-info">
                 <div class="category-name">{{ cat.label }}</div>
@@ -479,6 +479,12 @@ import { LoaderComponent } from '../loader/loader.component';
       display: flex;
       align-items: center;
       gap: 15px;
+      transition: all 0.2s;
+    }
+
+    .category-stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     }
 
     .category-icon {
@@ -844,12 +850,22 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  filterByCategory(category: string): void {
+    this.router.navigate(['/adventures'], { 
+      queryParams: { category: category } 
+    });
+  }
+
+  viewAllAdventures(): void {
+    this.router.navigate(['/adventures']);
+  }
+
   getCompletionPercentage(): number {
     if (this.stats.totalAdventures === 0) return 0;
     return Math.round((this.stats.completedAdventures / this.stats.totalAdventures) * 100);
   }
 
-  getCategoryStats(): Array<{label: string; icon: string; count: number}> {
+  getCategoryStats(): Array<{value: string; label: string; icon: string; count: number}> {
     const allAdventures = this.adventureService.getAllAdventures();
     const categoryCounts: Record<string, number> = {};
     

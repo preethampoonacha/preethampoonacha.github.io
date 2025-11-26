@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { AdventureService } from '../../services/adventure.service';
 import { Adventure, AdventureCategory, Partner } from '../../models/task.model';
 import { LoaderComponent } from '../loader/loader.component';
@@ -1082,10 +1082,31 @@ export class AdventureListComponent implements OnInit {
     { value: 'home' as AdventureCategory, label: 'Home', icon: '🏠' }
   ];
 
-  constructor(private adventureService: AdventureService) {}
+  constructor(
+    private adventureService: AdventureService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.loadAdventures();
+    // Read query parameters and apply filters
+    this.route.queryParams.subscribe(params => {
+      if (params['category']) {
+        this.selectedCategory = params['category'] as AdventureCategory;
+      } else {
+        this.selectedCategory = null;
+      }
+      if (params['status']) {
+        this.selectedStatus = params['status'] as Adventure['status'];
+      } else {
+        this.selectedStatus = null;
+      }
+      if (params['assignedTo']) {
+        // Note: assignedTo filter is not currently implemented in the filter popup
+        // but we can add it if needed
+      }
+      this.loadAdventures();
+    });
+
     this.adventureService.adventures$.subscribe(adventures => {
       this.adventures = adventures;
       this.applyFilters();
