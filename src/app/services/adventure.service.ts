@@ -496,69 +496,10 @@ export class AdventureService {
    * @returns Array of download URLs
    */
   private async uploadPhotosToStorage(photos: (string | File)[], adventureId: number): Promise<string[]> {
-    if (!storage || !this.useFirestore || photos.length === 0) {
-      return photos as string[];
-    }
-
-    const uploadedUrls: string[] = [];
-
-    for (let i = 0; i < photos.length; i++) {
-      const photo = photos[i];
-      try {
-        let blob: Blob;
-        let fileName: string;
-
-        if (photo instanceof File) {
-          blob = photo;
-          fileName = `adventure_${adventureId}_${Date.now()}_${i}.${photo.name.split('.').pop()}`;
-        } else if (typeof photo === 'string') {
-          // Check if it's already a URL (starts with http)
-          if (photo.startsWith('http://') || photo.startsWith('https://')) {
-            uploadedUrls.push(photo);
-            continue;
-          }
-
-          // Convert base64 to blob
-          const base64Data = photo.includes(',') ? photo.split(',')[1] : photo;
-          const byteCharacters = atob(base64Data);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let j = 0; j < byteCharacters.length; j++) {
-            byteNumbers[j] = byteCharacters.charCodeAt(j);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          
-          // Determine MIME type from base64 prefix
-          let mimeType = 'image/jpeg';
-          if (photo.startsWith('data:image/png')) {
-            mimeType = 'image/png';
-          } else if (photo.startsWith('data:image/gif')) {
-            mimeType = 'image/gif';
-          } else if (photo.startsWith('data:image/webp')) {
-            mimeType = 'image/webp';
-          }
-          
-          blob = new Blob([byteArray], { type: mimeType });
-          const extension = mimeType.split('/')[1];
-          fileName = `adventure_${adventureId}_${Date.now()}_${i}.${extension}`;
-        } else {
-          continue;
-        }
-
-        // Upload to Firebase Storage
-        const storageRef = ref(storage, `adventures/${adventureId}/${fileName}`);
-        await uploadBytes(storageRef, blob);
-        const downloadURL = await getDownloadURL(storageRef);
-        uploadedUrls.push(downloadURL);
-      } catch (error) {
-        console.error(`Error uploading photo ${i}:`, error);
-        // Fallback to original photo if upload fails
-        if (typeof photo === 'string') {
-          uploadedUrls.push(photo);
-        }
-      }
-    }
-
-    return uploadedUrls;
+    // Skip Firebase Storage uploads - store images as base64 directly in Firestore
+    // This avoids CORS issues and Storage rules configuration
+    // Firestore can store base64 images (up to 1MB per document field)
+    return photos as string[];
   }
 
   async createAdventure(adventure: Omit<Adventure, 'id' | 'createdAt' | 'updatedAt'>): Promise<Adventure> {
@@ -943,69 +884,10 @@ export class AdventureService {
    * @returns Array of download URLs
    */
   private async uploadSurprisePhotosToStorage(photos: (string | File)[], surpriseId: string): Promise<string[]> {
-    if (!storage || !this.useFirestore || photos.length === 0) {
-      return photos as string[];
-    }
-
-    const uploadedUrls: string[] = [];
-
-    for (let i = 0; i < photos.length; i++) {
-      const photo = photos[i];
-      try {
-        let blob: Blob;
-        let fileName: string;
-
-        if (photo instanceof File) {
-          blob = photo;
-          fileName = `surprise_${surpriseId}_${Date.now()}_${i}.${photo.name.split('.').pop()}`;
-        } else if (typeof photo === 'string') {
-          // Check if it's already a URL (starts with http)
-          if (photo.startsWith('http://') || photo.startsWith('https://')) {
-            uploadedUrls.push(photo);
-            continue;
-          }
-
-          // Convert base64 to blob
-          const base64Data = photo.includes(',') ? photo.split(',')[1] : photo;
-          const byteCharacters = atob(base64Data);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let j = 0; j < byteCharacters.length; j++) {
-            byteNumbers[j] = byteCharacters.charCodeAt(j);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          
-          // Determine MIME type from base64 prefix
-          let mimeType = 'image/jpeg';
-          if (photo.startsWith('data:image/png')) {
-            mimeType = 'image/png';
-          } else if (photo.startsWith('data:image/gif')) {
-            mimeType = 'image/gif';
-          } else if (photo.startsWith('data:image/webp')) {
-            mimeType = 'image/webp';
-          }
-          
-          blob = new Blob([byteArray], { type: mimeType });
-          const extension = mimeType.split('/')[1];
-          fileName = `surprise_${surpriseId}_${Date.now()}_${i}.${extension}`;
-        } else {
-          continue;
-        }
-
-        // Upload to Firebase Storage
-        const storageRef = ref(storage, `surprises/${surpriseId}/${fileName}`);
-        await uploadBytes(storageRef, blob);
-        const downloadURL = await getDownloadURL(storageRef);
-        uploadedUrls.push(downloadURL);
-      } catch (error) {
-        console.error(`Error uploading surprise photo ${i}:`, error);
-        // Fallback to original photo if upload fails
-        if (typeof photo === 'string') {
-          uploadedUrls.push(photo);
-        }
-      }
-    }
-
-    return uploadedUrls;
+    // Skip Firebase Storage uploads - store images as base64 directly in Firestore
+    // This avoids CORS issues and Storage rules configuration
+    // Firestore can store base64 images (up to 1MB per document field)
+    return photos as string[];
   }
 
   async createSurprise(surpriseData: Omit<Surprise, 'id' | 'createdAt' | 'updatedAt' | 'revealed'>): Promise<Surprise> {
@@ -1019,14 +901,10 @@ export class AdventureService {
       comments: surpriseData.comments || []
     };
 
-    // Upload photos to Firebase Storage
+    // Photos are stored as base64 directly in Firestore (no Storage needed)
+    // The uploadSurprisePhotosToStorage function now just returns photos as-is
     if (newSurprise.photos.length > 0) {
-      try {
-        newSurprise.photos = await this.uploadSurprisePhotosToStorage(newSurprise.photos, newSurprise.id);
-      } catch (error) {
-        console.error('Error uploading surprise photos to storage:', error);
-        // Continue with original photos if upload fails
-      }
+      newSurprise.photos = await this.uploadSurprisePhotosToStorage(newSurprise.photos, newSurprise.id);
     }
 
     this.surprises.push(newSurprise);
