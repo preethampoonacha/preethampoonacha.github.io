@@ -68,9 +68,6 @@ import { AuthService } from '../../services/auth.service';
           <span *ngIf="pinValue.length >= 4">Continue →</span>
         </button>
 
-        <div class="pin-hint" *ngIf="showHint">
-          <small>💡 Default: 1234</small>
-        </div>
       </div>
     </div>
   `,
@@ -112,7 +109,6 @@ export class PinAuthComponent implements OnInit, AfterViewInit {
   pinValue = '';
   pinDots: boolean[] = [false, false, false, false];
   errorMessage = '';
-  showHint = true;
   keypadNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 
   constructor(
@@ -124,9 +120,6 @@ export class PinAuthComponent implements OnInit, AfterViewInit {
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
     }
-    setTimeout(() => {
-      this.showHint = false;
-    }, 5000);
   }
 
   ngAfterViewInit(): void {

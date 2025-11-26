@@ -6,17 +6,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AuthService {
   private readonly PIN_KEY = 'adventure-pin';
-  private readonly DEFAULT_PIN = '1234'; // Change this to your desired PIN
+  private readonly DEFAULT_PIN = '9302';
   private readonly AUTH_KEY = 'adventure-authenticated';
   
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkAuth());
   public isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
 
   constructor() {
-    // Check if PIN is set, if not set default
-    if (!localStorage.getItem(this.PIN_KEY)) {
-      localStorage.setItem(this.PIN_KEY, this.DEFAULT_PIN);
-    }
+    // Always set PIN to default (9302) on initialization
+    // This ensures the PIN is always correct, even on mobile devices
+    localStorage.setItem(this.PIN_KEY, this.DEFAULT_PIN);
   }
 
   private checkAuth(): boolean {
