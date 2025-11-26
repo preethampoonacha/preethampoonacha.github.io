@@ -11,6 +11,12 @@ import { Adventure, AdventureCategory, Partner } from '../../models/task.model';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   template: `
     <div class="slide-form-container">
+      <div class="loader-overlay" *ngIf="isLoading">
+        <div class="loader-content">
+          <div class="loader-spinner"></div>
+          <p>Creating your surprise...</p>
+        </div>
+      </div>
       <div class="slide-header">
         <a routerLink="/adventures" class="close-btn">×</a>
         <div class="progress-bar">
@@ -402,6 +408,11 @@ import { Adventure, AdventureCategory, Partner } from '../../models/task.model';
     .btn-next,.btn-submit{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff;flex:1}
     .btn-next:hover:not(:disabled),.btn-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 20px rgba(245,87,108,.4)}
     .btn-next:disabled,.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+    .loader-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:2000;display:flex;align-items:center;justify-content:center}
+    .loader-content{text-align:center;color:#fff}
+    .loader-spinner{width:60px;height:60px;border:4px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loader-content p{font-size:18px;font-weight:500;margin:0}
     @media (max-width:768px){.slide-content{padding:30px 20px}.category-grid,.partner-options{grid-template-columns:repeat(2,1fr)}.status-options{grid-template-columns:1fr}.slide-content h2{font-size:1.5rem}}
   `]
 })
@@ -414,6 +425,7 @@ export class AdventureFormComponent implements OnInit {
   photoPreviews: string[] = [];
   existingPhotos: string[] = [];
   selectedPhotos: File[] = [];
+  isLoading = false;
 
   categories = [
     { value: 'travel' as AdventureCategory, label: 'Travel', icon: '✈️' },
@@ -623,8 +635,25 @@ export class AdventureFormComponent implements OnInit {
         this.router.navigate(['/adventures', this.adventureId]);
       } else {
         adventureData.photos = [...this.photoPreviews];
-        await this.adventureService.createAdventure(adventureData);
-        this.router.navigate(['/adventures']);
+        const isSurprise = adventureData.isSurprise || false;
+        
+        try {
+          if (isSurprise) {
+            this.isLoading = true;
+          }
+          
+          const createdAdventure = await this.adventureService.createAdventure(adventureData);
+          
+          if (isSurprise) {
+            this.router.navigate(['/adventures', createdAdventure.id]);
+          } else {
+            this.router.navigate(['/adventures']);
+          }
+        } catch (error) {
+          this.isLoading = false;
+          console.error('Error creating adventure:', error);
+          // Optionally show an error message to the user
+        }
       }
     }
   }

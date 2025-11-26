@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AdventureService } from '../../services/adventure.service';
-import { Adventure, CoupleStats, Achievement, Partner } from '../../models/task.model';
+import { Adventure, CoupleStats, Achievement, Partner, Surprise } from '../../models/task.model';
 import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, LoaderComponent],
+  imports: [CommonModule, RouterModule, FormsModule, LoaderComponent],
   template: `
     <app-loader *ngIf="isLoading"></app-loader>
     <div class="dashboard-container">
@@ -26,6 +27,11 @@ import { LoaderComponent } from '../loader/loader.component';
               <span class="notification-count" *ngIf="nobuuAdventures.length > 0">{{ nobuuAdventures.length }}</span>
               <div class="notification-tooltip">Nobuu's Adventures</div>
             </div>
+            <a routerLink="/surprises" class="notification-bell surprise-box-link" [class.has-notifications]="unrevealedSurprises.length > 0" title="Surprise Box">
+              <span class="bell-icon">🎁</span>
+              <span class="notification-count" *ngIf="unrevealedSurprises.length > 0">{{ unrevealedSurprises.length }}</span>
+              <div class="notification-tooltip">Surprise Box</div>
+            </a>
           </div>
           <a routerLink="/adventures/new" class="btn btn-primary">+ New Adventure</a>
         </div>
@@ -243,6 +249,17 @@ import { LoaderComponent } from '../loader/loader.component';
     .notification-bell.has-notifications {
       background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
       border-color: rgba(102, 126, 234, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .surprise-box-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .surprise-box-link.has-notifications {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%);
+      border-color: rgba(251, 191, 36, 0.3);
       animation: pulse 2s ease-in-out infinite;
     }
 
@@ -791,6 +808,9 @@ export class DashboardComponent implements OnInit {
   nobuuAdventures: Adventure[] = [];
   isLoading = false;
   
+  // Surprise Box (for notification badge only)
+  unrevealedSurprises: Surprise[] = [];
+  
   // Collapsible sections state (all collapsed by default)
   collapsedSections: { [key: string]: boolean } = {
     category: true,
@@ -808,6 +828,7 @@ export class DashboardComponent implements OnInit {
     { value: 'home', label: 'Home', icon: '🏠' }
   ];
 
+
   constructor(
     private adventureService: AdventureService,
     private router: Router
@@ -815,8 +836,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.loadSurprises();
     this.adventureService.adventures$.subscribe(() => {
       this.loadData();
+    });
+    this.adventureService.surprises$.subscribe(() => {
+      this.loadSurprises();
     });
     // Achievements subscription disabled
     // this.adventureService.achievements$.subscribe(achievements => {
@@ -826,6 +851,10 @@ export class DashboardComponent implements OnInit {
     this.adventureService.loading$.subscribe(loading => {
       this.isLoading = loading;
     });
+  }
+
+  loadSurprises(): void {
+    this.unrevealedSurprises = this.adventureService.getUnrevealedSurprises();
   }
 
   loadData(): void {
@@ -893,4 +922,5 @@ export class DashboardComponent implements OnInit {
   isSectionCollapsed(section: string): boolean {
     return this.collapsedSections[section] ?? true;
   }
+
 }

@@ -41,6 +41,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/timeline/timeline.component').then(m => m.TimelineComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'surprises',
+    loadComponent: () => import('./components/surprise-box/surprise-box.component').then(m => m.SurpriseBoxComponent),
+    canActivate: [authGuard]
+  },
   // Legacy routes for backward compatibility
   {
     path: 'tasks',

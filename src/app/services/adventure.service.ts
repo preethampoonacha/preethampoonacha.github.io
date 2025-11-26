@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Adventure, Achievement, CoupleStats, AdventureCategory, Partner } from '../models/task.model';
+import { Adventure, Achievement, CoupleStats, AdventureCategory, Partner, Surprise, Comment } from '../models/task.model';
 import { 
   collection, 
   doc, 
@@ -21,8 +21,10 @@ export class AdventureService {
   private readonly STORAGE_KEY = 'adventure-tracker-adventures';
   private readonly NEXT_ID_KEY = 'adventure-tracker-next-id';
   private readonly ACHIEVEMENTS_KEY = 'adventure-tracker-achievements';
+  private readonly SURPRISES_KEY = 'adventure-tracker-surprises';
   private readonly COLLECTION_NAME = 'adventures';
   private readonly ACHIEVEMENTS_COLLECTION = 'achievements';
+  private readonly SURPRISES_COLLECTION = 'surprises';
   
   private adventures: Adventure[] = [];
   private adventuresSubject = new BehaviorSubject<Adventure[]>(this.adventures);
@@ -31,6 +33,10 @@ export class AdventureService {
   private achievements: Achievement[] = [];
   private achievementsSubject = new BehaviorSubject<Achievement[]>(this.achievements);
   public achievements$: Observable<Achievement[]> = this.achievementsSubject.asObservable();
+
+  private surprises: Surprise[] = [];
+  private surprisesSubject = new BehaviorSubject<Surprise[]>(this.surprises);
+  public surprises$: Observable<Surprise[]> = this.surprisesSubject.asObservable();
 
   private nextId = 1;
   private useFirestore = false;
@@ -65,6 +71,7 @@ export class AdventureService {
 
   constructor() {
     this.initializeAchievements();
+    this.loadSurprisesFromStorage();
     this.checkFirebaseConfig();
   }
 
@@ -700,6 +707,199 @@ export class AdventureService {
 
   getAllAchievements(): Achievement[] {
     return [...this.achievements];
+  }
+
+  // Surprise Box Methods
+  getAllSurprises(): Surprise[] {
+    return [...this.surprises];
+  }
+
+  getUnrevealedSurprises(): Surprise[] {
+    return this.surprises.filter(s => !s.revealed);
+  }
+
+  getRevealedSurprises(): Surprise[] {
+    return this.surprises.filter(s => s.revealed).sort((a, b) => {
+      const dateA = a.revealedAt?.getTime() || 0;
+      const dateB = b.revealedAt?.getTime() || 0;
+      return dateB - dateA;
+    });
+  }
+
+  async createSurprise(photo: string, from: Partner, to: Partner, message?: string): Promise<Surprise> {
+    const newSurprise: Surprise = {
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      photo,
+      message,
+      from,
+      to,
+      revealed: false,
+      createdAt: new Date(),
+      comments: []
+    };
+
+    this.surprises.push(newSurprise);
+    this.surprisesSubject.next([...this.surprises]);
+    this.saveSurprisesToStorage();
+
+    if (this.useFirestore && db) {
+      try {
+        const surprisesRef = collection(db, this.SURPRISES_COLLECTION);
+        const surpriseDoc = doc(surprisesRef, newSurprise.id);
+        await setDoc(surpriseDoc, {
+          id: newSurprise.id,
+          photo: newSurprise.photo,
+          message: newSurprise.message || '',
+          from: newSurprise.from,
+          to: newSurprise.to,
+          revealed: newSurprise.revealed,
+          createdAt: Timestamp.fromDate(newSurprise.createdAt),
+          comments: []
+        });
+      } catch (error) {
+        console.error('Error creating surprise in Firestore:', error);
+      }
+    }
+
+    return newSurprise;
+  }
+
+  async revealSurprise(id: string): Promise<void> {
+    const surprise = this.surprises.find(s => s.id === id);
+    if (surprise && !surprise.revealed) {
+      surprise.revealed = true;
+      surprise.revealedAt = new Date();
+      this.surprisesSubject.next([...this.surprises]);
+      this.saveSurprisesToStorage();
+
+      if (this.useFirestore && db) {
+        try {
+          const surprisesRef = collection(db, this.SURPRISES_COLLECTION);
+          const surpriseDoc = doc(surprisesRef, id);
+          await updateDoc(surpriseDoc, {
+            revealed: true,
+            revealedAt: Timestamp.fromDate(surprise.revealedAt)
+          });
+        } catch (error) {
+          console.error('Error revealing surprise in Firestore:', error);
+        }
+      }
+    }
+  }
+
+  async deleteSurprise(id: string): Promise<void> {
+    this.surprises = this.surprises.filter(s => s.id !== id);
+    this.surprisesSubject.next([...this.surprises]);
+    this.saveSurprisesToStorage();
+
+    if (this.useFirestore && db) {
+      try {
+        const surprisesRef = collection(db, this.SURPRISES_COLLECTION);
+        const surpriseDoc = doc(surprisesRef, id);
+        await deleteDoc(surpriseDoc);
+      } catch (error) {
+        console.error('Error deleting surprise in Firestore:', error);
+      }
+    }
+  }
+
+  private saveSurprisesToStorage(): void {
+    try {
+      const surprisesData = this.surprises.map(s => ({
+        ...s,
+        createdAt: s.createdAt.toISOString(),
+        revealedAt: s.revealedAt?.toISOString(),
+        comments: (s.comments || []).map(c => ({
+          ...c,
+          createdAt: c.createdAt.toISOString()
+        }))
+      }));
+      localStorage.setItem(this.SURPRISES_KEY, JSON.stringify(surprisesData));
+    } catch (error) {
+      console.error('Error saving surprises to storage:', error);
+    }
+  }
+
+  async addCommentToSurprise(surpriseId: string, text: string, author: Partner): Promise<void> {
+    const surprise = this.surprises.find(s => s.id === surpriseId);
+    if (surprise) {
+      if (!surprise.comments) {
+        surprise.comments = [];
+      }
+      const newComment: Comment = {
+        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        text,
+        author,
+        createdAt: new Date()
+      };
+      surprise.comments.push(newComment);
+      this.surprisesSubject.next([...this.surprises]);
+      this.saveSurprisesToStorage();
+
+      if (this.useFirestore && db) {
+        try {
+          const surprisesRef = collection(db, this.SURPRISES_COLLECTION);
+          const surpriseDoc = doc(surprisesRef, surpriseId);
+          await updateDoc(surpriseDoc, {
+            comments: surprise.comments.map(c => ({
+              id: c.id,
+              text: c.text,
+              author: c.author,
+              createdAt: Timestamp.fromDate(c.createdAt)
+            }))
+          });
+        } catch (error) {
+          console.error('Error adding comment to surprise in Firestore:', error);
+        }
+      }
+    }
+  }
+
+  async deleteCommentFromSurprise(surpriseId: string, commentId: string): Promise<void> {
+    const surprise = this.surprises.find(s => s.id === surpriseId);
+    if (surprise && surprise.comments) {
+      surprise.comments = surprise.comments.filter(c => c.id !== commentId);
+      this.surprisesSubject.next([...this.surprises]);
+      this.saveSurprisesToStorage();
+
+      if (this.useFirestore && db) {
+        try {
+          const surprisesRef = collection(db, this.SURPRISES_COLLECTION);
+          const surpriseDoc = doc(surprisesRef, surpriseId);
+          await updateDoc(surpriseDoc, {
+            comments: surprise.comments.map(c => ({
+              id: c.id,
+              text: c.text,
+              author: c.author,
+              createdAt: Timestamp.fromDate(c.createdAt)
+            }))
+          });
+        } catch (error) {
+          console.error('Error deleting comment from surprise in Firestore:', error);
+        }
+      }
+    }
+  }
+
+  private loadSurprisesFromStorage(): void {
+    try {
+      const stored = localStorage.getItem(this.SURPRISES_KEY);
+      if (stored) {
+        const surprisesData = JSON.parse(stored);
+        this.surprises = surprisesData.map((s: any) => ({
+          ...s,
+          createdAt: new Date(s.createdAt),
+          revealedAt: s.revealedAt ? new Date(s.revealedAt) : undefined,
+          comments: (s.comments || []).map((c: any) => ({
+            ...c,
+            createdAt: new Date(c.createdAt)
+          }))
+        }));
+        this.surprisesSubject.next([...this.surprises]);
+      }
+    } catch (error) {
+      console.error('Error loading surprises from storage:', error);
+    }
   }
 
   ngOnDestroy(): void {

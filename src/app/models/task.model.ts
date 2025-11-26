@@ -65,6 +65,18 @@ export interface CoupleStats {
   totalPhotos: number;
 }
 
+export interface Surprise {
+  id: string;
+  photo: string; // base64 or URL
+  message?: string;
+  from: Partner;
+  to: Partner;
+  revealed: boolean;
+  createdAt: Date;
+  revealedAt?: Date;
+  comments: Comment[];
+}
+
 // Legacy Task interface for backward compatibility during migration
 export interface Task {
   id: number;
