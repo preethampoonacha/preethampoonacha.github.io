@@ -14,7 +14,7 @@ import { Adventure, AdventureCategory, Partner } from '../../models/task.model';
       <div class="loader-overlay" *ngIf="isLoading">
         <div class="loader-content">
           <div class="loader-spinner"></div>
-          <p>Creating your surprise...</p>
+          <p>{{ isLoadingMessage }}</p>
         </div>
       </div>
       <div class="slide-header">
@@ -426,6 +426,7 @@ export class AdventureFormComponent implements OnInit {
   existingPhotos: string[] = [];
   selectedPhotos: File[] = [];
   isLoading = false;
+  isLoadingMessage = 'Saving...';
 
   categories = [
     { value: 'travel' as AdventureCategory, label: 'Travel', icon: '✈️' },
@@ -639,6 +640,8 @@ export class AdventureFormComponent implements OnInit {
         try {
           if (isSurprise) {
             this.isLoading = true;
+            this.isLoadingMessage = 'Creating your surprise...';
+            
             // Create a Surprise entity instead of Adventure
             const surpriseData = {
               title: adventureData.title,
@@ -659,13 +662,19 @@ export class AdventureFormComponent implements OnInit {
               comments: []
             };
             
+            // Wait for surprise to be created and saved to database
+            this.isLoadingMessage = 'Saving to database...';
             const createdSurprise = await this.adventureService.createSurprise(surpriseData);
-            this.router.navigate(['/surprises']);
+            
+            // Keep loader visible until navigation completes
+            this.isLoadingMessage = 'Almost done...';
+            await this.router.navigate(['/surprises']);
+            this.isLoading = false;
           } else {
             // Create regular Adventure
             adventureData.photos = [...this.photoPreviews];
             const createdAdventure = await this.adventureService.createAdventure(adventureData);
-            this.router.navigate(['/adventures']);
+            await this.router.navigate(['/adventures']);
           }
         } catch (error) {
           this.isLoading = false;

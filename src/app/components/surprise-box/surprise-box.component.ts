@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -115,8 +115,9 @@ import { LoaderComponent } from '../loader/loader.component';
         <div class="main-slide">
           <div class="slide-content">
             <div class="surprise-photo-container" [class.latest]="currentIndex === 0" *ngIf="currentSurprise && currentSurprise.photos && currentSurprise.photos.length > 0">
-              <img [src]="currentSurprise.photos[0]" [alt]="currentSurprise.title" />
+              <img [src]="currentSurprise.photos[0]" [alt]="currentSurprise.title" (click)="openFullScreen(0)" class="clickable-photo" />
               <div class="latest-badge" *ngIf="currentIndex === 0">✨ Latest Surprise</div>
+              <div class="fullscreen-hint" *ngIf="!isFullScreenOpen">Click to view full screen</div>
             </div>
               <div class="surprise-info" *ngIf="currentSurprise">
               <div class="surprise-header-info">
@@ -205,6 +206,24 @@ import { LoaderComponent } from '../loader/loader.component';
         <h2>No surprises yet</h2>
         <p>Create your first surprise to start the magic!</p>
         <button class="btn-add-surprise" (click)="showAddSurprise = true">+ Add Surprise</button>
+      </div>
+    </div>
+
+    <!-- Full Screen Photo Viewer -->
+    <div class="fullscreen-overlay" *ngIf="isFullScreenOpen" (click)="closeFullScreen()">
+      <div class="fullscreen-content" (click)="$event.stopPropagation()">
+        <button class="fullscreen-close" (click)="closeFullScreen()" title="Close (ESC)">×</button>
+        <button class="fullscreen-nav fullscreen-prev" (click)="previousFullScreenPhoto()" *ngIf="canNavigatePrevious()" title="Previous (←)">
+          ‹
+        </button>
+        <button class="fullscreen-nav fullscreen-next" (click)="nextFullScreenPhoto()" *ngIf="canNavigateNext()" title="Next (→)">
+          ›
+        </button>
+        <img [src]="getFullScreenPhotoUrl()" [alt]="currentSurprise?.title || 'Surprise photo'" class="fullscreen-image" />
+        <div class="fullscreen-info" *ngIf="currentSurprise">
+          <div class="fullscreen-counter">{{ fullScreenPhotoIndex + 1 }} / {{ getAllPhotos().length }}</div>
+          <div class="fullscreen-title">{{ currentSurprise.title }}</div>
+        </div>
       </div>
     </div>
   `,
@@ -585,6 +604,35 @@ import { LoaderComponent } from '../loader/loader.component';
       object-fit: cover;
     }
 
+    .clickable-photo {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .clickable-photo:hover {
+      transform: scale(1.02);
+    }
+
+    .fullscreen-hint {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .surprise-photo-container:hover .fullscreen-hint {
+      opacity: 1;
+    }
+
     .latest-badge {
       position: absolute;
       top: 16px;
@@ -953,9 +1001,186 @@ import { LoaderComponent } from '../loader/loader.component';
         height: 60px;
       }
     }
+
+    /* Full-screen photo viewer */
+    .fullscreen-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .fullscreen-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 80px;
+    }
+
+    .fullscreen-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      animation: zoomIn 0.3s;
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .fullscreen-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      font-size: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      z-index: 10000;
+      line-height: 1;
+    }
+
+    .fullscreen-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .fullscreen-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 60px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      font-size: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      z-index: 10000;
+      line-height: 1;
+    }
+
+    .fullscreen-nav:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .fullscreen-prev {
+      left: 20px;
+    }
+
+    .fullscreen-next {
+      right: 20px;
+    }
+
+    .fullscreen-info {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 24px;
+      text-align: center;
+      z-index: 10000;
+    }
+
+    .fullscreen-counter {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      opacity: 0.9;
+    }
+
+    .fullscreen-title {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .fullscreen-content {
+        padding: 40px 20px;
+      }
+
+      .fullscreen-close {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 28px;
+      }
+
+      .fullscreen-nav {
+        width: 50px;
+        height: 50px;
+        font-size: 28px;
+      }
+
+      .fullscreen-prev {
+        left: 10px;
+      }
+
+      .fullscreen-next {
+        right: 10px;
+      }
+
+      .fullscreen-info {
+        bottom: 10px;
+        padding: 10px 20px;
+      }
+
+      .fullscreen-counter {
+        font-size: 12px;
+      }
+
+      .fullscreen-title {
+        font-size: 14px;
+      }
+    }
   `]
 })
-export class SurpriseBoxComponent implements OnInit {
+export class SurpriseBoxComponent implements OnInit, OnDestroy {
   allSurprises: Surprise[] = [];
   currentIndex = 0;
   isLoading = false;
@@ -968,6 +1193,11 @@ export class SurpriseBoxComponent implements OnInit {
   
   newCommentText: string = '';
   selectedCommentAuthor: Partner = 'both';
+  
+  // Full screen photo viewer
+  isFullScreenOpen = false;
+  fullScreenPhotoIndex = 0;
+  private keyDownHandler = this.handleKeyDown.bind(this);
 
   partnerOptions = [
     { value: 'partner1' as Partner, label: 'Doree', icon: '👨' },
@@ -988,6 +1218,32 @@ export class SurpriseBoxComponent implements OnInit {
     this.adventureService.loading$.subscribe(loading => {
       this.isLoading = loading;
     });
+    
+    // Add keyboard event listener for full-screen navigation
+    document.addEventListener('keydown', this.keyDownHandler);
+  }
+
+  ngOnDestroy(): void {
+    // Remove keyboard event listener
+    document.removeEventListener('keydown', this.keyDownHandler);
+  }
+
+  handleKeyDown(event: KeyboardEvent): void {
+    if (!this.isFullScreenOpen) return;
+    
+    switch (event.key) {
+      case 'Escape':
+        this.closeFullScreen();
+        break;
+      case 'ArrowLeft':
+        event.preventDefault();
+        this.previousFullScreenPhoto();
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        this.nextFullScreenPhoto();
+        break;
+    }
   }
 
   get currentSurprise(): Surprise | null {
@@ -1118,6 +1374,52 @@ export class SurpriseBoxComponent implements OnInit {
   getPartnerIcon(partner: Partner): string {
     const partnerOption = this.partnerOptions.find(p => p.value === partner);
     return partnerOption?.icon || '💑';
+  }
+
+  // Full-screen photo viewer methods
+  getAllPhotos(): string[] {
+    if (!this.currentSurprise || !this.currentSurprise.photos) return [];
+    return this.currentSurprise.photos;
+  }
+
+  openFullScreen(photoIndex: number = 0): void {
+    this.fullScreenPhotoIndex = photoIndex;
+    this.isFullScreenOpen = true;
+    // Prevent body scroll when full-screen is open
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeFullScreen(): void {
+    this.isFullScreenOpen = false;
+    // Restore body scroll
+    document.body.style.overflow = '';
+  }
+
+  getFullScreenPhotoUrl(): string {
+    const photos = this.getAllPhotos();
+    if (photos.length === 0) return '';
+    return photos[this.fullScreenPhotoIndex] || photos[0];
+  }
+
+  canNavigatePrevious(): boolean {
+    return this.fullScreenPhotoIndex > 0;
+  }
+
+  canNavigateNext(): boolean {
+    const photos = this.getAllPhotos();
+    return this.fullScreenPhotoIndex < photos.length - 1;
+  }
+
+  previousFullScreenPhoto(): void {
+    if (this.canNavigatePrevious()) {
+      this.fullScreenPhotoIndex--;
+    }
+  }
+
+  nextFullScreenPhoto(): void {
+    if (this.canNavigateNext()) {
+      this.fullScreenPhotoIndex++;
+    }
   }
 }
 
