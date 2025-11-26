@@ -12,7 +12,13 @@ import {
   orderBy,
   Timestamp
 } from 'firebase/firestore';
-import { db, isFirebaseConfigured } from '../config/firebase.config';
+import { 
+  ref, 
+  uploadBytes, 
+  getDownloadURL,
+  deleteObject
+} from 'firebase/storage';
+import { db, storage, isFirebaseConfigured } from '../config/firebase.config';
 
 @Injectable({
   providedIn: 'root'
@@ -95,10 +101,12 @@ export class AdventureService {
         this.useFirestore = true;
         this.firebaseStatusSubject.next({ connected: true, message: 'Synced with Firebase' });
         this.setupFirestoreListener();
+        this.setupSurprisesFirestoreListener();
       } else {
         console.info('Firebase not configured, using localStorage for adventure storage');
         this.firebaseStatusSubject.next({ connected: false, message: 'Using Local Storage (browser only)' });
         this.loadAdventuresFromStorage();
+        this.loadSurprisesFromStorage();
       }
     } catch (error) {
       console.warn('Firebase not configured, using localStorage:', error);
@@ -166,6 +174,79 @@ export class AdventureService {
       this.loadAdventuresFromStorage();
       this.loadingSubject.next(false);
     }
+  }
+
+  private setupSurprisesFirestoreListener(): void {
+    try {
+      if (!db) {
+        throw new Error('Firestore database not initialized');
+      }
+      const surprisesRef = collection(db, this.SURPRISES_COLLECTION);
+      
+      let q;
+      try {
+        q = query(surprisesRef, orderBy('createdAt', 'desc'));
+      } catch (orderError) {
+        console.warn('Could not use orderBy for surprises, trying without:', orderError);
+        q = query(surprisesRef);
+      }
+
+      onSnapshot(
+        q,
+        (snapshot) => {
+          this.surprises = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return this.mapFirestoreDataToSurprise(data);
+          });
+          
+          if (this.surprises.length > 0) {
+            this.surprises.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+          }
+          
+          this.surprisesSubject.next([...this.surprises]);
+          this.saveSurprisesToStorage();
+        },
+        (error: any) => {
+          console.error('Error listening to surprises in Firestore:', error);
+          this.loadSurprisesFromStorage();
+        }
+      );
+    } catch (error: any) {
+      console.error('Error setting up surprises Firestore listener:', error);
+      this.loadSurprisesFromStorage();
+    }
+  }
+
+  private mapFirestoreDataToSurprise(data: any): Surprise {
+    const comments = data['comments'] || [];
+    return {
+      id: data['id'] || '',
+      title: data['title'] || '',
+      description: data['description'] || '',
+      category: data['category'] || 'activity',
+      customCategory: data['customCategory'],
+      assignedTo: data['assignedTo'] || 'both',
+      createdBy: data['createdBy'] || 'both',
+      status: data['status'] || 'wishlist',
+      targetDate: data['targetDate']?.toDate ? data['targetDate'].toDate() : (data['targetDate'] ? new Date(data['targetDate']) : undefined),
+      completedDate: data['completedDate']?.toDate ? data['completedDate'].toDate() : (data['completedDate'] ? new Date(data['completedDate']) : undefined),
+      photos: data['photos'] || [],
+      rating: data['rating'],
+      review: data['review'],
+      location: data['location'],
+      estimatedCost: data['estimatedCost'],
+      notes: data['notes'],
+      comments: comments.map((c: any) => ({
+        id: c.id,
+        text: c.text,
+        author: c.author,
+        createdAt: c.createdAt?.toDate ? c.createdAt.toDate() : new Date(c.createdAt)
+      })),
+      revealed: data['revealed'] || false,
+      createdAt: data['createdAt']?.toDate ? data['createdAt'].toDate() : new Date(data['createdAt']),
+      updatedAt: data['updatedAt']?.toDate ? data['updatedAt'].toDate() : new Date(data['updatedAt']),
+      revealedAt: data['revealedAt']?.toDate ? data['revealedAt'].toDate() : (data['revealedAt'] ? new Date(data['revealedAt']) : undefined)
+    } as Surprise;
   }
 
   private mapFirestoreDataToAdventure(data: any): Adventure {
@@ -408,6 +489,78 @@ export class AdventureService {
     };
   }
 
+  /**
+   * Uploads photos to Firebase Storage and returns download URLs
+   * @param photos Array of base64 strings or File objects
+   * @param adventureId Adventure ID for organizing storage
+   * @returns Array of download URLs
+   */
+  private async uploadPhotosToStorage(photos: (string | File)[], adventureId: number): Promise<string[]> {
+    if (!storage || !this.useFirestore || photos.length === 0) {
+      return photos as string[];
+    }
+
+    const uploadedUrls: string[] = [];
+
+    for (let i = 0; i < photos.length; i++) {
+      const photo = photos[i];
+      try {
+        let blob: Blob;
+        let fileName: string;
+
+        if (photo instanceof File) {
+          blob = photo;
+          fileName = `adventure_${adventureId}_${Date.now()}_${i}.${photo.name.split('.').pop()}`;
+        } else if (typeof photo === 'string') {
+          // Check if it's already a URL (starts with http)
+          if (photo.startsWith('http://') || photo.startsWith('https://')) {
+            uploadedUrls.push(photo);
+            continue;
+          }
+
+          // Convert base64 to blob
+          const base64Data = photo.includes(',') ? photo.split(',')[1] : photo;
+          const byteCharacters = atob(base64Data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let j = 0; j < byteCharacters.length; j++) {
+            byteNumbers[j] = byteCharacters.charCodeAt(j);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          
+          // Determine MIME type from base64 prefix
+          let mimeType = 'image/jpeg';
+          if (photo.startsWith('data:image/png')) {
+            mimeType = 'image/png';
+          } else if (photo.startsWith('data:image/gif')) {
+            mimeType = 'image/gif';
+          } else if (photo.startsWith('data:image/webp')) {
+            mimeType = 'image/webp';
+          }
+          
+          blob = new Blob([byteArray], { type: mimeType });
+          const extension = mimeType.split('/')[1];
+          fileName = `adventure_${adventureId}_${Date.now()}_${i}.${extension}`;
+        } else {
+          continue;
+        }
+
+        // Upload to Firebase Storage
+        const storageRef = ref(storage, `adventures/${adventureId}/${fileName}`);
+        await uploadBytes(storageRef, blob);
+        const downloadURL = await getDownloadURL(storageRef);
+        uploadedUrls.push(downloadURL);
+      } catch (error) {
+        console.error(`Error uploading photo ${i}:`, error);
+        // Fallback to original photo if upload fails
+        if (typeof photo === 'string') {
+          uploadedUrls.push(photo);
+        }
+      }
+    }
+
+    return uploadedUrls;
+  }
+
   async createAdventure(adventure: Omit<Adventure, 'id' | 'createdAt' | 'updatedAt'>): Promise<Adventure> {
     const newAdventure: Adventure = {
       ...adventure,
@@ -419,6 +572,16 @@ export class AdventureService {
       isSurprise: adventure.isSurprise || false,
       revealed: adventure.isSurprise ? false : true
     };
+
+    // Upload photos to Firebase Storage if it's a surprise
+    if (newAdventure.isSurprise && newAdventure.photos.length > 0) {
+      try {
+        newAdventure.photos = await this.uploadPhotosToStorage(newAdventure.photos, newAdventure.id);
+      } catch (error) {
+        console.error('Error uploading photos to storage:', error);
+        // Continue with original photos if upload fails
+      }
+    }
 
     if (this.useFirestore && db) {
       try {
@@ -472,6 +635,49 @@ export class AdventureService {
     // Reveal surprise when completed
     if (updates.status === 'completed' && updatedAdventure.isSurprise && !updatedAdventure.revealed) {
       updatedAdventure.revealed = true;
+    }
+
+    // Upload photos to Firebase Storage if it's a surprise and photos are being updated
+    if (updatedAdventure.isSurprise && updates.photos && updates.photos.length > 0) {
+      try {
+        // Separate existing URLs from new base64 photos
+        const existingUrls = updates.photos.filter((p: string) => 
+          typeof p === 'string' && (p.startsWith('http://') || p.startsWith('https://'))
+        ) as string[];
+        
+        const newPhotos = updates.photos.filter((p: string) => 
+          typeof p === 'string' && !p.startsWith('http://') && !p.startsWith('https://')
+        ) as string[];
+
+        // Upload only new photos (base64 strings)
+        if (newPhotos.length > 0) {
+          const uploadedUrls = await this.uploadPhotosToStorage(newPhotos, id);
+          updatedAdventure.photos = [...existingUrls, ...uploadedUrls];
+        } else {
+          updatedAdventure.photos = existingUrls;
+        }
+      } catch (error) {
+        console.error('Error uploading photos to storage:', error);
+        // Continue with original photos if upload fails
+      }
+    } else if (updates.isSurprise === true && updatedAdventure.photos && updatedAdventure.photos.length > 0) {
+      // If converting to a surprise, upload all existing base64 photos
+      try {
+        const photosToUpload = updatedAdventure.photos.filter((p: string) => 
+          typeof p === 'string' && !p.startsWith('http://') && !p.startsWith('https://')
+        ) as string[];
+        
+        if (photosToUpload.length > 0) {
+          const uploadedUrls = await this.uploadPhotosToStorage(photosToUpload, id);
+          const existingUrls = updatedAdventure.photos.filter((p: string) => 
+            typeof p === 'string' && (p.startsWith('http://') || p.startsWith('https://'))
+          ) as string[];
+          updatedAdventure.photos = [...existingUrls, ...uploadedUrls];
+        }
+      } catch (error) {
+        console.error('Error uploading photos to storage when converting to surprise:', error);
+        // Continue with original photos if upload fails
+      }
     }
 
     if (this.useFirestore && db) {
@@ -714,6 +920,10 @@ export class AdventureService {
     return [...this.surprises];
   }
 
+  getSurpriseById(id: string): Surprise | undefined {
+    return this.surprises.find(surprise => surprise.id === id);
+  }
+
   getUnrevealedSurprises(): Surprise[] {
     return this.surprises.filter(s => !s.revealed);
   }
@@ -726,17 +936,98 @@ export class AdventureService {
     });
   }
 
-  async createSurprise(photo: string, from: Partner, to: Partner, message?: string): Promise<Surprise> {
+  /**
+   * Uploads photos to Firebase Storage for surprises and returns download URLs
+   * @param photos Array of base64 strings or File objects
+   * @param surpriseId Surprise ID for organizing storage
+   * @returns Array of download URLs
+   */
+  private async uploadSurprisePhotosToStorage(photos: (string | File)[], surpriseId: string): Promise<string[]> {
+    if (!storage || !this.useFirestore || photos.length === 0) {
+      return photos as string[];
+    }
+
+    const uploadedUrls: string[] = [];
+
+    for (let i = 0; i < photos.length; i++) {
+      const photo = photos[i];
+      try {
+        let blob: Blob;
+        let fileName: string;
+
+        if (photo instanceof File) {
+          blob = photo;
+          fileName = `surprise_${surpriseId}_${Date.now()}_${i}.${photo.name.split('.').pop()}`;
+        } else if (typeof photo === 'string') {
+          // Check if it's already a URL (starts with http)
+          if (photo.startsWith('http://') || photo.startsWith('https://')) {
+            uploadedUrls.push(photo);
+            continue;
+          }
+
+          // Convert base64 to blob
+          const base64Data = photo.includes(',') ? photo.split(',')[1] : photo;
+          const byteCharacters = atob(base64Data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let j = 0; j < byteCharacters.length; j++) {
+            byteNumbers[j] = byteCharacters.charCodeAt(j);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          
+          // Determine MIME type from base64 prefix
+          let mimeType = 'image/jpeg';
+          if (photo.startsWith('data:image/png')) {
+            mimeType = 'image/png';
+          } else if (photo.startsWith('data:image/gif')) {
+            mimeType = 'image/gif';
+          } else if (photo.startsWith('data:image/webp')) {
+            mimeType = 'image/webp';
+          }
+          
+          blob = new Blob([byteArray], { type: mimeType });
+          const extension = mimeType.split('/')[1];
+          fileName = `surprise_${surpriseId}_${Date.now()}_${i}.${extension}`;
+        } else {
+          continue;
+        }
+
+        // Upload to Firebase Storage
+        const storageRef = ref(storage, `surprises/${surpriseId}/${fileName}`);
+        await uploadBytes(storageRef, blob);
+        const downloadURL = await getDownloadURL(storageRef);
+        uploadedUrls.push(downloadURL);
+      } catch (error) {
+        console.error(`Error uploading surprise photo ${i}:`, error);
+        // Fallback to original photo if upload fails
+        if (typeof photo === 'string') {
+          uploadedUrls.push(photo);
+        }
+      }
+    }
+
+    return uploadedUrls;
+  }
+
+  async createSurprise(surpriseData: Omit<Surprise, 'id' | 'createdAt' | 'updatedAt' | 'revealed'>): Promise<Surprise> {
     const newSurprise: Surprise = {
+      ...surpriseData,
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-      photo,
-      message,
-      from,
-      to,
       revealed: false,
       createdAt: new Date(),
-      comments: []
+      updatedAt: new Date(),
+      photos: surpriseData.photos || [],
+      comments: surpriseData.comments || []
     };
+
+    // Upload photos to Firebase Storage
+    if (newSurprise.photos.length > 0) {
+      try {
+        newSurprise.photos = await this.uploadSurprisePhotosToStorage(newSurprise.photos, newSurprise.id);
+      } catch (error) {
+        console.error('Error uploading surprise photos to storage:', error);
+        // Continue with original photos if upload fails
+      }
+    }
 
     this.surprises.push(newSurprise);
     this.surprisesSubject.next([...this.surprises]);
@@ -746,16 +1037,8 @@ export class AdventureService {
       try {
         const surprisesRef = collection(db, this.SURPRISES_COLLECTION);
         const surpriseDoc = doc(surprisesRef, newSurprise.id);
-        await setDoc(surpriseDoc, {
-          id: newSurprise.id,
-          photo: newSurprise.photo,
-          message: newSurprise.message || '',
-          from: newSurprise.from,
-          to: newSurprise.to,
-          revealed: newSurprise.revealed,
-          createdAt: Timestamp.fromDate(newSurprise.createdAt),
-          comments: []
-        });
+        const firestoreData = this.mapSurpriseToFirestoreData(newSurprise);
+        await setDoc(surpriseDoc, firestoreData);
       } catch (error) {
         console.error('Error creating surprise in Firestore:', error);
       }
@@ -764,11 +1047,51 @@ export class AdventureService {
     return newSurprise;
   }
 
+  private mapSurpriseToFirestoreData(surprise: Surprise, isUpdate = false): any {
+    const data: any = {
+      id: surprise.id,
+      title: surprise.title,
+      description: surprise.description,
+      category: surprise.category,
+      assignedTo: surprise.assignedTo,
+      createdBy: surprise.createdBy,
+      status: surprise.status,
+      photos: surprise.photos,
+      revealed: surprise.revealed,
+      updatedAt: Timestamp.fromDate(surprise.updatedAt)
+    };
+
+    if (!isUpdate) {
+      data.createdAt = Timestamp.fromDate(surprise.createdAt);
+    }
+
+    if (surprise.customCategory) data.customCategory = surprise.customCategory;
+    if (surprise.targetDate) data.targetDate = Timestamp.fromDate(surprise.targetDate);
+    if (surprise.completedDate) data.completedDate = Timestamp.fromDate(surprise.completedDate);
+    if (surprise.rating) data.rating = surprise.rating;
+    if (surprise.review) data.review = surprise.review;
+    if (surprise.location) data.location = surprise.location;
+    if (surprise.estimatedCost) data.estimatedCost = surprise.estimatedCost;
+    if (surprise.notes) data.notes = surprise.notes;
+    if (surprise.revealedAt) data.revealedAt = Timestamp.fromDate(surprise.revealedAt);
+    if (surprise.comments && surprise.comments.length > 0) {
+      data.comments = surprise.comments.map(c => ({
+        id: c.id,
+        text: c.text,
+        author: c.author,
+        createdAt: Timestamp.fromDate(c.createdAt)
+      }));
+    }
+
+    return data;
+  }
+
   async revealSurprise(id: string): Promise<void> {
     const surprise = this.surprises.find(s => s.id === id);
     if (surprise && !surprise.revealed) {
       surprise.revealed = true;
       surprise.revealedAt = new Date();
+      surprise.updatedAt = new Date();
       this.surprisesSubject.next([...this.surprises]);
       this.saveSurprisesToStorage();
 
@@ -778,7 +1101,8 @@ export class AdventureService {
           const surpriseDoc = doc(surprisesRef, id);
           await updateDoc(surpriseDoc, {
             revealed: true,
-            revealedAt: Timestamp.fromDate(surprise.revealedAt)
+            revealedAt: Timestamp.fromDate(surprise.revealedAt),
+            updatedAt: Timestamp.fromDate(surprise.updatedAt)
           });
         } catch (error) {
           console.error('Error revealing surprise in Firestore:', error);
@@ -808,7 +1132,10 @@ export class AdventureService {
       const surprisesData = this.surprises.map(s => ({
         ...s,
         createdAt: s.createdAt.toISOString(),
+        updatedAt: s.updatedAt.toISOString(),
         revealedAt: s.revealedAt?.toISOString(),
+        targetDate: s.targetDate?.toISOString(),
+        completedDate: s.completedDate?.toISOString(),
         comments: (s.comments || []).map(c => ({
           ...c,
           createdAt: c.createdAt.toISOString()
@@ -889,7 +1216,10 @@ export class AdventureService {
         this.surprises = surprisesData.map((s: any) => ({
           ...s,
           createdAt: new Date(s.createdAt),
+          updatedAt: s.updatedAt ? new Date(s.updatedAt) : new Date(s.createdAt),
           revealedAt: s.revealedAt ? new Date(s.revealedAt) : undefined,
+          targetDate: s.targetDate ? new Date(s.targetDate) : undefined,
+          completedDate: s.completedDate ? new Date(s.completedDate) : undefined,
           comments: (s.comments || []).map((c: any) => ({
             ...c,
             createdAt: new Date(c.createdAt)

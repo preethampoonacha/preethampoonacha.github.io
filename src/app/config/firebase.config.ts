@@ -1,5 +1,6 @@
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
+import { getStorage, FirebaseStorage } from 'firebase/storage';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,14 +23,16 @@ export const isFirebaseConfigured = (): boolean => {
 // Initialize Firebase
 let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
+let storage: FirebaseStorage | null = null;
 
 try {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
+  storage = getStorage(app);
   console.log('Firebase initialized successfully');
 } catch (error) {
   console.error('Error initializing Firebase:', error);
 }
 
-export { db };
+export { db, storage };
 

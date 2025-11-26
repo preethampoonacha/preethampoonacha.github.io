@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AdventureService } from '../../services/adventure.service';
-import { Surprise, Partner, Comment } from '../../models/task.model';
+import { Surprise, Partner, Comment, AdventureCategory, AdventureStatus } from '../../models/task.model';
 import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
@@ -106,7 +106,7 @@ import { LoaderComponent } from '../loader/loader.component';
               [class.latest]="i === 0"
               (click)="goToSlide(i)"
             >
-              <img [src]="surprise.photo" [alt]="'Surprise ' + (i + 1)" />
+              <img [src]="surprise.photos && surprise.photos.length > 0 ? surprise.photos[0] : ''" [alt]="surprise.title || 'Surprise ' + (i + 1)" />
               <div class="thumbnail-badge" *ngIf="i === 0">✨ Latest</div>
             </div>
           </div>
@@ -114,23 +114,24 @@ import { LoaderComponent } from '../loader/loader.component';
 
         <div class="main-slide">
           <div class="slide-content">
-            <div class="surprise-photo-container" [class.latest]="currentIndex === 0" *ngIf="currentSurprise">
-              <img [src]="currentSurprise.photo" [alt]="'Surprise from ' + getPartnerLabel(currentSurprise.from)" />
+            <div class="surprise-photo-container" [class.latest]="currentIndex === 0" *ngIf="currentSurprise && currentSurprise.photos && currentSurprise.photos.length > 0">
+              <img [src]="currentSurprise.photos[0]" [alt]="currentSurprise.title" />
               <div class="latest-badge" *ngIf="currentIndex === 0">✨ Latest Surprise</div>
             </div>
               <div class="surprise-info" *ngIf="currentSurprise">
               <div class="surprise-header-info">
+                <h2 class="surprise-title">{{ currentSurprise.title }}</h2>
                 <div class="surprise-from-to">
-                  <span class="from-badge">{{ getPartnerIcon(currentSurprise.from) }} {{ getPartnerLabel(currentSurprise.from) }}</span>
+                  <span class="from-badge">{{ getPartnerIcon(currentSurprise.createdBy) }} {{ getPartnerLabel(currentSurprise.createdBy) }}</span>
                   <span class="arrow">→</span>
-                  <span class="to-badge">{{ getPartnerIcon(currentSurprise.to) }} {{ getPartnerLabel(currentSurprise.to) }}</span>
+                  <span class="to-badge">{{ getPartnerIcon(currentSurprise.assignedTo) }} {{ getPartnerLabel(currentSurprise.assignedTo) }}</span>
                 </div>
                 <div class="surprise-date">{{ currentSurprise.createdAt | date:'fullDate' }}</div>
                 <div class="surprise-date" *ngIf="currentSurprise.revealedAt">
                   Revealed: {{ currentSurprise.revealedAt | date:'fullDate' }}
                 </div>
               </div>
-              <p class="surprise-message" *ngIf="currentSurprise.message">{{ currentSurprise.message }}</p>
+              <p class="surprise-description" *ngIf="currentSurprise.description">{{ currentSurprise.description }}</p>
 
               <!-- Comments Section -->
               <div class="comments-section" *ngIf="currentSurprise">
@@ -636,15 +637,26 @@ import { LoaderComponent } from '../loader/loader.component';
       color: #6b7280;
     }
 
-    .surprise-message {
+    .surprise-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 16px 0;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .surprise-description {
       font-size: 16px;
       color: #4b5563;
-      font-style: italic;
       line-height: 1.6;
       padding: 16px;
       background: #f9fafb;
       border-radius: 12px;
       border-left: 4px solid #fbbf24;
+      margin: 0;
     }
 
     .comments-section {
@@ -1046,12 +1058,17 @@ export class SurpriseBoxComponent implements OnInit {
 
   async createSurprise(): Promise<void> {
     if (this.selectedSurprisePhoto && this.surpriseFrom && this.surpriseTo) {
-      await this.adventureService.createSurprise(
-        this.selectedSurprisePhoto,
-        this.surpriseFrom,
-        this.surpriseTo,
-        this.surpriseMessage || undefined
-      );
+      const surpriseData = {
+        title: this.surpriseMessage || 'Surprise',
+        description: this.surpriseMessage || '',
+        category: 'activity' as AdventureCategory,
+        assignedTo: this.surpriseTo,
+        createdBy: this.surpriseFrom,
+        status: 'wishlist' as AdventureStatus,
+        photos: [this.selectedSurprisePhoto],
+        comments: []
+      };
+      await this.adventureService.createSurprise(surpriseData);
       this.cancelAddSurprise();
       this.currentIndex = 0; // Show the latest (newly created) surprise
     }

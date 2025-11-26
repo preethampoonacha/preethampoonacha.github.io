@@ -67,14 +67,38 @@ export interface CoupleStats {
 
 export interface Surprise {
   id: string;
-  photo: string; // base64 or URL
-  message?: string;
-  from: Partner;
-  to: Partner;
+  title: string;
+  description: string;
+  category: AdventureCategory;
+  customCategory?: string;
+  
+  // Partner assignment
+  assignedTo: Partner;
+  createdBy: Partner;
+  
+  // Status & dates
+  status: AdventureStatus;
+  targetDate?: Date;
+  completedDate?: Date;
+  
+  // Memories
+  photos: string[]; // URLs or base64
+  rating?: number; // 1-5 stars
+  review?: string;
+  
+  // Planning
+  location?: string;
+  estimatedCost?: number;
+  notes?: string;
+  
+  // Comments
+  comments: Comment[];
+  
+  // Metadata
   revealed: boolean;
   createdAt: Date;
+  updatedAt: Date;
   revealedAt?: Date;
-  comments: Comment[];
 }
 
 // Legacy Task interface for backward compatibility during migration

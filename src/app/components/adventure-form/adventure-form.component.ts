@@ -634,24 +634,42 @@ export class AdventureFormComponent implements OnInit {
         await this.adventureService.updateAdventure(this.adventureId, adventureData);
         this.router.navigate(['/adventures', this.adventureId]);
       } else {
-        adventureData.photos = [...this.photoPreviews];
         const isSurprise = adventureData.isSurprise || false;
         
         try {
           if (isSurprise) {
             this.isLoading = true;
-          }
-          
-          const createdAdventure = await this.adventureService.createAdventure(adventureData);
-          
-          if (isSurprise) {
-            this.router.navigate(['/adventures', createdAdventure.id]);
+            // Create a Surprise entity instead of Adventure
+            const surpriseData = {
+              title: adventureData.title,
+              description: adventureData.description,
+              category: adventureData.category,
+              customCategory: adventureData.customCategory,
+              assignedTo: adventureData.assignedTo,
+              createdBy: adventureData.createdBy,
+              status: adventureData.status,
+              targetDate: adventureData.targetDate,
+              completedDate: adventureData.completedDate,
+              photos: [...this.photoPreviews],
+              rating: adventureData.rating,
+              review: adventureData.review,
+              location: adventureData.location,
+              estimatedCost: adventureData.estimatedCost,
+              notes: adventureData.notes,
+              comments: []
+            };
+            
+            const createdSurprise = await this.adventureService.createSurprise(surpriseData);
+            this.router.navigate(['/surprises']);
           } else {
+            // Create regular Adventure
+            adventureData.photos = [...this.photoPreviews];
+            const createdAdventure = await this.adventureService.createAdventure(adventureData);
             this.router.navigate(['/adventures']);
           }
         } catch (error) {
           this.isLoading = false;
-          console.error('Error creating adventure:', error);
+          console.error('Error creating adventure/surprise:', error);
           // Optionally show an error message to the user
         }
       }
