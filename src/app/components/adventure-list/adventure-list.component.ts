@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AdventureService } from '../../services/adventure.service';
 import { Adventure, AdventureCategory, Partner } from '../../models/task.model';
 import { LoaderComponent } from '../loader/loader.component';
@@ -8,7 +9,7 @@ import { LoaderComponent } from '../loader/loader.component';
 @Component({
   selector: 'app-adventure-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, LoaderComponent],
+  imports: [CommonModule, RouterModule, LoaderComponent, FormsModule],
   template: `
     <app-loader *ngIf="isLoading"></app-loader>
     <div class="adventure-container">
@@ -42,6 +43,26 @@ import { LoaderComponent } from '../loader/loader.component';
               🔍
             </button>
             <a routerLink="/adventures/new" class="btn btn-primary">+ New Adventure</a>
+          </div>
+        </div>
+        <div class="search-section">
+          <div class="search-bar">
+            <span class="search-icon">🔎</span>
+            <input
+              type="text"
+              [(ngModel)]="searchQuery"
+              (input)="onSearchChange()"
+              placeholder="Search adventures by title, description, location..."
+              class="search-input"
+            />
+            <button
+              *ngIf="searchQuery"
+              class="clear-search-btn"
+              (click)="clearSearch()"
+              title="Clear search"
+            >
+              ×
+            </button>
           </div>
         </div>
       </div>
@@ -153,11 +174,19 @@ import { LoaderComponent } from '../loader/loader.component';
         </div>
       </div>
 
-      <div *ngIf="filteredAdventures.length === 0" class="empty-state">
+      <div *ngIf="filteredAdventures.length === 0 && !searchQuery && adventures.length === 0" class="empty-state">
         <div class="empty-icon">💭</div>
         <h2>No adventures yet</h2>
         <p>Start your journey together by creating your first adventure!</p>
         <a routerLink="/adventures/new" class="btn btn-primary">Create Adventure</a>
+      </div>
+
+      <div *ngIf="filteredAdventures.length === 0 && (searchQuery || adventures.length > 0)" class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h2>No adventures found</h2>
+        <p *ngIf="searchQuery">Try adjusting your search or filters to find what you're looking for.</p>
+        <p *ngIf="!searchQuery">No adventures match the current filters.</p>
+        <button *ngIf="searchQuery" class="btn btn-secondary" (click)="clearSearch()">Clear Search</button>
       </div>
 
       <div class="adventures-grid" [class.list-view]="viewMode === 'list'">
@@ -254,6 +283,75 @@ import { LoaderComponent } from '../loader/loader.component';
       margin-bottom: 24px;
       flex-wrap: wrap;
       gap: 20px;
+    }
+
+    .search-section {
+      margin-top: 20px;
+    }
+
+    .search-bar {
+      position: relative;
+      display: flex;
+      align-items: center;
+      max-width: 600px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border-radius: 16px;
+      padding: 12px 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s;
+    }
+
+    .search-bar:focus-within {
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+      border-color: rgba(245, 87, 108, 0.5);
+    }
+
+    .search-icon {
+      font-size: 20px;
+      margin-right: 12px;
+      color: #6b7280;
+      flex-shrink: 0;
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      color: #1f2937;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .search-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .clear-search-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .clear-search-btn:hover {
+      background: #f3f4f6;
+      color: #1f2937;
     }
 
     .header-content h1 {
@@ -884,6 +982,15 @@ import { LoaderComponent } from '../loader/loader.component';
         gap: 12px;
       }
 
+      .search-section {
+        margin-top: 16px;
+        width: 100%;
+      }
+
+      .search-bar {
+        max-width: 100%;
+      }
+
       .header-actions {
         gap: 8px;
         flex-wrap: wrap;
@@ -1072,6 +1179,7 @@ export class AdventureListComponent implements OnInit {
   isLoading = false;
   viewMode: 'card' | 'list' = 'card';
   showFilterPopup = false;
+  searchQuery = '';
 
   categories = [
     { value: 'travel' as AdventureCategory, label: 'Travel', icon: '✈️' },
@@ -1157,6 +1265,19 @@ export class AdventureListComponent implements OnInit {
       filtered = filtered.filter(a => a.createdBy === this.selectedCreatedBy);
     }
 
+    // Filter by search query
+    if (this.searchQuery && this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(a => {
+        const titleMatch = a.title?.toLowerCase().includes(query) || false;
+        const descriptionMatch = a.description?.toLowerCase().includes(query) || false;
+        const locationMatch = a.location?.toLowerCase().includes(query) || false;
+        const notesMatch = a.notes?.toLowerCase().includes(query) || false;
+        const categoryMatch = this.getCategoryLabel(a.category).toLowerCase().includes(query) || false;
+        return titleMatch || descriptionMatch || locationMatch || notesMatch || categoryMatch;
+      });
+    }
+
     // Hide unrevealed surprises
     filtered = filtered.filter(a => !a.isSurprise || a.revealed);
 
@@ -1218,5 +1339,14 @@ export class AdventureListComponent implements OnInit {
 
   setViewMode(mode: 'card' | 'list'): void {
     this.viewMode = mode;
+  }
+
+  onSearchChange(): void {
+    this.applyFilters();
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.applyFilters();
   }
 }
