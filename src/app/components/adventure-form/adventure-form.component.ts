@@ -565,23 +565,106 @@ export class AdventureFormComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  onPhotoSelected(event: Event): void {
+  async onPhotoSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      Array.from(input.files).forEach(file => {
+      const files = Array.from(input.files);
+      for (const file of files) {
         if (file.type.startsWith('image/')) {
-          this.selectedPhotos.push(file);
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const result = e.target?.result as string;
-            if (result) {
-              this.photoPreviews.push(result);
-            }
-          };
-          reader.readAsDataURL(file);
+          try {
+            const compressedBase64 = await this.compressImage(file, 300 * 1024); // 300KB limit
+            this.photoPreviews.push(compressedBase64);
+            // Store original file for reference (though we use compressed version)
+            this.selectedPhotos.push(file);
+          } catch (error) {
+            console.error('Error compressing image:', error);
+            // Fallback to original if compression fails
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const result = e.target?.result as string;
+              if (result) {
+                this.photoPreviews.push(result);
+              }
+            };
+            reader.readAsDataURL(file);
+          }
         }
-      });
+      }
     }
+  }
+
+  private async compressImage(file: File, maxSizeBytes: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate new dimensions to maintain aspect ratio
+          // Max dimensions: 1920x1920 for quality, but we'll reduce if needed
+          const maxDimension = 1920;
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = (height / width) * maxDimension;
+              width = maxDimension;
+            } else {
+              width = (width / height) * maxDimension;
+              height = maxDimension;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Could not get canvas context'));
+            return;
+          }
+          
+          // Draw image to canvas
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Try different quality levels until we get under maxSizeBytes
+          const tryCompress = (quality: number): void => {
+            canvas.toBlob(
+              (blob) => {
+                if (!blob) {
+                  reject(new Error('Failed to compress image'));
+                  return;
+                }
+                
+                // Check if we're under the size limit
+                if (blob.size <= maxSizeBytes || quality <= 0.1) {
+                  // Convert blob to base64
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    resolve(reader.result as string);
+                  };
+                  reader.onerror = () => reject(new Error('Failed to read compressed image'));
+                  reader.readAsDataURL(blob);
+                } else {
+                  // Reduce quality and try again
+                  tryCompress(Math.max(0.1, quality - 0.1));
+                }
+              },
+              'image/jpeg',
+              quality
+            );
+          };
+          
+          // Start with 0.9 quality
+          tryCompress(0.9);
+        };
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
   }
 
   removePhoto(index: number): void {
