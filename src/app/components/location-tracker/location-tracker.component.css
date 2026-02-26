@@ -1,0 +1,25 @@
+.location-tracker {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: background 0.3s ease;
+}
+
+.location-tracker:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.track-button {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  transition: transform 0.2s;
+}
+
+.track-button:hover {
+  transform: scale(1.05);
+}
