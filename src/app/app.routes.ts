@@ -46,6 +46,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/surprise-box/surprise-box.component').then(m => m.SurpriseBoxComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'locate',
+    loadComponent: () => import('./components/location-tracker/location-tracker.component').then(m => m.LocationTrackerComponent),
+    canActivate: [authGuard]
+  },
   // Legacy routes for backward compatibility
   {
     path: 'tasks',
