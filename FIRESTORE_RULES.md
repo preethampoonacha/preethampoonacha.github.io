@@ -24,6 +24,11 @@ service cloud.firestore {
     match /achievements/{achievementId} {
       allow read, write: if true;
     }
+
+    // Realtime Locations collection - allow all read/write for location tracking
+    match /realtime_locations/{userId} {
+      allow read, write: if true;
+    }
   }
 }
 ```

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LocationTrackerService, LocationPoint } from '../../services/location-tracker.service';
+import { LocationTrackerService, LocationPoint, UserProfile } from '../../services/location-tracker.service';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -15,44 +15,57 @@ declare let L: any; // Leaflet library
 })
 export class LocationTrackerComponent implements OnInit, OnDestroy {
   isTracking$: Observable<boolean>;
-  locationPoints$: Observable<LocationPoint[]>;
   currentLocation$: Observable<LocationPoint | null>;
+  partnerLocation$: Observable<LocationPoint | null>;
   trackingStatus$: Observable<{ message: string; error?: string }>;
 
-  locationPoints: LocationPoint[] = [];
   currentLocation: LocationPoint | null = null;
+  partnerLocation: LocationPoint | null = null;
   isTracking: boolean = false;
   
   map: any;
-  marker: any;
-  polyline: any;
-  markers: any[] = [];
+  boyMarker: any;
+  girlMarker: any;
+  
+  distanceApart: number | null = null;
+
+  get currentUserProfile(): UserProfile {
+    return this.locationTrackerService.currentUserProfile;
+  }
 
   private destroy$ = new Subject<void>();
 
   constructor(private locationTrackerService: LocationTrackerService) {
     this.isTracking$ = this.locationTrackerService.isTracking$;
-    this.locationPoints$ = this.locationTrackerService.locationPoints$;
     this.currentLocation$ = this.locationTrackerService.currentLocation$;
+    this.partnerLocation$ = this.locationTrackerService.partnerLocation$;
     this.trackingStatus$ = this.locationTrackerService.trackingStatus$;
   }
 
   ngOnInit(): void {
     this.initializeMap();
     
-    this.locationPoints$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(points => {
-        this.locationPoints = points;
-        this.updateMapPolyline();
-      });
-
     this.currentLocation$
       .pipe(takeUntil(this.destroy$))
       .subscribe(location => {
         this.currentLocation = location;
         if (location) {
-          this.updateMapMarker(location);
+          this.updateMapMarker(location, this.currentUserProfile!);
+          this.updateDistance();
+          this.fitMapBounds();
+        }
+      });
+
+    this.partnerLocation$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(location => {
+        this.partnerLocation = location;
+        if (location) {
+          // If I am Boy, partner is Girl, etc.
+          const partnerProfile = this.currentUserProfile === 'Boy' ? 'Girl' : 'Boy';
+          this.updateMapMarker(location, partnerProfile);
+          this.updateDistance();
+          this.fitMapBounds();
         }
       });
 
@@ -64,6 +77,9 @@ export class LocationTrackerComponent implements OnInit, OnDestroy {
   }
 
   private initializeMap(): void {
+    const mapElement = document.getElementById('map');
+    if (!mapElement) return;
+
     // Initialize Leaflet map centered on default coordinates
     this.map = L.map('map').setView([20, 0], 2);
     
@@ -72,133 +88,90 @@ export class LocationTrackerComponent implements OnInit, OnDestroy {
       attribution: '© OpenStreetMap contributors',
       maxZoom: 19
     }).addTo(this.map);
-
-    // Initialize polyline for tracking path
-    this.polyline = L.polyline([], {
-      color: '#667eea',
-      weight: 3,
-      opacity: 0.8,
-      smoothFactor: 1
-    }).addTo(this.map);
   }
 
-  private updateMapMarker(location: LocationPoint): void {
+  private updateMapMarker(location: LocationPoint, profile: 'Boy' | 'Girl'): void {
+    if (!this.map) return;
+
     const latLng = [location.latitude, location.longitude];
+    const isBoy = profile === 'Boy';
+    const color = isBoy ? '#4facfe' : '#ff0844';
 
-    if (this.marker) {
-      this.marker.setLatLng(latLng);
-    } else {
-      this.marker = L.circleMarker(latLng, {
-        radius: 8,
-        fillColor: '#667eea',
-        color: '#fff',
-        weight: 2,
-        opacity: 1,
-        fillOpacity: 0.8
-      }).addTo(this.map)
-        .bindPopup(`
-          <div style="text-align: center;">
-            <strong>Current Location</strong><br>
-            Lat: ${location.latitude.toFixed(6)}<br>
-            Lon: ${location.longitude.toFixed(6)}<br>
-            Accuracy: ±${location.accuracy.toFixed(0)}m
-          </div>
-        `);
-    }
-
-    this.map.setView(latLng, this.map.getZoom());
-  }
-
-  private updateMapPolyline(): void {
-    if (this.locationPoints.length > 0) {
-      const latLngs = this.locationPoints.map(p => [p.latitude, p.longitude]);
-      this.polyline.setLatLngs(latLngs);
-
-      // Update or create point markers
-      this.markers.forEach(m => this.map.removeLayer(m));
-      this.markers = [];
-
-      this.locationPoints.forEach((point, index) => {
-        const marker = L.circleMarker([point.latitude, point.longitude], {
-          radius: 4,
-          fillColor: '#764ba2',
+    if (isBoy) {
+      if (this.boyMarker) {
+        this.boyMarker.setLatLng(latLng);
+      } else {
+        this.boyMarker = L.circleMarker(latLng, {
+          radius: 10,
+          fillColor: color,
           color: '#fff',
-          weight: 1,
-          opacity: 0.7,
-          fillOpacity: 0.6
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.8
         }).addTo(this.map)
-          .bindPopup(`
-            <div style="font-size: 12px;">
-              Point ${this.locationPoints.length - index}<br>
-              Time: ${point.timestamp.toLocaleTimeString()}<br>
-              Accuracy: ±${point.accuracy.toFixed(0)}m
-            </div>
-          `);
-        this.markers.push(marker);
-      });
-
-      // Fit map to bounds
-      if (latLngs.length > 0) {
-        const bounds = L.latLngBounds(latLngs as any);
-        this.map.fitBounds(bounds, { padding: [50, 50] });
+          .bindPopup(`<strong>Boy</strong><br>Updated: ${location.timestamp.toLocaleTimeString()}`);
+      }
+    } else {
+      if (this.girlMarker) {
+        this.girlMarker.setLatLng(latLng);
+      } else {
+        this.girlMarker = L.circleMarker(latLng, {
+          radius: 10,
+          fillColor: color,
+          color: '#fff',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.8
+        }).addTo(this.map)
+          .bindPopup(`<strong>Girl</strong><br>Updated: ${location.timestamp.toLocaleTimeString()}`);
       }
     }
   }
 
-  startTracking(): void {
-    this.locationTrackerService.startTracking();
-  }
+  private fitMapBounds(): void {
+    if (!this.map) return;
+    
+    const latLngs = [];
 
-  stopTracking(): void {
-    this.locationTrackerService.stopTracking();
-  }
+    if (this.boyMarker) {
+      latLngs.push(this.boyMarker.getLatLng());
+    }
+    if (this.girlMarker) {
+      latLngs.push(this.girlMarker.getLatLng());
+    }
 
-  clearHistory(): void {
-    if (confirm('Are you sure you want to clear tracking history?')) {
-      this.locationTrackerService.clearHistory();
-      this.markers.forEach(m => this.map.removeLayer(m));
-      this.markers = [];
-      this.polyline.setLatLngs([]);
-      if (this.marker) {
-        this.map.removeLayer(this.marker);
-        this.marker = null;
-      }
+    if (latLngs.length > 1) {
+      const bounds = L.latLngBounds(latLngs);
+      this.map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
+    } else if (latLngs.length === 1) {
+      this.map.setView(latLngs[0], 16);
     }
   }
 
-  exportData(): void {
-    const data = {
-      locations: this.locationPoints.map(p => ({
-        latitude: p.latitude,
-        longitude: p.longitude,
-        accuracy: p.accuracy,
-        timestamp: p.timestamp.toISOString(),
-        speed: p.speed,
-        heading: p.heading
-      })),
-      exportedAt: new Date().toISOString()
-    };
-
-    const dataStr = JSON.stringify(data, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `location-tracking-${new Date().getTime()}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+  setupProfile(profile: 'Boy' | 'Girl'): void {
+    this.locationTrackerService.setProfile(profile);
+    alert(`Device configured for ${profile}. Location permission is saved.`);
   }
 
-  calculateTotalDistance(): number {
-    if (this.locationPoints.length < 2) return 0;
-
-    let totalDistance = 0;
-    for (let i = 0; i < this.locationPoints.length - 1; i++) {
-      const p1 = this.locationPoints[i];
-      const p2 = this.locationPoints[i + 1];
-      totalDistance += this.getDistance(p1.latitude, p1.longitude, p2.latitude, p2.longitude);
+  refreshLocation(targetProfile: 'Boy' | 'Girl'): void {
+    if (this.currentUserProfile !== targetProfile) {
+      alert(`This device is currently set up as ${this.currentUserProfile || 'None'}. Please click the ${targetProfile} icon to set it up for ${targetProfile} first.`);
+      return;
     }
-    return totalDistance;
+    this.locationTrackerService.refreshLocation();
+  }
+
+  private updateDistance(): void {
+    if (this.currentLocation && this.partnerLocation) {
+      this.distanceApart = this.getDistance(
+        this.currentLocation.latitude, 
+        this.currentLocation.longitude, 
+        this.partnerLocation.latitude, 
+        this.partnerLocation.longitude
+      );
+    } else {
+      this.distanceApart = null;
+    }
   }
 
   private getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -215,6 +188,5 @@ export class LocationTrackerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.locationTrackerService.stopTracking();
   }
 }

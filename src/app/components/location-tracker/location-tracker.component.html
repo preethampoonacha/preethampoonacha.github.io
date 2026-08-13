@@ -1,86 +1,56 @@
 <div class="location-tracker-container">
-  <div class="location-tracker-header">
-    <h2>?? Location Tracker</h2>
-    <div class="controls">
-      <button *ngIf="!isTracking" class="btn btn-start" (click)="startTracking()">
-        ? Start Tracking
-      </button>
-      <button *ngIf="isTracking" class="btn btn-stop" (click)="stopTracking()">
-        ? Stop Tracking
-      </button>
-      <button class="btn btn-secondary" (click)="exportData()" title="Export tracking data as JSON">
-        ?? Export
-      </button>
-      <button class="btn btn-secondary" (click)="clearHistory()" title="Clear all tracking history">
-        ?? Clear
-      </button>
+  <div class="header">
+    <h2>Location Tracker</h2>
+    <div class="status-badge" [class.tracking]="isTracking" [class.error]="(trackingStatus$ | async)?.error">
+      {{ (trackingStatus$ | async)?.message || 'Ready' }}
     </div>
   </div>
 
-  <!-- Status Badge -->
-  <div class="status-badge" [class.tracking]="isTracking" [class.error]="(trackingStatus$ | async)?.error">
-    <span class="status-dot" [class.active]="isTracking" [class.error]="(trackingStatus$ | async)?.error"></span>
-    {{ (trackingStatus$ | async)?.message || 'Ready' }}
+  <div class="profiles-container">
+    <!-- Boy Profile -->
+    <div class="profile-card boy" [class.active-device]="currentUserProfile === 'Boy'">
+      <div class="icon-container" (click)="setupProfile('Boy')" title="Click to set up this device for Boy">
+        <span class="emoji-icon">&#x1F466;</span>
+        <div class="setup-label" *ngIf="currentUserProfile !== 'Boy'">Click to Setup</div>
+        <div class="setup-label claimed" *ngIf="currentUserProfile === 'Boy'">Your Device</div>
+      </div>
+      <button class="btn btn-refresh" (click)="refreshLocation('Boy')" title="Refresh Boy Location">
+        &#x1F504; Refresh
+      </button>
+      <div class="last-update" *ngIf="currentUserProfile === 'Boy' && currentLocation">
+        Updated: {{ currentLocation.timestamp | date:'shortTime' }}
+      </div>
+      <div class="last-update" *ngIf="currentUserProfile === 'Girl' && partnerLocation?.profile === 'Boy'">
+        Updated: {{ partnerLocation?.timestamp | date:'shortTime' }}
+      </div>
+    </div>
+
+    <!-- Girl Profile -->
+    <div class="profile-card girl" [class.active-device]="currentUserProfile === 'Girl'">
+      <div class="icon-container" (click)="setupProfile('Girl')" title="Click to set up this device for Girl">
+        <span class="emoji-icon">&#x1F467;</span>
+        <div class="setup-label" *ngIf="currentUserProfile !== 'Girl'">Click to Setup</div>
+        <div class="setup-label claimed" *ngIf="currentUserProfile === 'Girl'">Your Device</div>
+      </div>
+      <button class="btn btn-refresh" (click)="refreshLocation('Girl')" title="Refresh Girl Location">
+        &#x1F504; Refresh
+      </button>
+      <div class="last-update" *ngIf="currentUserProfile === 'Girl' && currentLocation">
+        Updated: {{ currentLocation.timestamp | date:'shortTime' }}
+      </div>
+      <div class="last-update" *ngIf="currentUserProfile === 'Boy' && partnerLocation?.profile === 'Girl'">
+        Updated: {{ partnerLocation?.timestamp | date:'shortTime' }}
+      </div>
+    </div>
   </div>
 
-  <!-- Map -->
+  <div class="distance-indicator" *ngIf="distanceApart !== null">
+    <span class="distance-text">
+      Distance: <strong>{{ distanceApart < 1 ? (distanceApart * 1000 | number:'1.0-0') + ' meters' : (distanceApart | number:'1.2-2') + ' kilometers' }}</strong>
+    </span>
+  </div>
+
   <div class="map-container">
     <div id="map"></div>
-  </div>
-
-  <!-- Stats -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Points Tracked</div>
-      <div class="stat-value">{{ locationPoints.length }}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Distance</div>
-      <div class="stat-value">{{ calculateTotalDistance() | number:'1.2-2' }} km</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Status</div>
-      <div class="stat-value">{{ isTracking ? '?? Active' : '? Idle' }}</div>
-    </div>
-  </div>
-
-  <!-- Current Location -->
-  <div class="current-location-card" *ngIf="currentLocation">
-    <h3>?? Current Location</h3>
-    <div class="location-details">
-      <div class="location-detail">
-        <span class="label">Latitude</span>
-        <span class="value">{{ currentLocation.latitude | number:'1.6-6' }}</span>
-      </div>
-      <div class="location-detail">
-        <span class="label">Longitude</span>
-        <span class="value">{{ currentLocation.longitude | number:'1.6-6' }}</span>
-      </div>
-      <div class="location-detail">
-        <span class="label">Accuracy</span>
-        <span class="value">±{{ currentLocation.accuracy | number:'1.0-0' }}m</span>
-      </div>
-      <div class="location-detail" *ngIf="currentLocation.speed != null">
-        <span class="label">Speed</span>
-        <span class="value">{{ currentLocation.speed | number:'1.1-1' }} m/s</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Location History -->
-  <div class="history-section">
-    <h3>?? Location History ({{ locationPoints.length }})</h3>
-    <div *ngIf="locationPoints.length === 0" class="no-locations">
-      <p>No locations tracked yet. Click "Start Tracking" to begin.</p>
-    </div>
-    <ul class="history-list" *ngIf="locationPoints.length > 0">
-      <li *ngFor="let point of locationPoints; let i = index" class="history-item">
-        <div>
-          <span class="history-coords">{{ point.latitude | number:'1.4-4' }}, {{ point.longitude | number:'1.4-4' }}</span>
-          <span class="history-accuracy"> · ±{{ point.accuracy | number:'1.0-0' }}m</span>
-        </div>
-        <span class="history-time">{{ point.timestamp | date:'shortTime' }}</span>
-      </li>
-    </ul>
   </div>
 </div>
