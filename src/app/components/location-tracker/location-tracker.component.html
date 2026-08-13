@@ -10,7 +10,7 @@
     <!-- Boy Profile -->
     <div class="profile-card boy" [class.active-device]="currentUserProfile === 'Boy'">
       <div class="icon-container" (click)="setupProfile('Boy')" title="Click to set up this device for Boy">
-        <span class="emoji-icon">&#x1F466;</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#4facfe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="emoji-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         <div class="setup-label" *ngIf="currentUserProfile !== 'Boy'">Click to Setup</div>
         <div class="setup-label claimed" *ngIf="currentUserProfile === 'Boy'">Your Device</div>
       </div>
@@ -28,7 +28,7 @@
     <!-- Girl Profile -->
     <div class="profile-card girl" [class.active-device]="currentUserProfile === 'Girl'">
       <div class="icon-container" (click)="setupProfile('Girl')" title="Click to set up this device for Girl">
-        <span class="emoji-icon">&#x1F467;</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ff0844" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="emoji-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         <div class="setup-label" *ngIf="currentUserProfile !== 'Girl'">Click to Setup</div>
         <div class="setup-label claimed" *ngIf="currentUserProfile === 'Girl'">Your Device</div>
       </div>
