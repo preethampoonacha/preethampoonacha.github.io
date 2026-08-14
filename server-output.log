@@ -1,0 +1,32 @@
+
+> task-tracker@1.0.0 start
+> ng serve
+
+Initial chunk files | Names                      |  Raw size
+polyfills.js        | polyfills                  |  88.09 kB | 
+main.js             | main                       |  10.97 kB | 
+styles.css          | styles                     |   7.59 kB | 
+chunk-NWKUXUI7.js   | -                          |   1.83 kB | 
+chunk-4WXVOEFY.js   | -                          |   1.46 kB | 
+
+                    | Initial total              | 109.95 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-2ZBWXLHI.js   | surprise-box-component     |  62.73 kB | 
+chunk-QECRXE5W.js   | adventure-list-component   |  52.13 kB | 
+chunk-A4NAXSHL.js   | adventure-form-component   |  51.95 kB | 
+chunk-BIUVVGGM.js   | -                          |  39.14 kB | 
+chunk-MGIIABCS.js   | adventure-detail-component |  38.01 kB | 
+chunk-QIZUOA7O.js   | dashboard-component        |  37.09 kB | 
+chunk-BQU5U7XM.js   | location-tracker-component |  30.85 kB | 
+chunk-ERAJ2QGD.js   | pizza-restaurant-component |  19.88 kB | 
+chunk-XHCYR7TR.js   | signalr-poc-component      |  19.51 kB | 
+chunk-O2XMJO42.js   | pin-auth-component         |  14.64 kB | 
+chunk-6LGLRWE5.js   | timeline-component         |  14.29 kB | 
+chunk-2MUSFIIL.js   | -                          |   3.54 kB | 
+chunk-4GQAIDMA.js   | -                          |   1.02 kB | 
+
+Application bundle generation complete. [2.654 seconds]
+
+Watch mode enabled. Watching for file changes...
+  ➜  Local:   http://localhost:4200/

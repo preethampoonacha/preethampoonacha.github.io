@@ -51,6 +51,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/location-tracker/location-tracker.component').then(m => m.LocationTrackerComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'locationv1',
+    loadComponent: () => import('./components/locationv1/locationv1.component').then(m => m.Locationv1Component),
+    canActivate: [authGuard]
+  },
   // Legacy routes for backward compatibility
   {
     path: 'tasks',

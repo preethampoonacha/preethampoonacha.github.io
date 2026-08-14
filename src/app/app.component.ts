@@ -26,6 +26,10 @@ import { AuthService } from './services/auth.service';
           <span class="nav-icon">📍</span>
           <span class="nav-text">Locate</span>
         </a>
+        <a routerLink="/locationv1" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <span class="nav-icon">🛰️</span>
+          <span class="nav-text">Live Locate</span>
+        </a>
         <button (click)="logout()" class="logout-btn">
           <span class="nav-icon">🔒</span>
           <span class="nav-text">Logout</span>

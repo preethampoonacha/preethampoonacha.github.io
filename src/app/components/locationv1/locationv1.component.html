@@ -1,0 +1,61 @@
+<div class="location-tracker-container">
+  <div class="header">
+    <h2>Live Location Tracker v1</h2>
+    <div class="status-badge" [class.tracking]="isTracking" [class.error]="(trackingStatus$ | async)?.error">
+      {{ (trackingStatus$ | async)?.message || 'Ready' }}
+    </div>
+  </div>
+
+  <div class="controls-container" *ngIf="currentUserProfile">
+    <button class="btn btn-primary" *ngIf="!isTracking" (click)="startLiveTracking()">
+      <span class="live-icon">🔴</span> Start Live Tracking
+    </button>
+    <button class="btn btn-danger" *ngIf="isTracking" (click)="stopLiveTracking()">
+      Stop Tracking
+    </button>
+  </div>
+
+  <div class="profiles-container">
+    <!-- Boy Profile -->
+    <div class="profile-card boy" [class.active-device]="currentUserProfile === 'Boy'">
+      <div class="icon-container" (click)="setupProfile('Boy')" title="Click to set up this device for Boy">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#4facfe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="emoji-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="setup-label" *ngIf="currentUserProfile !== 'Boy'">Click to Setup</div>
+        <div class="setup-label claimed" *ngIf="currentUserProfile === 'Boy'">Your Device</div>
+      </div>
+      
+      <div class="last-update" *ngIf="currentUserProfile === 'Boy' && currentLocation">
+        Updated: {{ currentLocation.timestamp | date:'mediumTime' }}
+      </div>
+      <div class="last-update" *ngIf="currentUserProfile === 'Girl' && partnerLocation?.profile === 'Boy'">
+        Updated: {{ partnerLocation?.timestamp | date:'mediumTime' }}
+      </div>
+    </div>
+
+    <!-- Girl Profile -->
+    <div class="profile-card girl" [class.active-device]="currentUserProfile === 'Girl'">
+      <div class="icon-container" (click)="setupProfile('Girl')" title="Click to set up this device for Girl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ff0844" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="emoji-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="setup-label" *ngIf="currentUserProfile !== 'Girl'">Click to Setup</div>
+        <div class="setup-label claimed" *ngIf="currentUserProfile === 'Girl'">Your Device</div>
+      </div>
+      
+      <div class="last-update" *ngIf="currentUserProfile === 'Girl' && currentLocation">
+        Updated: {{ currentLocation.timestamp | date:'mediumTime' }}
+      </div>
+      <div class="last-update" *ngIf="currentUserProfile === 'Boy' && partnerLocation?.profile === 'Girl'">
+        Updated: {{ partnerLocation?.timestamp | date:'mediumTime' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="distance-indicator" *ngIf="distanceApart !== null">
+    <span class="distance-text">
+      Distance: <strong>{{ distanceApart < 1 ? (distanceApart * 1000 | number:'1.0-0') + ' meters' : (distanceApart | number:'1.2-2') + ' kilometers' }}</strong>
+    </span>
+  </div>
+
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+</div>

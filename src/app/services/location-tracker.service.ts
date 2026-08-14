@@ -51,6 +51,7 @@ export class LocationTrackerService {
   
   private useFirestore = false;
   private unsubscribeSnapshot: (() => void) | null = null;
+  private watchPositionId: number | null = null;
 
   public currentUserProfile: UserProfile = null;
 
@@ -188,7 +189,12 @@ export class LocationTrackerService {
 
     this.currentLocationSubject.next(locationPoint);
     this.addLocationPoint(locationPoint);
-    this.isTrackingSubject.next(false);
+    
+    // Only set tracking to false if we are not in live tracking mode
+    if (this.watchPositionId === null) {
+      this.isTrackingSubject.next(false);
+    }
+    
     this.trackingStatusSubject.next({ 
       message: `Updated: ${latitude.toFixed(4)}, ${longitude.toFixed(4)} (±${accuracy.toFixed(0)}m)` 
     });
@@ -272,9 +278,55 @@ export class LocationTrackerService {
     this.trackingStatusSubject.next({ message: 'History cleared' });
   }
 
+  startRealTimeTracking(): void {
+    if (!navigator.geolocation) {
+      this.trackingStatusSubject.next({ 
+        message: 'Geolocation not supported', 
+        error: 'Your browser does not support geolocation' 
+      });
+      return;
+    }
+
+    if (!this.currentUserProfile) {
+       this.trackingStatusSubject.next({ 
+        message: 'Profile not selected', 
+        error: 'Please click Boy or Girl first to set up this device.' 
+      });
+      return;
+    }
+
+    this.isTrackingSubject.next(true);
+    this.trackingStatusSubject.next({ message: 'Live tracking active...' });
+
+    const options = {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 10000
+    };
+
+    // Clear any existing watch
+    this.stopRealTimeTracking();
+
+    this.watchPositionId = navigator.geolocation.watchPosition(
+      (position) => this.handlePosition(position),
+      (error) => this.handleError(error),
+      options
+    );
+  }
+
+  stopRealTimeTracking(): void {
+    if (this.watchPositionId !== null) {
+      navigator.geolocation.clearWatch(this.watchPositionId);
+      this.watchPositionId = null;
+    }
+    this.isTrackingSubject.next(false);
+    this.trackingStatusSubject.next({ message: 'Live tracking stopped' });
+  }
+
   ngOnDestroy(): void {
     if (this.unsubscribeSnapshot) {
       this.unsubscribeSnapshot();
     }
+    this.stopRealTimeTracking();
   }
 }

@@ -1,0 +1,17 @@
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+- Building...
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    src/app/components/adventure-detail/adventure-detail.component.ts:165:45:
+      165 │                 [disabled]="!newCommentText?.trim()"
+          ╵                                              ~~~~
+
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    src/app/components/surprise-box/surprise-box.component.ts:184:49:
+      184 │                     [disabled]="!newCommentText?.trim()"
+          ╵                                                  ~~~~
+
+
