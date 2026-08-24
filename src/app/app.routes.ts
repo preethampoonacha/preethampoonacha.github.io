@@ -69,6 +69,10 @@ export const routes: Routes = [
   {
     path: 'pizza',
     loadComponent: () => import('./components/pizza-restaurant/pizza-restaurant.component').then(m => m.PizzaRestaurantComponent)
+  },
+  {
+    path: 'dsa-roadmap',
+    loadComponent: () => import('./components/dsa-roadmap/dsa-roadmap.component').then(m => m.DsaRoadmapComponent)
   }
 ];
 

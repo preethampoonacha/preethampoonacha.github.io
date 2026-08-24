@@ -1,0 +1,52 @@
+<div class="roadmap-container">
+  <div class="header">
+    <div class="oswald-logo">🐙</div>
+    <h1>Oswald's Big City DSA Roadmap</h1>
+  </div>
+
+  <div class="content-wrapper">
+    <div class="sidebar">
+      <div 
+        *ngFor="let topic of topics" 
+        class="nav-item" 
+        [class.active]="selectedTopic.id === topic.id"
+        (click)="selectTopic(topic)"
+        [style.--theme-color]="topic.color"
+      >
+        <span class="icon">{{topic.icon}}</span>
+        <span class="title">{{topic.title}}</span>
+      </div>
+    </div>
+
+    <div class="main-content" [style.--theme-color]="selectedTopic.color">
+      <div class="card glass-card">
+        <div class="card-header">
+          <div class="card-icon" [style.background-color]="selectedTopic.color">
+            {{selectedTopic.icon}}
+          </div>
+          <h2>{{selectedTopic.title}}</h2>
+        </div>
+        
+        <div class="character-badge">
+          Featuring <strong>{{selectedTopic.character}}</strong>
+        </div>
+
+        <div class="story-section">
+          <h3>The Story</h3>
+          <p class="story-text">{{selectedTopic.description}}</p>
+        </div>
+
+        <div class="concept-section">
+          <h3>The Concept</h3>
+          <p class="concept-text">{{selectedTopic.concept}}</p>
+        </div>
+        
+        <div class="animation-stage">
+          <!-- Fluidic animation placeholders for concepts -->
+          <div class="fluid-blob"></div>
+          <div class="fluid-blob small-blob"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
