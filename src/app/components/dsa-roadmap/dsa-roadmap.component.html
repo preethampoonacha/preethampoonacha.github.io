@@ -41,8 +41,169 @@
           <p class="concept-text">{{selectedTopic.concept}}</p>
         </div>
         
-        <div class="animation-stage">
-          <!-- Fluidic animation placeholders for concepts -->
+        <!-- Algorithm Patterns Section -->
+        <ng-container *ngIf="selectedTopic.patterns && selectedTopic.patterns.length > 0">
+          <div class="patterns-container">
+            <h3>Algorithm Patterns</h3>
+            <div class="pattern-tabs">
+              <button 
+                *ngFor="let pattern of selectedTopic.patterns"
+                class="pattern-tab"
+                [class.active]="selectedPattern?.id === pattern.id"
+                (click)="selectPattern(pattern)"
+              >
+                {{pattern.name}}
+              </button>
+            </div>
+            
+            <div class="pattern-content" *ngIf="selectedPattern">
+              <p class="pattern-story"><strong>Story: </strong>{{selectedPattern.story}}</p>
+              <p class="pattern-explanation"><strong>Concept: </strong>{{selectedPattern.explanation}}</p>
+              
+              <!-- Pattern Animation Stage -->
+              <div class="animation-stage pattern-animation" [ngClass]="selectedPattern.animationClass">
+                <ng-container *ngIf="selectedPattern.id === 'basic'">
+                  <div class="array-container">
+                    <div class="array-item" *ngFor="let i of [1,2,3,4,5]">🥄 {{i}}</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'two-pointers'">
+                  <div class="array-container two-pointers-container">
+                    <div class="pointer p-left">🐧👉</div>
+                    <div class="array-item" *ngFor="let i of [1,2,3,4,5,6]">🥄</div>
+                    <div class="pointer p-right">👈🐧</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'sliding-window'">
+                  <div class="array-container sliding-window-container">
+                    <div class="window-frame"></div>
+                    <div class="array-item" *ngFor="let i of [1,2,3,4,5,6]">🥄</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'prefix-sum'">
+                  <div class="array-container prefix-sum-container">
+                    <div class="spoon-stack" *ngFor="let i of [1,2,3,4,5]">
+                      <div class="spoon-icon">🥄</div>
+                      <div class="sum-label">{{ i * 10 }}g</div>
+                    </div>
+                    <div class="henry-walking">🐧</div>
+                  </div>
+                </ng-container>
+
+                <!-- Linked List Patterns -->
+                <ng-container *ngIf="selectedPattern.id === 'fast-slow-pointers'">
+                  <div class="ll-container fast-slow-container">
+                    <div class="sausage-link" *ngFor="let i of [1,2,3,4,5,6]">🌭</div>
+                    <div class="dog slow-dog">🐕</div>
+                    <div class="dog fast-dog">🐕‍🦺</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'reversal'">
+                  <div class="ll-container reversal-container">
+                    <div class="sausage-link rev-sausage" *ngFor="let i of [1,2,3,4]">🌭<span class="arrow">➡️</span></div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'dummy-node'">
+                  <div class="ll-container dummy-container">
+                    <div class="dummy-sausage">🎈</div>
+                    <div class="sausage-link" *ngFor="let i of [1,2,3,4]">🌭</div>
+                  </div>
+                </ng-container>
+
+                <!-- Stack Patterns -->
+                <ng-container *ngIf="selectedPattern.id === 'monotonic-stack'">
+                  <div class="stack-container monotonic-container">
+                    <div class="pancake size-1">🥞</div>
+                    <div class="pancake size-2">🥞</div>
+                    <div class="pancake size-3">🥞</div>
+                    <div class="oswald-chef">🐙</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'valid-parentheses'">
+                  <div class="stack-container valid-paren-container">
+                    <div class="pancake blue">🥞🫐</div>
+                    <div class="pancake choc">🥞🍫</div>
+                    <div class="match-indicator">✅</div>
+                  </div>
+                </ng-container>
+
+                <!-- Queue Patterns -->
+                <ng-container *ngIf="selectedPattern.id === 'bfs-queue'">
+                  <div class="queue-container bfs-container">
+                    <div class="butterfly-server">🦋</div>
+                    <div class="table t1">🍽️</div>
+                    <div class="table t2">🍽️</div>
+                    <div class="table t3">🍽️</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'sliding-window-max'">
+                  <div class="queue-container vip-container">
+                    <div class="customer regular">👤</div>
+                    <div class="customer vip">👑</div>
+                    <div class="customer regular">👤</div>
+                    <div class="window-frame-queue"></div>
+                  </div>
+                </ng-container>
+
+                <!-- Tree Patterns -->
+                <ng-container *ngIf="selectedPattern.id === 'dfs-tree'">
+                  <div class="tree-container dfs-container">
+                    <div class="flower-center">🌻</div>
+                    <div class="leaf l1">🍃</div>
+                    <div class="leaf l2">🍃</div>
+                    <div class="ladybug">🐞</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'level-order'">
+                  <div class="tree-container level-container">
+                    <div class="sun">☀️</div>
+                    <div class="flower-center">🌻</div>
+                    <div class="leaf row-1">🍃 🍃</div>
+                    <div class="leaf row-2">🍃 🍃 🍃</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'bst'">
+                  <div class="tree-container bst-container">
+                    <div class="node root">10</div>
+                    <div class="node left">5</div>
+                    <div class="node right">15</div>
+                  </div>
+                </ng-container>
+
+                <!-- Graph Patterns -->
+                <ng-container *ngIf="selectedPattern.id === 'topological-sort'">
+                  <div class="graph-container topo-container">
+                    <div class="building b1">🏠</div>
+                    <div class="building b2">🏦</div>
+                    <div class="building b3">🦋</div>
+                    <div class="oswald-walker">🐙</div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="selectedPattern.id === 'shortest-path'">
+                  <div class="graph-container shortest-path-container">
+                    <div class="building b1">🏠</div>
+                    <div class="building b2">🌲</div>
+                    <div class="path-line"></div>
+                    <div class="oswald-runner">🐙💨</div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Fallback fluid blobs for topics without patterns yet -->
+        <div class="animation-stage" *ngIf="!selectedTopic.patterns || selectedTopic.patterns.length === 0">
           <div class="fluid-blob"></div>
           <div class="fluid-blob small-blob"></div>
         </div>
