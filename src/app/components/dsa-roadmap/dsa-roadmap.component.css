@@ -415,13 +415,65 @@ input:checked + .slider::before { transform: translateX(24px); }
 @keyframes float { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-15px) rotate(10deg); } }
 
 /* ═══════════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE (Mobile Optimized for ~390px - 430px devices)
    ═══════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .content-wrapper { grid-template-columns: 1fr; }
-  .sidebar { max-height: none; flex-direction: row; flex-wrap: wrap; overflow-x: auto; }
-  .nav-item { flex: 0 0 auto; white-space: nowrap; }
-  .title-container h1 { font-size: 1.8rem; }
-  .pattern-tabs { flex-wrap: nowrap; overflow-x: auto; }
-  .pattern-tab { white-space: nowrap; }
+  .roadmap-container { padding: 10px; }
+  
+  .header { padding: 15px; margin-bottom: 20px; border-radius: 15px; }
+  .title-container h1 { font-size: 1.6rem; }
+  .title-container p { font-size: 0.9rem; }
+  
+  .theme-btn { padding: 6px 12px; font-size: 0.85rem; }
+  
+  .content-wrapper { grid-template-columns: 1fr; gap: 15px; }
+  
+  /* Swipeable Sidebar */
+  .sidebar { 
+    flex-direction: row; flex-wrap: nowrap; 
+    overflow-x: auto; padding-bottom: 10px; max-height: none;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .nav-item { flex: 0 0 auto; white-space: nowrap; padding: 8px 12px; }
+  
+  .glass-card { padding: 15px; border-radius: 15px; }
+  .card-header { gap: 10px; flex-wrap: wrap; }
+  .card-header h2 { font-size: 1.3rem; }
+  .card-icon { width: 40px; height: 40px; font-size: 1.2rem; }
+  
+  .story-text, .concept-text, .pattern-explanation { font-size: 0.9rem; padding: 10px; }
+  
+  /* Swipeable Pattern Tabs */
+  .pattern-tabs { 
+    flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; 
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .pattern-tabs::-webkit-scrollbar { display: none; }
+  .pattern-tab { flex: 0 0 auto; white-space: nowrap; padding: 6px 12px; }
+  
+  /* Scrollable Animations */
+  .animation-stage { 
+    padding: 15px 10px; min-height: 100px; 
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; justify-content: flex-start;
+  }
+  
+  /* Scale down elaborate elements slightly to fit better */
+  .elab-array, .elab-ll, .elab-stack, .elab-queue, .elab-tree, .elab-graph, .elab-sort {
+    transform: scale(0.9); transform-origin: left center;
+  }
+  
+  /* Specific layout fixes for very small screens */
+  .lw-grid, .elab-grid-dp { gap: 2px; }
+  .lw-item, .elab-item, .elab-node { padding: 4px 8px; font-size: 0.8rem; }
+  .elab-emoji { font-size: 1.1rem; }
+}
+
+@media (max-width: 480px) {
+  /* iPhone 16, iQOO Neo 10R specific fine-tuning */
+  .animation-toggle { flex-direction: column; gap: 5px; }
+  .elab-array, .elab-ll, .elab-stack, .elab-queue, .elab-tree, .elab-graph, .elab-sort {
+    transform: scale(0.85);
+  }
 }
