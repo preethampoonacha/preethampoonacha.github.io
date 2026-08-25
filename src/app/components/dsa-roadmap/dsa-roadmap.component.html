@@ -1,13 +1,25 @@
 <div class="roadmap-container">
   <div class="header">
-    <div class="oswald-logo">🐙</div>
-    <h1>Oswald's Big City DSA Roadmap</h1>
+    <div class="header-content">
+      <div class="title-container">
+        <h1>{{ selectedTheme.icon }} DSA Roadmap</h1>
+        <p>Master Data Structures & Algorithms with {{ selectedTheme.name }}!</p>
+      </div>
+      <div class="theme-selector">
+        <button *ngFor="let theme of themes" 
+                class="theme-btn" 
+                [class.active]="selectedTheme.id === theme.id"
+                (click)="selectTheme(theme)">
+          {{ theme.icon }} {{ theme.name }}
+        </button>
+      </div>
+    </div>
   </div>
 
   <div class="content-wrapper">
     <div class="sidebar">
       <div 
-        *ngFor="let topic of topics" 
+        *ngFor="let topic of selectedTheme.topics" 
         class="nav-item" 
         [class.active]="selectedTopic.id === topic.id"
         (click)="selectTopic(topic)"
