@@ -14,6 +14,7 @@ export class DsaRoadmapComponent implements OnInit {
   selectedTheme: ThemeDefinition = this.themes[0];
   selectedTopic!: DsaTopic;
   selectedPattern: AlgorithmPattern | null = null;
+  animationMode: 'lightweight' | 'elaborate' = 'lightweight';
 
   ngOnInit() {
     this.initThemeState();
@@ -26,19 +27,32 @@ export class DsaRoadmapComponent implements OnInit {
 
   private initThemeState() {
     this.selectedTopic = this.selectedTheme.topics[0];
-    this.selectedPattern = this.selectedTopic.patterns && this.selectedTopic.patterns.length > 0 
-      ? this.selectedTopic.patterns[0] 
+    this.selectedPattern = this.selectedTopic.patterns && this.selectedTopic.patterns.length > 0
+      ? this.selectedTopic.patterns[0]
       : null;
   }
 
   selectTopic(topic: DsaTopic) {
     this.selectedTopic = topic;
-    this.selectedPattern = topic.patterns && topic.patterns.length > 0 
-      ? topic.patterns[0] 
+    this.selectedPattern = topic.patterns && topic.patterns.length > 0
+      ? topic.patterns[0]
       : null;
   }
 
   selectPattern(pattern: AlgorithmPattern) {
     this.selectedPattern = pattern;
+  }
+
+  toggleAnimationMode() {
+    this.animationMode = this.animationMode === 'lightweight' ? 'elaborate' : 'lightweight';
+  }
+
+  getTierBadge(tier: string): string {
+    switch (tier) {
+      case 'basic': return '🟢';
+      case 'advanced': return '🟡';
+      case 'elite': return '🔴';
+      default: return '';
+    }
   }
 }

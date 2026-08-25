@@ -6,25 +6,34 @@
         <p>Master Data Structures & Algorithms with {{ selectedTheme.name }}!</p>
       </div>
       <div class="theme-selector">
-        <button *ngFor="let theme of themes" 
-                class="theme-btn" 
+        <button *ngFor="let theme of themes"
+                class="theme-btn"
                 [class.active]="selectedTheme.id === theme.id"
                 (click)="selectTheme(theme)">
           {{ theme.icon }} {{ theme.name }}
         </button>
+      </div>
+      <div class="animation-toggle">
+        <span class="toggle-label" [class.active]="animationMode === 'lightweight'">⚡ Lightweight</span>
+        <label class="switch">
+          <input type="checkbox" [checked]="animationMode === 'elaborate'" (change)="toggleAnimationMode()">
+          <span class="slider round"></span>
+        </label>
+        <span class="toggle-label" [class.active]="animationMode === 'elaborate'">✨ Elaborate</span>
       </div>
     </div>
   </div>
 
   <div class="content-wrapper">
     <div class="sidebar">
-      <div 
-        *ngFor="let topic of selectedTheme.topics" 
-        class="nav-item" 
+      <div
+        *ngFor="let topic of selectedTheme.topics"
+        class="nav-item"
         [class.active]="selectedTopic.id === topic.id"
         (click)="selectTopic(topic)"
         [style.--theme-color]="topic.color"
       >
+        <span class="tier-badge">{{ getTierBadge(topic.tier) }}</span>
         <span class="icon">{{topic.icon}}</span>
         <span class="title">{{topic.title}}</span>
       </div>
@@ -37,8 +46,11 @@
             {{selectedTopic.icon}}
           </div>
           <h2>{{selectedTopic.title}}</h2>
+          <span class="tier-label" [ngClass]="'tier-' + selectedTopic.tier">
+            {{selectedTopic.tier | uppercase}}
+          </span>
         </div>
-        
+
         <div class="character-badge">
           Featuring <strong>{{selectedTopic.character}}</strong>
         </div>
@@ -52,13 +64,13 @@
           <h3>The Concept</h3>
           <p class="concept-text">{{selectedTopic.concept}}</p>
         </div>
-        
+
         <!-- Algorithm Patterns Section -->
         <ng-container *ngIf="selectedTopic.patterns && selectedTopic.patterns.length > 0">
           <div class="patterns-container">
             <h3>Algorithm Patterns</h3>
             <div class="pattern-tabs">
-              <button 
+              <button
                 *ngFor="let pattern of selectedTopic.patterns"
                 class="pattern-tab"
                 [class.active]="selectedPattern?.id === pattern.id"
@@ -67,154 +79,490 @@
                 {{pattern.name}}
               </button>
             </div>
-            
+
             <div class="pattern-content" *ngIf="selectedPattern">
               <p class="pattern-story"><strong>Story: </strong>{{selectedPattern.story}}</p>
               <p class="pattern-explanation"><strong>Concept: </strong>{{selectedPattern.explanation}}</p>
-              
-              <!-- Pattern Animation Stage -->
-              <div class="animation-stage pattern-animation" [ngClass]="selectedPattern.animationClass">
-                <ng-container *ngIf="selectedPattern.id === 'basic'">
-                  <div class="array-container">
-                    <div class="array-item" *ngFor="let i of [1,2,3,4,5]">🥄 {{i}}</div>
-                  </div>
+
+              <!-- ═══════════════════════════════════════ -->
+              <!--         ANIMATION STAGE                 -->
+              <!-- ═══════════════════════════════════════ -->
+              <div class="animation-stage pattern-animation"
+                   [ngClass]="[selectedPattern.animationClass, animationMode]">
+
+                <!-- ── LIGHTWEIGHT ANIMATIONS (emoji-based) ── -->
+                <ng-container *ngIf="animationMode === 'lightweight'">
+
+                  <!-- Arrays -->
+                  <ng-container *ngIf="selectedPattern.id === 'basic'">
+                    <div class="lw-array"><span class="lw-item" *ngFor="let i of [1,2,3,4,5]">📦{{i}}</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'two-pointers'">
+                    <div class="lw-array"><span class="lw-ptr-l">👉</span><span class="lw-item" *ngFor="let i of [1,2,3,4,5,6]">📦</span><span class="lw-ptr-r">👈</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'sliding-window'">
+                    <div class="lw-array"><div class="lw-window"></div><span class="lw-item" *ngFor="let i of [1,2,3,4,5,6]">📦</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'prefix-sum'">
+                    <div class="lw-array lw-prefix"><span class="lw-item" *ngFor="let i of [1,2,3,4,5]">📦<br><small>Σ{{i * 10}}</small></span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'kadanes'">
+                    <div class="lw-array"><span class="lw-item" *ngFor="let v of [3,-1,2,-1,5]" [class.positive]="v > 0" [class.negative]="v < 0">{{v}}</span><span class="lw-max">max↑</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'hash-map'">
+                    <div class="lw-hash"><span class="lw-bucket" *ngFor="let k of ['A','B','C']">🗂️{{k}}</span><span class="lw-arrow">→ O(1)</span></div>
+                  </ng-container>
+
+                  <!-- Strings -->
+                  <ng-container *ngIf="selectedPattern.id === 'string-manip'">
+                    <div class="lw-string"><span class="lw-char" *ngFor="let c of ['H','E','L','L','O']">{{c}}</span><span class="lw-reverse">🔄</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'anagram'">
+                    <div class="lw-string"><span>LISTEN</span><span>↔️</span><span>SILENT</span><span>✅</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'palindrome'">
+                    <div class="lw-string"><span class="lw-ptr-l">👉</span><span class="lw-char" *ngFor="let c of ['R','A','C','E','C','A','R']">{{c}}</span><span class="lw-ptr-r">👈</span></div>
+                  </ng-container>
+
+                  <!-- Linked Lists -->
+                  <ng-container *ngIf="selectedPattern.id === 'fast-slow-pointers'">
+                    <div class="lw-ll"><span class="lw-node" *ngFor="let i of [1,2,3,4,5]">⭕→</span><span class="lw-fast">🐇</span><span class="lw-slow">🐢</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'reversal'">
+                    <div class="lw-ll"><span class="lw-node" *ngFor="let i of [1,2,3,4]">⭕→</span><span class="lw-reverse">🔄</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'dummy-node'">
+                    <div class="lw-ll"><span class="lw-dummy">🎈→</span><span class="lw-node" *ngFor="let i of [1,2,3,4]">⭕→</span></div>
+                  </ng-container>
+
+                  <!-- Stacks -->
+                  <ng-container *ngIf="selectedPattern.id === 'monotonic-stack'">
+                    <div class="lw-stack"><span class="lw-plate" *ngFor="let s of [3,2,1]">🥞{{s}}</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'valid-parentheses'">
+                    <div class="lw-stack"><span class="lw-paren" *ngFor="let p of ['(','[','{','}',']',')']">{{p}}</span><span>✅</span></div>
+                  </ng-container>
+
+                  <!-- Queues -->
+                  <ng-container *ngIf="selectedPattern.id === 'bfs-queue'">
+                    <div class="lw-queue"><span class="lw-person" *ngFor="let i of [1,2,3,4]">👤</span><span>→ FIFO →</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'sliding-window-max'">
+                    <div class="lw-queue"><span class="lw-person" *ngFor="let v of [1,3,2]">{{v}}</span><span class="lw-crown">👑max</span></div>
+                  </ng-container>
+
+                  <!-- Recursion -->
+                  <ng-container *ngIf="selectedPattern.id === 'base-case'">
+                    <div class="lw-recursion"><span *ngFor="let i of [1,2,3]" class="lw-box" [style.font-size.rem]="2-i*0.4">📦</span><span>🎁base</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'recursion-tree'">
+                    <div class="lw-tree-mini"><span>🌲</span><span>↙️↘️</span><span>🌲🌲</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'multiple-branches'">
+                    <div class="lw-tree-mini"><span>1→</span><span>2→</span><span>4→</span><span>8 🔥</span></div>
+                  </ng-container>
+
+                  <!-- Sorting -->
+                  <ng-container *ngIf="selectedPattern.id === 'bubble-sort'">
+                    <div class="lw-sort"><span class="lw-bar" *ngFor="let h of [5,2,4,1,3]" [style.height.px]="h*15">{{h}}</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'merge-sort'">
+                    <div class="lw-sort"><span>🔀 Split</span><span>→</span><span>🔃 Sort</span><span>→</span><span>🔗 Merge</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'quick-sort'">
+                    <div class="lw-sort"><span>⬅️ small</span><span class="lw-pivot">|P|</span><span>big ➡️</span></div>
+                  </ng-container>
+
+                  <!-- Binary Search -->
+                  <ng-container *ngIf="selectedPattern.id === 'standard-bs'">
+                    <div class="lw-bs"><span class="lw-item" *ngFor="let i of [1,2,3,4,5,6,7,8]">{{i}}</span><span class="lw-mid">↕️mid</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'bs-on-answer'">
+                    <div class="lw-bs"><span>lo=1</span><span>→ mid? →</span><span>hi=100</span><span>🎯</span></div>
+                  </ng-container>
+
+                  <!-- Trees -->
+                  <ng-container *ngIf="selectedPattern.id === 'dfs-tree'">
+                    <div class="lw-tree"><span>🌳</span><span>↙️deep</span><span>🐞</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'level-order'">
+                    <div class="lw-tree"><span>L1:🌻</span><span>L2:🍃🍃</span><span>L3:🍃🍃🍃</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'bst'">
+                    <div class="lw-tree"><span>⬅️&lt;</span><span class="lw-root">10</span><span>&gt;➡️</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'lca'">
+                    <div class="lw-tree"><span>🐞↗️</span><span class="lw-root">LCA</span><span>↖️🐞</span></div>
+                  </ng-container>
+
+                  <!-- Heaps -->
+                  <ng-container *ngIf="selectedPattern.id === 'min-max-heap'">
+                    <div class="lw-heap"><span class="lw-top">👑 top</span><span>↙️↘️</span><span>⬇️ children</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'top-k'">
+                    <div class="lw-heap"><span>K=3:</span><span class="lw-item" *ngFor="let i of [9,7,5]">{{i}}</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'merge-k'">
+                    <div class="lw-heap"><span>L1→</span><span>L2→</span><span>L3→</span><span>⛰️merge</span></div>
+                  </ng-container>
+
+                  <!-- Graphs -->
+                  <ng-container *ngIf="selectedPattern.id === 'graph-bfs-dfs'">
+                    <div class="lw-graph"><span>🏠</span><span>—</span><span>🏦</span><span>—</span><span>🏪</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'topological-sort'">
+                    <div class="lw-graph"><span>🏠→</span><span>🏦→</span><span>🦋</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'shortest-path'">
+                    <div class="lw-graph"><span>🏠</span><span>···3···</span><span>🌲</span><span>💨</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'cycle-detection'">
+                    <div class="lw-graph"><span>🔄</span><span>A→B→C→A</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'union-find'">
+                    <div class="lw-graph"><span>⭕⭕</span><span>🔗merge</span><span>⭕</span></div>
+                  </ng-container>
+
+                  <!-- Backtracking -->
+                  <ng-container *ngIf="selectedPattern.id === 'subsets'">
+                    <div class="lw-bt"><span>{{ '{' }} {{ '}' }}</span><span>{{ '{' }}A{{ '}' }}</span><span>{{ '{' }}B{{ '}' }}</span><span>{{ '{' }}A,B{{ '}' }}</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'permutations'">
+                    <div class="lw-bt"><span>ABC</span><span>ACB</span><span>BAC</span><span>...</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'n-queens'">
+                    <div class="lw-bt"><span>♛·</span><span>·♛</span><span>♛·</span><span>🔙</span></div>
+                  </ng-container>
+
+                  <!-- Greedy -->
+                  <ng-container *ngIf="selectedPattern.id === 'activity-selection'">
+                    <div class="lw-greedy"><span>📅1-3</span><span>📅2-5</span><span>📅4-7</span><span>✅pick earliest end</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'fractional-knapsack'">
+                    <div class="lw-greedy"><span>🎒</span><span>best v/w first</span><span>💰</span></div>
+                  </ng-container>
+
+                  <!-- 1-D DP -->
+                  <ng-container *ngIf="selectedPattern.id === 'climbing-stairs'">
+                    <div class="lw-dp"><span class="lw-step" *ngFor="let i of [1,1,2,3,5]">{{i}}</span><span>🪜</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'house-robber'">
+                    <div class="lw-dp"><span class="lw-house" *ngFor="let v of [2,7,9,3]" [class.robbed]="v > 5">🏠{{v}}</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'lis'">
+                    <div class="lw-dp"><span class="lw-item" *ngFor="let v of [3,1,4,1,5,9]" [class.in-lis]="v >= 3">{{v}}</span></div>
+                  </ng-container>
+
+                  <!-- Intervals -->
+                  <ng-container *ngIf="selectedPattern.id === 'merge-intervals'">
+                    <div class="lw-intervals"><span class="lw-interval">|--1--3--|</span><span class="lw-interval overlap">|--2--5--|</span><span>→</span><span class="lw-interval merged">|--1--5--|</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'meeting-rooms'">
+                    <div class="lw-intervals"><span>📅📅📅</span><span>overlap? ❌</span></div>
+                  </ng-container>
+
+                  <!-- Tries -->
+                  <ng-container *ngIf="selectedPattern.id === 'trie-insert-search'">
+                    <div class="lw-trie"><span class="lw-node" *ngFor="let c of ['R','O','S','S']">{{c}}→</span><span>✅</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'prefix-match'">
+                    <div class="lw-trie"><span>HE→</span><span>HELLO</span><span>HENRY</span><span>HELP</span></div>
+                  </ng-container>
+
+                  <!-- 2-D DP -->
+                  <ng-container *ngIf="selectedPattern.id === 'grid-dp'">
+                    <div class="lw-grid"><span class="lw-cell" *ngFor="let v of [1,1,1,1,2,3,1,3,6]">{{v}}</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'lcs'">
+                    <div class="lw-dp"><span>ABCDE</span><span>↕️</span><span>ACE</span><span>=ACE(3)</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'knapsack-01'">
+                    <div class="lw-dp"><span>🎒W=10</span><span>📦5kg/$60</span><span>📦3kg/$50</span><span>max💰</span></div>
+                  </ng-container>
+
+                  <!-- Advanced Graphs -->
+                  <ng-container *ngIf="selectedPattern.id === 'mst'">
+                    <div class="lw-graph"><span>🏠-2-🏦</span><span>-3-</span><span>🏪</span><span>MST</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'bellman-ford'">
+                    <div class="lw-graph"><span>A-(-1)-B</span><span>relax V-1×</span></div>
+                  </ng-container>
+
+                  <!-- Bit Manipulation -->
+                  <ng-container *ngIf="selectedPattern.id === 'and-or-xor'">
+                    <div class="lw-bits"><span>1010</span><span>⊕</span><span>1010</span><span>=0000</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'counting-bits'">
+                    <div class="lw-bits"><span>1101</span><span>→ 3 bits set</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'power-of-two'">
+                    <div class="lw-bits"><span>1000</span><span>& 0111</span><span>= 0 ✅</span></div>
+                  </ng-container>
+
+                  <!-- Math & Geometry -->
+                  <ng-container *ngIf="selectedPattern.id === 'gcd-lcm'">
+                    <div class="lw-math"><span>GCD(12,18)=6</span><span>LCM=36</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'sieve'">
+                    <div class="lw-math"><span class="lw-item" *ngFor="let n of [2,3,4,5,6,7]" [class.prime]="n===2||n===3||n===5||n===7">{{n}}</span></div>
+                  </ng-container>
+
+                  <!-- String Algorithms -->
+                  <ng-container *ngIf="selectedPattern.id === 'kmp'">
+                    <div class="lw-string"><span>TEXT: AABAACAA</span><span>PAT: AABA</span><span>→skip✨</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'rabin-karp'">
+                    <div class="lw-string"><span>#hash1</span><span>≠</span><span>#hash2</span><span>=</span><span>#hash3✅</span></div>
+                  </ng-container>
+
+                  <!-- Segment Trees -->
+                  <ng-container *ngIf="selectedPattern.id === 'range-query'">
+                    <div class="lw-seg"><span>[1-8]</span><span>↙️↘️</span><span>[1-4][5-8]</span><span>query[3-7]</span></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'point-update'">
+                    <div class="lw-seg"><span>update[5]</span><span>↑ O(logN)</span></div>
+                  </ng-container>
                 </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'two-pointers'">
-                  <div class="array-container two-pointers-container">
-                    <div class="pointer p-left">🐧👉</div>
-                    <div class="array-item" *ngFor="let i of [1,2,3,4,5,6]">🥄</div>
-                    <div class="pointer p-right">👈🐧</div>
-                  </div>
-                </ng-container>
+                <!-- ── ELABORATE ANIMATIONS (CSS-driven) ── -->
+                <ng-container *ngIf="animationMode === 'elaborate'">
 
-                <ng-container *ngIf="selectedPattern.id === 'sliding-window'">
-                  <div class="array-container sliding-window-container">
-                    <div class="window-frame"></div>
-                    <div class="array-item" *ngFor="let i of [1,2,3,4,5,6]">🥄</div>
-                  </div>
-                </ng-container>
+                  <!-- Arrays -->
+                  <ng-container *ngIf="selectedPattern.id === 'basic'">
+                    <div class="elab-array"><div class="elab-item" *ngFor="let i of [1,2,3,4,5]"><span class="elab-emoji">📦</span><span class="elab-idx">{{i-1}}</span></div><div class="elab-pointer">☝️</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'two-pointers'">
+                    <div class="elab-array elab-two-ptr"><div class="elab-ptr-l">👈</div><div class="elab-item" *ngFor="let i of [1,3,5,7,9,11]"><span class="elab-emoji">📦</span><span class="elab-val">{{i}}</span></div><div class="elab-ptr-r">👉</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'sliding-window'">
+                    <div class="elab-array elab-sliding"><div class="elab-window-frame"></div><div class="elab-item" *ngFor="let i of [2,5,1,8,3,7]"><span class="elab-emoji">📦</span><span class="elab-val">{{i}}</span></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'prefix-sum'">
+                    <div class="elab-array elab-prefix"><div class="elab-item" *ngFor="let i of [10,20,30,40,50]; let idx = index"><span class="elab-emoji">📦</span><span class="elab-val">{{i}}</span><span class="elab-sum">Σ{{ (idx+1)*10 + idx*10*(idx)/2 }}</span></div><div class="elab-walker">🚶</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'kadanes'">
+                    <div class="elab-array elab-kadanes"><div class="elab-item" *ngFor="let v of [3,-1,2,-1,5]; let i = index" [class.elab-pos]="v > 0" [class.elab-neg]="v < 0"><span class="elab-val">{{v}}</span></div><div class="elab-tracker">📈 max</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'hash-map'">
+                    <div class="elab-hash"><div class="elab-bucket" *ngFor="let k of ['A','B','C']"><span class="elab-key">{{k}}</span><span class="elab-arrow">→</span><span class="elab-val">🗄️</span></div><div class="elab-speed">O(1)</div></div>
+                  </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'prefix-sum'">
-                  <div class="array-container prefix-sum-container">
-                    <div class="spoon-stack" *ngFor="let i of [1,2,3,4,5]">
-                      <div class="spoon-icon">🥄</div>
-                      <div class="sum-label">{{ i * 10 }}g</div>
-                    </div>
-                    <div class="henry-walking">🐧</div>
-                  </div>
-                </ng-container>
+                  <!-- Strings -->
+                  <ng-container *ngIf="selectedPattern.id === 'string-manip'">
+                    <div class="elab-string elab-reverse"><div class="elab-char" *ngFor="let c of ['H','E','L','L','O']">{{c}}</div><div class="elab-swap-arrow">🔄</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'anagram'">
+                    <div class="elab-string elab-anagram"><div class="elab-word">LISTEN</div><div class="elab-eq">⟺</div><div class="elab-word">SILENT</div><div class="elab-check">✅</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'palindrome'">
+                    <div class="elab-string elab-palindrome"><div class="elab-ptr-l">👉</div><div class="elab-char" *ngFor="let c of ['R','A','C','E','C','A','R']">{{c}}</div><div class="elab-ptr-r">👈</div></div>
+                  </ng-container>
 
-                <!-- Linked List Patterns -->
-                <ng-container *ngIf="selectedPattern.id === 'fast-slow-pointers'">
-                  <div class="ll-container fast-slow-container">
-                    <div class="sausage-link" *ngFor="let i of [1,2,3,4,5,6]">🌭</div>
-                    <div class="dog slow-dog">🐕</div>
-                    <div class="dog fast-dog">🐕‍🦺</div>
-                  </div>
-                </ng-container>
+                  <!-- Linked Lists -->
+                  <ng-container *ngIf="selectedPattern.id === 'fast-slow-pointers'">
+                    <div class="elab-ll"><div class="elab-node" *ngFor="let i of [1,2,3,4,5,6]">⭕</div><div class="elab-runner slow">🐢</div><div class="elab-runner fast">🐇</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'reversal'">
+                    <div class="elab-ll elab-rev"><div class="elab-node" *ngFor="let i of [1,2,3,4]">⭕<span class="elab-link">→</span></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'dummy-node'">
+                    <div class="elab-ll"><div class="elab-dummy">🎈</div><div class="elab-node" *ngFor="let i of [1,2,3,4]">⭕<span class="elab-link">→</span></div></div>
+                  </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'reversal'">
-                  <div class="ll-container reversal-container">
-                    <div class="sausage-link rev-sausage" *ngFor="let i of [1,2,3,4]">🌭<span class="arrow">➡️</span></div>
-                  </div>
-                </ng-container>
+                  <!-- Stacks -->
+                  <ng-container *ngIf="selectedPattern.id === 'monotonic-stack'">
+                    <div class="elab-stack"><div class="elab-plate" *ngFor="let s of [5,3,1]" [style.width.px]="s*20+30">🥞 {{s}}</div><div class="elab-chef">🧑‍🍳</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'valid-parentheses'">
+                    <div class="elab-stack elab-paren"><div class="elab-bracket" *ngFor="let p of ['(','[','{','}',']',')']" [class.open]="p==='('||p==='['||p==='{'" [class.close]="p===')'||p===']'||p==='}'">{{p}}</div><div class="elab-result">✅ Valid</div></div>
+                  </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'dummy-node'">
-                  <div class="ll-container dummy-container">
-                    <div class="dummy-sausage">🎈</div>
-                    <div class="sausage-link" *ngFor="let i of [1,2,3,4]">🌭</div>
-                  </div>
-                </ng-container>
+                  <!-- Queues -->
+                  <ng-container *ngIf="selectedPattern.id === 'bfs-queue'">
+                    <div class="elab-queue"><div class="elab-person" *ngFor="let i of [1,2,3,4,5]">👤</div><div class="elab-server">🦋serving</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'sliding-window-max'">
+                    <div class="elab-queue elab-deque"><div class="elab-person" *ngFor="let v of [1,3,2,5,1]">{{v}}</div><div class="elab-window-frame"></div><div class="elab-crown">👑</div></div>
+                  </ng-container>
 
-                <!-- Stack Patterns -->
-                <ng-container *ngIf="selectedPattern.id === 'monotonic-stack'">
-                  <div class="stack-container monotonic-container">
-                    <div class="pancake size-1">🥞</div>
-                    <div class="pancake size-2">🥞</div>
-                    <div class="pancake size-3">🥞</div>
-                    <div class="oswald-chef">🐙</div>
-                  </div>
-                </ng-container>
+                  <!-- Recursion -->
+                  <ng-container *ngIf="selectedPattern.id === 'base-case'">
+                    <div class="elab-recursion"><div class="elab-box" *ngFor="let i of [1,2,3]" [style.transform]="'scale(' + (1 - i*0.25) + ')'">📦</div><div class="elab-treasure">🎁</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'recursion-tree'">
+                    <div class="elab-rec-tree"><div class="elab-node root">f(4)</div><div class="elab-row"><div class="elab-node">f(3)</div><div class="elab-node">f(2)</div></div><div class="elab-row"><div class="elab-node sm">f(2)</div><div class="elab-node sm">f(1)</div><div class="elab-node sm">f(1)</div><div class="elab-node sm">f(0)</div></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'multiple-branches'">
+                    <div class="elab-rec-tree"><div class="elab-node root">🌳</div><div class="elab-row"><div class="elab-node">🌲</div><div class="elab-node">🌲</div></div><div class="elab-row"><div class="elab-node sm">🌱</div><div class="elab-node sm">🌱</div><div class="elab-node sm">🌱</div><div class="elab-node sm">🌱</div></div></div>
+                  </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'valid-parentheses'">
-                  <div class="stack-container valid-paren-container">
-                    <div class="pancake blue">🥞🫐</div>
-                    <div class="pancake choc">🥞🍫</div>
-                    <div class="match-indicator">✅</div>
-                  </div>
-                </ng-container>
+                  <!-- Sorting -->
+                  <ng-container *ngIf="selectedPattern.id === 'bubble-sort'">
+                    <div class="elab-sort"><div class="elab-bar" *ngFor="let h of [5,2,4,1,3]" [style.height.px]="h*25" [style.background]="'hsl(' + h*50 + ', 70%, 60%)'"><span>{{h}}</span></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'merge-sort'">
+                    <div class="elab-sort elab-merge"><div class="elab-stage">🔀 Split</div><div class="elab-stage">📊 Sort halves</div><div class="elab-stage">🔗 Merge</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'quick-sort'">
+                    <div class="elab-sort elab-quick"><div class="elab-section left">⬅️ smaller</div><div class="elab-pivot">|P|</div><div class="elab-section right">larger ➡️</div></div>
+                  </ng-container>
 
-                <!-- Queue Patterns -->
-                <ng-container *ngIf="selectedPattern.id === 'bfs-queue'">
-                  <div class="queue-container bfs-container">
-                    <div class="butterfly-server">🦋</div>
-                    <div class="table t1">🍽️</div>
-                    <div class="table t2">🍽️</div>
-                    <div class="table t3">🍽️</div>
-                  </div>
-                </ng-container>
+                  <!-- Binary Search -->
+                  <ng-container *ngIf="selectedPattern.id === 'standard-bs'">
+                    <div class="elab-bs"><div class="elab-item" *ngFor="let i of [1,2,3,4,5,6,7,8]" [class.eliminated]="i < 4 || i > 6">{{i}}</div><div class="elab-mid-ptr">↕️mid</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'bs-on-answer'">
+                    <div class="elab-bs elab-bs-answer"><div class="elab-lo">lo=1</div><div class="elab-range"></div><div class="elab-hi">hi=100</div><div class="elab-target">🎯 mid=50</div></div>
+                  </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'sliding-window-max'">
-                  <div class="queue-container vip-container">
-                    <div class="customer regular">👤</div>
-                    <div class="customer vip">👑</div>
-                    <div class="customer regular">👤</div>
-                    <div class="window-frame-queue"></div>
-                  </div>
-                </ng-container>
+                  <!-- Trees -->
+                  <ng-container *ngIf="selectedPattern.id === 'dfs-tree'">
+                    <div class="elab-tree"><div class="elab-node root">🌻</div><div class="elab-row"><div class="elab-node">🍃</div><div class="elab-node">🍃</div></div><div class="elab-bug">🐞</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'level-order'">
+                    <div class="elab-tree elab-level"><div class="elab-row highlight-1"><div class="elab-node">🌻</div></div><div class="elab-row highlight-2"><div class="elab-node">🍃</div><div class="elab-node">🍃</div></div><div class="elab-row highlight-3"><div class="elab-node sm">🍃</div><div class="elab-node sm">🍃</div><div class="elab-node sm">🍃</div></div><div class="elab-sun">☀️</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'bst'">
+                    <div class="elab-tree elab-bst"><div class="elab-node root">10</div><div class="elab-row"><div class="elab-node">5</div><div class="elab-node">15</div></div><div class="elab-row"><div class="elab-node sm">2</div><div class="elab-node sm">7</div><div class="elab-node sm">12</div><div class="elab-node sm">20</div></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'lca'">
+                    <div class="elab-tree elab-lca"><div class="elab-node root lca-highlight">LCA</div><div class="elab-row"><div class="elab-node path-a">🐞A</div><div class="elab-node path-b">🐞B</div></div></div>
+                  </ng-container>
 
-                <!-- Tree Patterns -->
-                <ng-container *ngIf="selectedPattern.id === 'dfs-tree'">
-                  <div class="tree-container dfs-container">
-                    <div class="flower-center">🌻</div>
-                    <div class="leaf l1">🍃</div>
-                    <div class="leaf l2">🍃</div>
-                    <div class="ladybug">🐞</div>
-                  </div>
-                </ng-container>
+                  <!-- Heaps -->
+                  <ng-container *ngIf="selectedPattern.id === 'min-max-heap'">
+                    <div class="elab-tree elab-heap"><div class="elab-node root heap-top">👑 MAX</div><div class="elab-row"><div class="elab-node">⬇️</div><div class="elab-node">⬇️</div></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'top-k'">
+                    <div class="elab-topk"><div class="elab-item" *ngFor="let v of [9,3,7,1,5]; let i = index" [class.in-top]="v >= 5">{{v}}</div><div class="elab-heap-label">K=3 heap</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'merge-k'">
+                    <div class="elab-merge-k"><div class="elab-list" *ngFor="let l of [[1,4,7],[2,5,8],[3,6,9]]"><span *ngFor="let v of l">{{v}} </span></div><div class="elab-heap-merge">⛰️→ sorted</div></div>
+                  </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'level-order'">
-                  <div class="tree-container level-container">
-                    <div class="sun">☀️</div>
-                    <div class="flower-center">🌻</div>
-                    <div class="leaf row-1">🍃 🍃</div>
-                    <div class="leaf row-2">🍃 🍃 🍃</div>
-                  </div>
-                </ng-container>
+                  <!-- Graphs -->
+                  <ng-container *ngIf="selectedPattern.id === 'graph-bfs-dfs'">
+                    <div class="elab-graph"><div class="elab-node" *ngFor="let n of ['A','B','C','D']">{{n}}</div><div class="elab-edges">—</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'topological-sort'">
+                    <div class="elab-graph elab-topo"><div class="elab-node">🏠</div><div class="elab-arrow">→</div><div class="elab-node">🏦</div><div class="elab-arrow">→</div><div class="elab-node">🦋</div><div class="elab-walker">🐙</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'shortest-path'">
+                    <div class="elab-graph elab-dijkstra"><div class="elab-node">🏠</div><div class="elab-edge">—3—</div><div class="elab-node">🌲</div><div class="elab-runner">🏃💨</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'cycle-detection'">
+                    <div class="elab-graph elab-cycle"><div class="elab-node">A</div><div class="elab-arrow">→</div><div class="elab-node">B</div><div class="elab-arrow">→</div><div class="elab-node">C</div><div class="elab-arrow cycle-back">↩️A</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'union-find'">
+                    <div class="elab-graph elab-uf"><div class="elab-group"><span>⭕</span><span>⭕</span></div><div class="elab-merge-icon">🔗</div><div class="elab-group merged"><span>⭕</span></div></div>
+                  </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'bst'">
-                  <div class="tree-container bst-container">
-                    <div class="node root">10</div>
-                    <div class="node left">5</div>
-                    <div class="node right">15</div>
-                  </div>
-                </ng-container>
+                  <!-- Backtracking -->
+                  <ng-container *ngIf="selectedPattern.id === 'subsets'">
+                    <div class="elab-bt"><div class="elab-subset" *ngFor="let s of ['{}','{A}','{B}','{A,B}','{C}','{A,C}','{B,C}','{A,B,C}']">{{s}}</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'permutations'">
+                    <div class="elab-bt elab-perm"><div class="elab-perm-item" *ngFor="let p of ['ABC','ACB','BAC','BCA','CAB','CBA']">{{p}}</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'n-queens'">
+                    <div class="elab-queens"><div class="elab-board"><div class="elab-cell" *ngFor="let c of [0,1,0,0, 0,0,0,1, 1,0,0,0, 0,0,1,0]" [class.queen]="c===1">{{c === 1 ? '♛' : '·'}}</div></div></div>
+                  </ng-container>
 
-                <!-- Graph Patterns -->
-                <ng-container *ngIf="selectedPattern.id === 'topological-sort'">
-                  <div class="graph-container topo-container">
-                    <div class="building b1">🏠</div>
-                    <div class="building b2">🏦</div>
-                    <div class="building b3">🦋</div>
-                    <div class="oswald-walker">🐙</div>
-                  </div>
-                </ng-container>
+                  <!-- Greedy -->
+                  <ng-container *ngIf="selectedPattern.id === 'activity-selection'">
+                    <div class="elab-greedy"><div class="elab-timeline"><div class="elab-act" *ngFor="let a of [{s:1,e:3},{s:2,e:5},{s:4,e:7},{s:6,e:9}]; let i = index" [style.left.px]="a.s*25" [style.width.px]="(a.e-a.s)*25" [class.selected]="i===0||i===2||i===3">{{a.s}}-{{a.e}}</div></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'fractional-knapsack'">
+                    <div class="elab-greedy elab-knapsack"><div class="elab-bag">🎒</div><div class="elab-item" *ngFor="let it of [{w:2,v:10},{w:3,v:12},{w:5,v:15}]"><span>{{it.w}}kg/${{it.v}}</span><span class="elab-ratio">${{(it.v/it.w).toFixed(1)}}/kg</span></div></div>
+                  </ng-container>
 
-                <ng-container *ngIf="selectedPattern.id === 'shortest-path'">
-                  <div class="graph-container shortest-path-container">
-                    <div class="building b1">🏠</div>
-                    <div class="building b2">🌲</div>
-                    <div class="path-line"></div>
-                    <div class="oswald-runner">🐙💨</div>
-                  </div>
+                  <!-- 1-D DP -->
+                  <ng-container *ngIf="selectedPattern.id === 'climbing-stairs'">
+                    <div class="elab-dp"><div class="elab-stair" *ngFor="let v of [1,1,2,3,5,8]; let i = index" [style.height.px]="(i+1)*15">{{v}}</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'house-robber'">
+                    <div class="elab-dp elab-robber"><div class="elab-house" *ngFor="let v of [2,7,9,3,1]; let i = index" [class.rob]="i===1||i===2||i===4">🏠 ${{v}}</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'lis'">
+                    <div class="elab-dp elab-lis"><div class="elab-bar" *ngFor="let v of [3,1,4,1,5,9]" [style.height.px]="v*12" [class.in-lis]="v===1||v===4||v===5||v===9">{{v}}</div></div>
+                  </ng-container>
+
+                  <!-- Intervals -->
+                  <ng-container *ngIf="selectedPattern.id === 'merge-intervals'">
+                    <div class="elab-intervals"><div class="elab-timeline"><div class="elab-interval" style="left:10px;width:60px">1-3</div><div class="elab-interval overlap" style="left:40px;width:80px">2-5</div></div><div class="elab-result-timeline"><div class="elab-interval merged" style="left:10px;width:110px">1-5 ✅</div></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'meeting-rooms'">
+                    <div class="elab-intervals"><div class="elab-timeline"><div class="elab-interval" *ngFor="let m of [{s:0,e:30},{s:5,e:10},{s:15,e:20}]; let i = index" [style.left.px]="m.s*3" [style.width.px]="(m.e-m.s)*3">📅</div></div><div class="elab-count">Rooms needed: 2</div></div>
+                  </ng-container>
+
+                  <!-- Tries -->
+                  <ng-container *ngIf="selectedPattern.id === 'trie-insert-search'">
+                    <div class="elab-tree elab-trie-tree"><div class="elab-node root">∅</div><div class="elab-row"><div class="elab-node">R</div><div class="elab-node">H</div></div><div class="elab-row"><div class="elab-node sm">O</div><div class="elab-node sm">E</div></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'prefix-match'">
+                    <div class="elab-tree elab-trie-tree"><div class="elab-node root">HE</div><div class="elab-row"><div class="elab-node highlight">HELLO</div><div class="elab-node highlight">HENRY</div><div class="elab-node highlight">HELP</div></div></div>
+                  </ng-container>
+
+                  <!-- 2-D DP -->
+                  <ng-container *ngIf="selectedPattern.id === 'grid-dp'">
+                    <div class="elab-grid-dp"><div class="elab-cell" *ngFor="let v of [1,1,1,1,2,3,1,3,6]; let i = index" [class.path]="i===0||i===1||i===2||i===5||i===8">{{v}}</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'lcs'">
+                    <div class="elab-dp elab-lcs-table"><div class="elab-seq">A B C D E</div><div class="elab-seq">A C E</div><div class="elab-result">LCS = ACE (len 3)</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'knapsack-01'">
+                    <div class="elab-dp elab-ks"><div class="elab-bag">🎒 W=10</div><div class="elab-item" *ngFor="let it of [{w:5,v:60},{w:3,v:50},{w:4,v:70}]">📦{{it.w}}kg/${{it.v}}</div><div class="elab-result">Max $💰</div></div>
+                  </ng-container>
+
+                  <!-- Advanced Graphs -->
+                  <ng-container *ngIf="selectedPattern.id === 'mst'">
+                    <div class="elab-graph elab-mst"><div class="elab-node">A</div><div class="elab-edge mst-edge">—2—</div><div class="elab-node">B</div><div class="elab-edge mst-edge">—3—</div><div class="elab-node">C</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'bellman-ford'">
+                    <div class="elab-graph elab-bf"><div class="elab-node">A</div><div class="elab-edge neg">—(-1)—</div><div class="elab-node">B</div><div class="elab-label">Relax V-1 times</div></div>
+                  </ng-container>
+
+                  <!-- Bit Manipulation -->
+                  <ng-container *ngIf="selectedPattern.id === 'and-or-xor'">
+                    <div class="elab-bits"><div class="elab-bit-row"><span *ngFor="let b of [1,0,1,0]" class="elab-bit">{{b}}</span></div><div class="elab-op">⊕ XOR</div><div class="elab-bit-row"><span *ngFor="let b of [1,0,1,0]" class="elab-bit">{{b}}</span></div><div class="elab-bit-row result"><span *ngFor="let b of [0,0,0,0]" class="elab-bit">{{b}}</span></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'counting-bits'">
+                    <div class="elab-bits elab-count"><div class="elab-bit-row"><span *ngFor="let b of [1,1,0,1]" class="elab-bit" [class.set]="b===1">{{b}}</span></div><div class="elab-label">3 bits set ✅</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'power-of-two'">
+                    <div class="elab-bits elab-pow2"><div class="elab-bit-row"><span *ngFor="let b of [1,0,0,0]" class="elab-bit" [class.set]="b===1">{{b}}</span></div><div class="elab-op">&</div><div class="elab-bit-row"><span *ngFor="let b of [0,1,1,1]" class="elab-bit">{{b}}</span></div><div class="elab-label">= 0 → Power of 2 ✅</div></div>
+                  </ng-container>
+
+                  <!-- Math -->
+                  <ng-container *ngIf="selectedPattern.id === 'gcd-lcm'">
+                    <div class="elab-math"><div class="elab-calc">GCD(12, 18)</div><div class="elab-steps"><div>18 % 12 = 6</div><div>12 % 6 = 0</div><div class="elab-result">GCD = 6</div></div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'sieve'">
+                    <div class="elab-sieve"><div class="elab-num" *ngFor="let n of [2,3,4,5,6,7,8,9,10,11]" [class.prime]="n===2||n===3||n===5||n===7||n===11" [class.crossed]="n===4||n===6||n===8||n===9||n===10">{{n}}</div></div>
+                  </ng-container>
+
+                  <!-- String Algorithms -->
+                  <ng-container *ngIf="selectedPattern.id === 'kmp'">
+                    <div class="elab-string elab-kmp"><div class="elab-text">A A B A A C A A B A</div><div class="elab-pattern">A A B A</div><div class="elab-fail">Failure: [0,1,0,1]</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'rabin-karp'">
+                    <div class="elab-string elab-rk"><div class="elab-text">TEXT: ABCDEFC</div><div class="elab-hash-window">#12 ≠ #15 ≠ #12 ✅</div></div>
+                  </ng-container>
+
+                  <!-- Segment Trees -->
+                  <ng-container *ngIf="selectedPattern.id === 'range-query'">
+                    <div class="elab-tree elab-seg"><div class="elab-node root">[1-8]: 36</div><div class="elab-row"><div class="elab-node">[1-4]: 10</div><div class="elab-node">[5-8]: 26</div></div><div class="elab-query">Query [3-7] → O(log N)</div></div>
+                  </ng-container>
+                  <ng-container *ngIf="selectedPattern.id === 'point-update'">
+                    <div class="elab-tree elab-seg"><div class="elab-node root">↑ update propagates</div><div class="elab-row"><div class="elab-node">↑</div><div class="elab-node dim">—</div></div><div class="elab-update-target">Update arr[5] → O(log N)</div></div>
+                  </ng-container>
                 </ng-container>
               </div>
             </div>
           </div>
         </ng-container>
 
-        <!-- Fallback fluid blobs for topics without patterns yet -->
+        <!-- Fallback -->
         <div class="animation-stage" *ngIf="!selectedTopic.patterns || selectedTopic.patterns.length === 0">
           <div class="fluid-blob"></div>
           <div class="fluid-blob small-blob"></div>
